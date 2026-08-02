@@ -43,7 +43,9 @@ export function PanelNombre({ nombre }: { nombre: string }) {
           style={[StyleSheet.absoluteFill, estilos.fondoMetal]}
         />
 
-        <Text style={estilos.titulo}>{nombre}</Text>
+        <Text style={estilos.titulo} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7}>
+          {nombre}
+        </Text>
       </View>
 
       {/* Destellos: van fuera de la caja recortada, apoyados sobre el borde. */}

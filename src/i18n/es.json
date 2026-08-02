@@ -7,14 +7,37 @@
   },
   "footer": {
     "consejo": "Consejo",
-    "wiki": "Wiki",
-    "quiz": "Quiz"
+    "wiki": "Aprender",
+    "quiz": "Reto"
   },
   "secciones": {
     "pregunta": "Pregunta",
     "consejo": "Consejo",
-    "wiki": "Wiki",
-    "quiz": "Quiz"
+    "wiki": "Aprender",
+    "quiz": "Reto"
+  },
+  "pregunta": {
+    "titulo": "¿Sobre qué quieres preguntar?",
+    "chips": { "general": "General", "amor": "Amor", "trabajo": "Trabajo", "dinero": "Dinero" },
+    "placeholder": "Escribe tu pregunta...",
+    "consultar": "Consultar",
+    "hintCorta": "Escribe una pregunta un poco más larga para poder leerla.",
+    "avisoCortaTitulo": "Tu pregunta es muy corta",
+    "avisoCortaTexto": "Cuéntanos un poco más sobre lo que quieres saber para una respuesta más precisa.",
+    "escribirMas": "Escribir más",
+    "seguirIgual": "Consultar igual",
+    "sinGemasTitulo": "Te quedan 0 gemas",
+    "sinGemasTexto": "Mira un video corto para ganar una gema.",
+    "verVideo": "Ver video",
+    "ahoraNo": "Ahora no",
+    "entendido": "Entendido"
+  },
+  "flujo": {
+    "verLectura": "Ver lectura",
+    "verTirada": "Volver a la tirada",
+    "nuevaPregunta": "Nueva pregunta",
+    "escuchar": "Escuchar",
+    "detener": "Detener"
   },
   "ajustes": {
     "titulo": "Ajustes",

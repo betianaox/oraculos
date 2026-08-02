@@ -7,14 +7,37 @@
   },
   "footer": {
     "consejo": "Advice",
-    "wiki": "Wiki",
-    "quiz": "Quiz"
+    "wiki": "Learn",
+    "quiz": "Challenge"
   },
   "secciones": {
     "pregunta": "Question",
     "consejo": "Advice",
-    "wiki": "Wiki",
-    "quiz": "Quiz"
+    "wiki": "Learn",
+    "quiz": "Challenge"
+  },
+  "pregunta": {
+    "titulo": "What would you like to ask about?",
+    "chips": { "general": "General", "amor": "Love", "trabajo": "Work", "dinero": "Money" },
+    "placeholder": "Write your question...",
+    "consultar": "Ask",
+    "hintCorta": "Write a slightly longer question so it can be read.",
+    "avisoCortaTitulo": "Your question is very short",
+    "avisoCortaTexto": "Tell us a bit more about what you want to know for a more precise answer.",
+    "escribirMas": "Write more",
+    "seguirIgual": "Ask anyway",
+    "sinGemasTitulo": "You have 0 gems left",
+    "sinGemasTexto": "Watch a short video to earn a gem.",
+    "verVideo": "Watch video",
+    "ahoraNo": "Not now",
+    "entendido": "Got it"
+  },
+  "flujo": {
+    "verLectura": "See reading",
+    "verTirada": "Back to the spread",
+    "nuevaPregunta": "New question",
+    "escuchar": "Listen",
+    "detener": "Stop"
   },
   "ajustes": {
     "titulo": "Settings",

@@ -1,4 +1,5 @@
 import type { ImageSourcePropType } from 'react-native';
+import type { Pieza } from '@/flujo/pieza';
 
 /**
  * Contrato de un ORACULO. Cada oraculo se describe a si mismo en su
@@ -31,6 +32,25 @@ export interface OraculoModulo {
    * la Etapa 1: si falta, se usa un degrade neutro derivado del `acento`.
    */
   fondo?: ImageSourcePropType;
+
+  /**
+   * Mazo del oraculo: las piezas que se tiran (cartas, runas...). Si esta
+   * presente, la pregunta lleva al flujo de tirada+lectura compartido. Si falta,
+   * el oraculo todavia no tiene motor y cae al placeholder.
+   */
+  mazo?: Pieza[];
+
+  /** Si tiene la seccion Aprender (wiki de sus piezas). Por ahora, Tarot. */
+  aprender?: boolean;
+
+  /** Si tiene la seccion Consejo del dia. Por ahora, Tarot. */
+  consejo?: boolean;
+
+  /**
+   * Icono del oraculo. Se muestra arriba de la pantalla de pregunta (que es
+   * igual para todos) para reforzar en que oraculo esta el usuario.
+   */
+  icono?: ImageSourcePropType;
 
   // --- Etapa 2 en adelante (todavia no se usa) ---
   // tirada?: React.ComponentType;        // tirada PROPIA del oraculo

@@ -7,14 +7,37 @@
   },
   "footer": {
     "consejo": "Conseil",
-    "wiki": "Wiki",
-    "quiz": "Quiz"
+    "wiki": "Apprendre",
+    "quiz": "Défi"
   },
   "secciones": {
     "pregunta": "Question",
     "consejo": "Conseil",
-    "wiki": "Wiki",
-    "quiz": "Quiz"
+    "wiki": "Apprendre",
+    "quiz": "Défi"
+  },
+  "pregunta": {
+    "titulo": "Sur quoi veux-tu poser ta question ?",
+    "chips": { "general": "Général", "amor": "Amour", "trabajo": "Travail", "dinero": "Argent" },
+    "placeholder": "Écris ta question...",
+    "consultar": "Consulter",
+    "hintCorta": "Écris une question un peu plus longue pour pouvoir la lire.",
+    "avisoCortaTitulo": "Ta question est très courte",
+    "avisoCortaTexto": "Dis-nous en un peu plus sur ce que tu veux savoir pour une réponse plus précise.",
+    "escribirMas": "Écrire plus",
+    "seguirIgual": "Consulter quand même",
+    "sinGemasTitulo": "Il te reste 0 gemmes",
+    "sinGemasTexto": "Regarde une courte vidéo pour gagner une gemme.",
+    "verVideo": "Voir la vidéo",
+    "ahoraNo": "Pas maintenant",
+    "entendido": "Compris"
+  },
+  "flujo": {
+    "verLectura": "Voir la lecture",
+    "verTirada": "Retour au tirage",
+    "nuevaPregunta": "Nouvelle question",
+    "escuchar": "Écouter",
+    "detener": "Arrêter"
   },
   "ajustes": {
     "titulo": "Réglages",

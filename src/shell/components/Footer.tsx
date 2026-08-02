@@ -70,11 +70,13 @@ export function Footer({ onSelect }: Props) {
             <Stop offset="0.45" stopColor="#46536e" />
             <Stop offset="1" stopColor="#566989" />
           </SvgLinearGradient>
+          {/* Borde: celeste (como el panel) que brilla casi blanco al centro. */}
           <SvgLinearGradient id="borde" x1="0" y1="0" x2="1" y2="0">
-            <Stop offset="0" stopColor="#4fd8ff" />
-            <Stop offset="0.3" stopColor="#b4d2ff" />
-            <Stop offset="0.7" stopColor="#b4d2ff" />
-            <Stop offset="1" stopColor="#e9c46a" />
+            <Stop offset="0" stopColor="#AFD2FF" stopOpacity="0.75" />
+            <Stop offset="0.44" stopColor="#AFD2FF" stopOpacity="0.85" />
+            <Stop offset="0.5" stopColor="#EAF6FF" stopOpacity="1" />
+            <Stop offset="0.56" stopColor="#AFD2FF" stopOpacity="0.85" />
+            <Stop offset="1" stopColor="#AFD2FF" stopOpacity="0.75" />
           </SvgLinearGradient>
         </Defs>
 
@@ -86,11 +88,11 @@ export function Footer({ onSelect }: Props) {
           d={arriba}
           stroke="url(#borde)"
           strokeWidth={6}
-          strokeOpacity={0.25}
+          strokeOpacity={0.3}
           strokeLinecap="round"
           fill="none"
         />
-        {/* Borde nitido */}
+        {/* Borde nitido con destello al centro */}
         <Path d={arriba} stroke="url(#borde)" strokeWidth={2} strokeLinecap="round" fill="none" />
       </Svg>
 

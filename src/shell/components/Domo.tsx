@@ -1,4 +1,6 @@
-import { Animated, Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useRef } from 'react';
+import { Animated, Easing, Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import type { OraculoModulo } from '@/oraculos/tipos';
 import { useT } from '@/i18n';
 import { colores, espaciado } from '../theme/tokens';
@@ -36,6 +38,34 @@ export function Domo({ oraculo, index, scrollX, stride, itemWidth, spacing, onPr
     extrapolate: 'clamp',
   });
 
+  // Foco: 1 cuando el domo esta centrado. Solo el activo brilla.
+  const foco = scrollX.interpolate({
+    inputRange: rango,
+    outputRange: [0, 1, 0],
+    extrapolate: 'clamp',
+  });
+
+  // Barrido de luz en loop (movimiento de luz dentro del domo activo).
+  const brillo = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    const anim = Animated.loop(
+      Animated.timing(brillo, {
+        toValue: 1,
+        duration: 3200,
+        delay: 600,
+        easing: Easing.inOut(Easing.ease),
+        useNativeDriver: true,
+      })
+    );
+    anim.start();
+    return () => anim.stop();
+  }, [brillo]);
+
+  const desliz = brillo.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-itemWidth * 0.7, itemWidth * 1.3],
+  });
+
   return (
     <Animated.View
       style={{
@@ -70,6 +100,25 @@ export function Domo({ oraculo, index, scrollX, stride, itemWidth, spacing, onPr
               <View style={[estilos.placeholder, { backgroundColor: hexAlfa(oraculo.acento, 0.14) }]}>
                 <View style={[estilos.placeholderAnillo, { borderColor: hexAlfa(oraculo.acento, 0.5) }]} />
               </View>
+            )}
+
+            {/* Barrido de luz (solo visible en el domo centrado) */}
+            {oraculo.domo && (
+              <Animated.View style={[estilos.shimmerWrap, { opacity: foco }]} pointerEvents="none">
+                <Animated.View
+                  style={[
+                    estilos.shimmerBand,
+                    { width: itemWidth * 0.45, transform: [{ translateX: desliz }, { rotate: '18deg' }] },
+                  ]}
+                >
+                  <LinearGradient
+                    colors={['transparent', 'rgba(255,255,255,0.14)', 'transparent']}
+                    start={{ x: 0, y: 0.5 }}
+                    end={{ x: 1, y: 0.5 }}
+                    style={StyleSheet.absoluteFill}
+                  />
+                </Animated.View>
+              </Animated.View>
             )}
           </>
         )}
@@ -106,6 +155,20 @@ const estilos = StyleSheet.create({
     right: '28%',
     bottom: '28%',
     borderRadius: 999,
+  },
+  shimmerWrap: {
+    position: 'absolute',
+    top: '6%',
+    left: '6%',
+    right: '6%',
+    bottom: '6%',
+    borderRadius: 24,
+    overflow: 'hidden',
+  },
+  shimmerBand: {
+    position: 'absolute',
+    top: '-25%',
+    height: '150%',
   },
   imagen: {
     width: '100%',
