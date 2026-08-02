@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Animated,
   Image,
@@ -15,60 +15,60 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '@/navigation/tipos';
 import { oraculoPorId } from '@/oraculos/registry';
 import { useT } from '@/i18n';
+import { useApp } from '@/store/useApp';
 import { Header } from '@/shell/components/Header';
 import { colores, espaciado } from '@/shell/theme/tokens';
 import { hexAlfa } from '@/shell/color';
 import { fuente } from '@/shell/theme/fuentes';
-import { RATIO_PIEZA, CartaImagen } from '@/flujo/components/CartaImagen';
-import { CartaAmpliable } from '@/flujo/components/CartaAmpliable';
-import { DORSO } from '../content/cartas/imagenes';
-import { CARTA_POR_ID } from '../content/cartas/meta';
-import type { CartaId } from '../content/types';
-import {
-  cartaDelConsejoDeHoy,
-  guardarConsejoDeHoy,
-  textoConsejo,
-  tresParaConsejo,
-} from '../lib/consejoDelDia';
-import { nombreDeCarta } from '../lib/nombreCarta';
-import { useCartasTarot } from '../useCartas';
-import { useTextosTarot } from '../textos';
+import { RATIO_PIEZA, CartaImagen } from '../components/CartaImagen';
+import { CartaAmpliable } from '../components/CartaAmpliable';
+import { tresAlAzar, type Pieza } from '../pieza';
+import { consejoDeHoy, guardarConsejo } from '../consejo';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ConsejoDelDia'>;
 
+/**
+ * Consejo del dia COMPARTIDO: elegir 1 de 3 piezas dadas vuelta, se voltea y da
+ * el consejo. Queda quemado por hoy (por oraculo). El mazo, el dorso y el texto
+ * del consejo los aporta el contenido del oraculo.
+ */
 export function ConsejoDelDiaScreen({ navigation, route }: Props) {
   const { oraculoId } = route.params;
   const t = useT();
-  const tt = useTextosTarot();
-  const { consejos, consejoGenerico, nombres, wiki } = useCartasTarot();
+  const idioma = useApp((s) => s.idioma);
   const { width } = useWindowDimensions();
   const oraculo = oraculoPorId(oraculoId);
   const acento = oraculo?.acento ?? colores.cromo;
-  const nombre = oraculo ? t(oraculo.nombreKey) : oraculoId;
+  const nombreOraculo = oraculo ? t(oraculo.nombreKey) : oraculoId;
+
+  const contenido = useMemo(() => oraculo?.contenido?.(idioma), [oraculo, idioma]);
+  const mazo = oraculo?.mazo ?? [];
 
   const [cargando, setCargando] = useState(true);
-  const [ofrecidas, setOfrecidas] = useState<CartaId[]>([]);
-  const [elegida, setElegida] = useState<CartaId | null>(null);
+  const [ofrecidas, setOfrecidas] = useState<Pieza[]>([]);
+  const [elegida, setElegida] = useState<Pieza | null>(null);
 
   const flip = useRef(new Animated.Value(0)).current; // 0 = dorso, 1 = frente
   const opacidadConsejo = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    cartaDelConsejoDeHoy().then((carta) => {
-      if (carta) {
-        setElegida(carta);
+    consejoDeHoy(oraculoId).then((piezaId) => {
+      if (piezaId) {
+        const pieza = mazo.find((p) => p.id === piezaId) ?? null;
+        setElegida(pieza);
         flip.setValue(1);
         opacidadConsejo.setValue(1);
       } else {
-        setOfrecidas(tresParaConsejo());
+        setOfrecidas(tresAlAzar(mazo));
       }
       setCargando(false);
     });
-  }, [flip, opacidadConsejo]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const elegir = (carta: CartaId) => {
-    setElegida(carta);
-    guardarConsejoDeHoy(carta);
+  const elegir = (pieza: Pieza) => {
+    setElegida(pieza);
+    guardarConsejo(oraculoId, pieza.id);
     flip.setValue(0);
     opacidadConsejo.setValue(0);
     Animated.sequence([
@@ -85,6 +85,8 @@ export function ConsejoDelDiaScreen({ navigation, route }: Props) {
   const rotDorso = flip.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '180deg'] });
   const rotFrente = flip.interpolate({ inputRange: [0, 1], outputRange: ['180deg', '360deg'] });
 
+  const reverso = contenido?.reverso;
+
   return (
     <View style={estilos.contenedor}>
       <LinearGradient
@@ -94,22 +96,24 @@ export function ConsejoDelDiaScreen({ navigation, route }: Props) {
         end={{ x: 0.5, y: 0.9 }}
       />
 
-      <Header accion="cerrar" onAccion={() => navigation.goBack()} titulo={nombre} />
+      <Header accion="cerrar" onAccion={() => navigation.goBack()} titulo={nombreOraculo} />
 
       <View style={estilos.cuerpo}>
-        <Text style={estilos.titulo}>{tt.consejoDelDia.titulo}</Text>
+        <Text style={estilos.titulo}>{t('consejo.titulo')}</Text>
 
         {!cargando && !elegida && (
           <View style={estilos.centro}>
-            <Text style={estilos.prompt}>{tt.consejoDelDia.elegir}</Text>
+            <Text style={estilos.prompt}>{t('consejo.elegir')}</Text>
             <View style={estilos.filaBacks}>
-              {ofrecidas.map((id) => (
-                <Pressable key={id} onPress={() => elegir(id)}>
-                  <Image
-                    source={DORSO}
-                    style={{ width: anchoBack, height: altoBack, borderRadius: 8 }}
-                    resizeMode="cover"
-                  />
+              {ofrecidas.map((pieza) => (
+                <Pressable key={pieza.id} onPress={() => elegir(pieza)}>
+                  {reverso != null ? (
+                    <Image
+                      source={reverso}
+                      style={{ width: anchoBack, height: altoBack, borderRadius: 8 }}
+                      resizeMode="cover"
+                    />
+                  ) : null}
                 </Pressable>
               ))}
             </View>
@@ -118,45 +122,31 @@ export function ConsejoDelDiaScreen({ navigation, route }: Props) {
 
         {!cargando && elegida && (
           <ScrollView contentContainerStyle={estilos.resultado} showsVerticalScrollIndicator={false}>
-            <CartaAmpliable
-              pieza={{
-                id: CARTA_POR_ID[elegida].id,
-                numero: CARTA_POR_ID[elegida].numero,
-                imagen: CARTA_POR_ID[elegida].imagen,
-              }}
-            >
+            <CartaAmpliable pieza={elegida}>
               <View style={{ width: anchoCarta, height: altoCarta }}>
                 <Animated.View
                   style={[estilos.cara, { transform: [{ perspective: 900 }, { rotateY: rotDorso }] }]}
                 >
-                  <Image
-                    source={DORSO}
-                    style={{ width: anchoCarta, height: altoCarta, borderRadius: 10 }}
-                    resizeMode="cover"
-                  />
+                  {reverso != null ? (
+                    <Image
+                      source={reverso}
+                      style={{ width: anchoCarta, height: altoCarta, borderRadius: 10 }}
+                      resizeMode="cover"
+                    />
+                  ) : null}
                 </Animated.View>
                 <Animated.View
                   style={[estilos.cara, { transform: [{ perspective: 900 }, { rotateY: rotFrente }] }]}
                 >
-                  <CartaImagen
-                    pieza={{
-                      id: CARTA_POR_ID[elegida].id,
-                      numero: CARTA_POR_ID[elegida].numero,
-                      imagen: CARTA_POR_ID[elegida].imagen,
-                    }}
-                    width={anchoCarta}
-                    radio={10}
-                  />
+                  <CartaImagen pieza={elegida} width={anchoCarta} radio={10} />
                 </Animated.View>
               </View>
             </CartaAmpliable>
 
             <Animated.View style={[estilos.bloqueConsejo, { opacity: opacidadConsejo }]}>
-              <Text style={estilos.nombre}>
-                {nombreDeCarta(CARTA_POR_ID[elegida], nombres, wiki[elegida]?.nombre)}
-              </Text>
-              <Text style={estilos.consejo}>{textoConsejo(elegida, consejos, consejoGenerico)}</Text>
-              <Text style={estilos.vuelveManana}>{tt.consejoDelDia.vuelveManana}</Text>
+              <Text style={estilos.nombre}>{contenido?.nombre(elegida)}</Text>
+              <Text style={estilos.consejo}>{contenido?.consejo(elegida)}</Text>
+              <Text style={estilos.vuelveManana}>{t('consejo.vuelveManana')}</Text>
             </Animated.View>
           </ScrollView>
         )}

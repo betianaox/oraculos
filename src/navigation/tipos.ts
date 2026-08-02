@@ -12,9 +12,9 @@ export type RootStackParamList = {
   // Flujo de lectura COMPARTIDO: cualquier oraculo con `mazo` lo usa.
   Tirada: { oraculoId: string; pregunta: string; tema: Tema };
   Lectura: { oraculoId: string; pregunta: string; tirada: PiezaTirada[] };
-  // Aprender (ex-Wiki). Por ahora Tarot.
+  // Aprender (ex-Wiki) COMPARTIDO: cualquier oraculo con `contenido`.
   Aprender: { oraculoId: string };
-  AprenderDetalle: { oraculoId: string; cartaId: string };
-  // Consejo del dia. Por ahora Tarot.
+  AprenderDetalle: { oraculoId: string; piezaId: string };
+  // Consejo del dia COMPARTIDO.
   ConsejoDelDia: { oraculoId: string };
 };

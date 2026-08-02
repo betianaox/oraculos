@@ -1,5 +1,6 @@
 import type { OraculoModulo } from '../tipos';
 import { MAZO_ANGELES } from './mazo';
+import { crearContenidoAngeles } from './contenido';
 
 const angeles: OraculoModulo = {
   id: 'angeles',
@@ -9,6 +10,7 @@ const angeles: OraculoModulo = {
   fondo: require('../../../assets/oraculos/angeles/fondo.webp'),
   icono: require('../../../assets/oraculos/angeles/icono.webp'),
   mazo: MAZO_ANGELES,
+  contenido: crearContenidoAngeles,
 };
 
 export default angeles;

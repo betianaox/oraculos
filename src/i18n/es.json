@@ -39,6 +39,17 @@
     "escuchar": "Escuchar",
     "detener": "Detener"
   },
+  "aprender": {
+    "seccionCartas": "Cartas",
+    "carta": "Carta",
+    "proximamente": "Contenido próximamente",
+    "consejoGenerico": "Confía en la señal de este momento y deja que te acompañe hoy."
+  },
+  "consejo": {
+    "titulo": "Consejo del día",
+    "elegir": "Elige una carta para tu consejo de hoy",
+    "vuelveManana": "Vuelve mañana para el próximo consejo"
+  },
   "ajustes": {
     "titulo": "Ajustes",
     "idioma": "Idioma"

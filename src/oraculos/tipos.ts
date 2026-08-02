@@ -1,5 +1,7 @@
 import type { ImageSourcePropType } from 'react-native';
+import type { CodigoIdioma } from '@/i18n/idiomas';
 import type { Pieza } from '@/flujo/pieza';
+import type { ContenidoOraculo } from '@/flujo/contenido';
 
 /**
  * Contrato de un ORACULO. Cada oraculo se describe a si mismo en su
@@ -40,11 +42,11 @@ export interface OraculoModulo {
    */
   mazo?: Pieza[];
 
-  /** Si tiene la seccion Aprender (wiki de sus piezas). Por ahora, Tarot. */
-  aprender?: boolean;
-
-  /** Si tiene la seccion Consejo del dia. Por ahora, Tarot. */
-  consejo?: boolean;
+  /**
+   * Contenido del oraculo (Aprender + Consejo del dia) en el idioma dado. Si
+   * esta presente, se habilitan esas secciones. Si falta, caen al placeholder.
+   */
+  contenido?: (idioma: CodigoIdioma) => ContenidoOraculo;
 
   /**
    * Icono del oraculo. Se muestra arriba de la pantalla de pregunta (que es

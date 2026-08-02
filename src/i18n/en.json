@@ -39,6 +39,17 @@
     "escuchar": "Listen",
     "detener": "Stop"
   },
+  "aprender": {
+    "seccionCartas": "Cards",
+    "carta": "Card",
+    "proximamente": "Content coming soon",
+    "consejoGenerico": "Trust the sign of this moment and let it guide you today."
+  },
+  "consejo": {
+    "titulo": "Advice of the day",
+    "elegir": "Choose a card for today's advice",
+    "vuelveManana": "Come back tomorrow for the next advice"
+  },
   "ajustes": {
     "titulo": "Settings",
     "idioma": "Language"

@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useMemo } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -6,44 +6,32 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '@/navigation/tipos';
 import { oraculoPorId } from '@/oraculos/registry';
 import { useT } from '@/i18n';
+import { useApp } from '@/store/useApp';
 import { Header } from '@/shell/components/Header';
 import { colores, espaciado, radios } from '@/shell/theme/tokens';
 import { hexAlfa } from '@/shell/color';
 import { fuente } from '@/shell/theme/fuentes';
-import { CartaImagen } from '@/flujo/components/CartaImagen';
-import { CartaAmpliable } from '@/flujo/components/CartaAmpliable';
-import { useVoz } from '@/flujo/useVoz';
-import { CARTA_POR_ID } from '../content/cartas/meta';
-import type { CartaId } from '../content/types';
-import { nombreDeCarta } from '../lib/nombreCarta';
-import { useCartasTarot } from '../useCartas';
-import { useTextosTarot } from '../textos';
+import { CartaImagen, RATIO_PIEZA } from '../components/CartaImagen';
+import { CartaAmpliable } from '../components/CartaAmpliable';
+import { useVoz } from '../voz';
+import type { Bloque, Chip } from '../contenido';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AprenderDetalle'>;
 
 export function AprenderDetalleScreen({ navigation, route }: Props) {
-  const { oraculoId, cartaId } = route.params;
+  const { oraculoId, piezaId } = route.params;
   const t = useT();
-  const tt = useTextosTarot();
+  const idioma = useApp((s) => s.idioma);
   const { width } = useWindowDimensions();
-  const { nombres, wiki } = useCartasTarot();
   const oraculo = oraculoPorId(oraculoId);
   const acento = oraculo?.acento ?? colores.cromo;
+  const nombreOraculo = oraculo ? t(oraculo.nombreKey) : oraculoId;
 
-  const meta = CARTA_POR_ID[cartaId as CartaId];
-  const ficha = wiki[meta.id];
-  const nombre = nombreDeCarta(meta, nombres, ficha?.nombre);
-  const pieza = { id: meta.id, numero: meta.numero, imagen: meta.imagen };
+  const contenido = useMemo(() => oraculo?.contenido?.(idioma), [oraculo, idioma]);
+  const pieza = oraculo?.mazo?.find((p) => p.id === piezaId);
 
-  const textoFicha = ficha
-    ? [
-        nombre,
-        `${tt.wiki.derecho}. ${ficha.significado.normal}`,
-        `${tt.wiki.invertido}. ${ficha.significado.invertida}`,
-        `${tt.wiki.simbolismo}. ${ficha.simbolismo}`,
-      ].join('\n\n')
-    : '';
-
+  const nombre = pieza && contenido ? contenido.nombre(pieza) : '';
+  const ficha = pieza && contenido?.ficha ? contenido.ficha(pieza) : null;
   const anchoCarta = Math.min(width * 0.5, 160);
 
   return (
@@ -55,59 +43,68 @@ export function AprenderDetalleScreen({ navigation, route }: Props) {
         end={{ x: 0.5, y: 0.9 }}
       />
 
-      <Header accion="cerrar" onAccion={() => navigation.goBack()} titulo={t(oraculo!.nombreKey)} />
+      <Header accion="cerrar" onAccion={() => navigation.goBack()} titulo={nombreOraculo} />
 
-      <ScrollView contentContainerStyle={estilos.scroll} showsVerticalScrollIndicator={false}>
-        <View style={estilos.cabecera}>
-          <CartaAmpliable pieza={pieza}>
-            <CartaImagen pieza={pieza} width={anchoCarta} radio={10} />
-          </CartaAmpliable>
-          <Text style={estilos.nombre}>{nombre}</Text>
-          {ficha ? <BotonEscuchar texto={textoFicha} acento={acento} /> : null}
+      {pieza ? (
+        <ScrollView contentContainerStyle={estilos.scroll} showsVerticalScrollIndicator={false}>
+          <View style={estilos.cabecera}>
+            <CartaAmpliable pieza={pieza}>
+              <CartaImagen pieza={pieza} width={anchoCarta} radio={10} />
+            </CartaAmpliable>
+            <Text style={estilos.nombre}>{nombre}</Text>
+            {ficha && ficha.voz ? <BotonEscuchar texto={ficha.voz} acento={acento} /> : null}
+          </View>
+
+          {ficha ? (
+            <>
+              {ficha.datos.length > 0 && (
+                <View style={estilos.datos}>
+                  {ficha.datos.map((d, i) => (
+                    <View key={i} style={estilos.dato}>
+                      <Text style={estilos.datoEtiqueta}>{d.etiqueta}</Text>
+                      <Text style={estilos.datoValor}>{d.valor}</Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+
+              {ficha.bloques.length > 0
+                ? ficha.bloques.map((bloque, i) => <BloqueFicha key={i} bloque={bloque} />)
+                : <Text style={estilos.proximamente}>{contenido?.proximamente}</Text>}
+            </>
+          ) : (
+            <Text style={estilos.proximamente}>{contenido?.proximamente}</Text>
+          )}
+        </ScrollView>
+      ) : null}
+    </View>
+  );
+}
+
+function BloqueFicha({ bloque }: { bloque: Bloque }) {
+  return (
+    <View style={estilos.seccion}>
+      <Text style={estilos.seccionTitulo}>{bloque.titulo}</Text>
+      {bloque.texto ? <Text style={estilos.parrafo}>{bloque.texto}</Text> : null}
+      {bloque.chips?.map((chip: Chip, i) => (
+        <View key={i} style={estilos.chips}>
+          <Text style={estilos.chipEtiqueta}>{chip.etiqueta}:</Text>
+          <Text style={estilos.chipTexto}>{chip.valor}</Text>
         </View>
-
-        <View style={estilos.datos}>
-          <Dato etiqueta={tt.wiki.numero} valor={String(meta.numero)} />
-          {meta.elemento && <Dato etiqueta={tt.wiki.elemento} valor={nombres.elementos[meta.elemento]} />}
-          {meta.palo && <Dato etiqueta="Palo" valor={nombres.palos[meta.palo]} />}
-        </View>
-
-        {ficha ? (
-          <>
-            <Seccion titulo={tt.wiki.palabrasClave}>
-              <View style={estilos.chips}>
-                <Text style={estilos.chipEtiqueta}>{tt.wiki.derecho}:</Text>
-                <Text style={estilos.chipTexto}>{ficha.palabrasClave.normal.join(' · ')}</Text>
-              </View>
-              <View style={estilos.chips}>
-                <Text style={estilos.chipEtiqueta}>{tt.wiki.invertido}:</Text>
-                <Text style={estilos.chipTexto}>{ficha.palabrasClave.invertida.join(' · ')}</Text>
-              </View>
-            </Seccion>
-            <Seccion titulo={tt.wiki.derecho}>
-              <Text style={estilos.parrafo}>{ficha.significado.normal}</Text>
-            </Seccion>
-            <Seccion titulo={tt.wiki.invertido}>
-              <Text style={estilos.parrafo}>{ficha.significado.invertida}</Text>
-            </Seccion>
-            <Seccion titulo={tt.wiki.simbolismo}>
-              <Text style={estilos.parrafo}>{ficha.simbolismo}</Text>
-            </Seccion>
-          </>
-        ) : (
-          <Text style={estilos.proximamente}>{tt.wiki.proximamente}</Text>
-        )}
-      </ScrollView>
+      ))}
     </View>
   );
 }
 
 function BotonEscuchar({ texto, acento }: { texto: string; acento: string }) {
-  const { hablando, alternar } = useVoz(texto);
+  const hablando = useVoz((s) => s.hablando);
+  const hablar = useVoz((s) => s.hablar);
+  const parar = useVoz((s) => s.parar);
+  const idioma = useApp((s) => s.idioma);
   const t = useT();
   return (
     <Pressable
-      onPress={alternar}
+      onPress={() => (hablando ? parar() : hablar(texto, idioma, ['AprenderDetalle']))}
       style={({ pressed }) => [
         estilos.escuchar,
         { borderColor: hexAlfa(acento, 0.6) },
@@ -126,24 +123,6 @@ function BotonEscuchar({ texto, acento }: { texto: string; acento: string }) {
   );
 }
 
-function Dato({ etiqueta, valor }: { etiqueta: string; valor: string }) {
-  return (
-    <View style={estilos.dato}>
-      <Text style={estilos.datoEtiqueta}>{etiqueta}</Text>
-      <Text style={estilos.datoValor}>{valor}</Text>
-    </View>
-  );
-}
-
-function Seccion({ titulo, children }: { titulo: string; children: ReactNode }) {
-  return (
-    <View style={estilos.seccion}>
-      <Text style={estilos.seccionTitulo}>{titulo}</Text>
-      {children}
-    </View>
-  );
-}
-
 const estilos = StyleSheet.create({
   contenedor: {
     flex: 1,
@@ -158,12 +137,18 @@ const estilos = StyleSheet.create({
     alignItems: 'center',
     gap: espaciado.md,
   },
+  nombre: {
+    color: colores.texto,
+    fontSize: 26,
+    textAlign: 'center',
+    fontFamily: fuente('tituloBold'),
+  },
   escuchar: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: espaciado.sm,
     paddingVertical: espaciado.sm,
-    paddingHorizontal: espaciado.lg,
+    paddingHorizontal: espaciado.xl,
     borderRadius: radios.pill,
     borderWidth: 1,
     backgroundColor: 'rgba(0,0,0,0.3)',
@@ -172,12 +157,6 @@ const estilos = StyleSheet.create({
     color: colores.texto,
     fontSize: 14,
     fontFamily: fuente('uiMedium'),
-  },
-  nombre: {
-    color: colores.texto,
-    fontSize: 26,
-    textAlign: 'center',
-    fontFamily: fuente('tituloBold'),
   },
   datos: {
     flexDirection: 'row',

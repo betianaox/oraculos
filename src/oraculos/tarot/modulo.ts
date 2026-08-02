@@ -1,5 +1,6 @@
 import type { OraculoModulo } from '../tipos';
 import { MAZO_TAROT } from './mazo';
+import { crearContenidoTarot } from './contenido';
 
 const tarot: OraculoModulo = {
   id: 'tarot',
@@ -9,8 +10,7 @@ const tarot: OraculoModulo = {
   fondo: require('../../../assets/oraculos/tarot/fondo.webp'),
   icono: require('../../../assets/oraculos/tarot/icono.webp'),
   mazo: MAZO_TAROT,
-  aprender: true,
-  consejo: true,
+  contenido: crearContenidoTarot,
 };
 
 export default tarot;

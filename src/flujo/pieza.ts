@@ -34,3 +34,13 @@ export function tirarCruz(mazo: Pieza[], aleatorio: () => number = Math.random):
     posicion: aleatorio() < PROB_INVERTIDA ? 'invertida' : 'normal',
   }));
 }
+
+/** Tres piezas distintas al azar, para ofrecer a elegir en el Consejo del dia. */
+export function tresAlAzar(mazo: Pieza[], aleatorio: () => number = Math.random): Pieza[] {
+  const piezas = [...mazo];
+  for (let i = 0; i < 3; i++) {
+    const j = i + Math.floor(aleatorio() * (piezas.length - i));
+    [piezas[i], piezas[j]] = [piezas[j], piezas[i]];
+  }
+  return piezas.slice(0, 3);
+}

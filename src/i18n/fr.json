@@ -39,6 +39,17 @@
     "escuchar": "Écouter",
     "detener": "Arrêter"
   },
+  "aprender": {
+    "seccionCartas": "Cartes",
+    "carta": "Carte",
+    "proximamente": "Contenu bientôt disponible",
+    "consejoGenerico": "Fais confiance au signe de cet instant et laisse-le t'accompagner aujourd'hui."
+  },
+  "consejo": {
+    "titulo": "Conseil du jour",
+    "elegir": "Choisis une carte pour ton conseil du jour",
+    "vuelveManana": "Reviens demain pour le prochain conseil"
+  },
   "ajustes": {
     "titulo": "Réglages",
     "idioma": "Langue"

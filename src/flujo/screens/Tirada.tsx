@@ -17,6 +17,7 @@ import { RATIO_PIEZA, CartaImagen } from '../components/CartaImagen';
 import { CartaAmpliable } from '../components/CartaAmpliable';
 import { BotonIcono } from '../components/BotonIcono';
 import { BotonVoz } from '../components/BotonVoz';
+import { RUTAS_LECTURA } from '../voz';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Tirada'>;
 
@@ -125,7 +126,7 @@ export function TiradaScreen({ navigation, route }: Props) {
         >
           <MaterialCommunityIcons name="script-text-outline" size={26} color={colores.texto} />
         </BotonIcono>
-        <BotonVoz texto={TEXTO_DEMO} />
+        <BotonVoz texto={TEXTO_DEMO} rutas={RUTAS_LECTURA} />
         <BotonIcono
           accessibilityLabel={t('flujo.nuevaPregunta')}
           onPress={() => navigation.navigate('Oraculo', { oraculoId, seccion: 'pregunta' })}

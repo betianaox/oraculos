@@ -2,10 +2,17 @@ import { useCallback, useEffect } from 'react';
 import { View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { NavigationContainer, DarkTheme, type Theme } from '@react-navigation/native';
+import {
+  NavigationContainer,
+  DarkTheme,
+  useNavigationContainerRef,
+  type Theme,
+} from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { Navegacion } from '@/navigation';
+import type { RootStackParamList } from '@/navigation/tipos';
+import { useVoz } from '@/flujo/voz';
 import { mapaFuentes } from '@/shell/theme/fuentes';
 import { colores } from '@/shell/theme/tokens';
 
@@ -36,13 +43,19 @@ export default function App() {
     if (fuentesListas) SplashScreen.hideAsync().catch(() => {});
   }, [fuentesListas]);
 
+  const navRef = useNavigationContainerRef<RootStackParamList>();
+
   if (!fuentesListas) return null;
 
   return (
     <SafeAreaProvider>
       <View style={{ flex: 1, backgroundColor: colores.fondo }} onLayout={onLayout}>
         <StatusBar style="light" />
-        <NavigationContainer theme={tema}>
+        <NavigationContainer
+          ref={navRef}
+          theme={tema}
+          onStateChange={() => useVoz.getState().alCambiarRuta(navRef.getCurrentRoute()?.name)}
+        >
           <Navegacion />
         </NavigationContainer>
       </View>

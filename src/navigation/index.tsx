@@ -5,9 +5,9 @@ import { AjustesScreen } from '@/screens/Ajustes';
 import { OraculoScreen } from '@/screens/Oraculo';
 import { TiradaScreen } from '@/flujo/screens/Tirada';
 import { LecturaScreen } from '@/flujo/screens/Lectura';
-import { AprenderScreen } from '@/oraculos/tarot/screens/Aprender';
-import { AprenderDetalleScreen } from '@/oraculos/tarot/screens/AprenderDetalle';
-import { ConsejoDelDiaScreen } from '@/oraculos/tarot/screens/ConsejoDelDia';
+import { AprenderScreen } from '@/flujo/screens/Aprender';
+import { AprenderDetalleScreen } from '@/flujo/screens/AprenderDetalle';
+import { ConsejoDelDiaScreen } from '@/flujo/screens/ConsejoDelDia';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

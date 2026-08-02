@@ -27,12 +27,12 @@ export function InicioScreen({ navigation }: Props) {
 
   const abrirSeccion = (seccion: SeccionFooter) => {
     const oraculo = ORACULOS[activo];
-    // Aprender y Consejo tienen pantalla propia cuando el oraculo las tiene.
-    if (seccion === 'wiki' && oraculo.aprender) {
+    // Aprender y Consejo tienen pantalla propia si el oraculo tiene contenido.
+    if (seccion === 'wiki' && oraculo.contenido) {
       navigation.navigate('Aprender', { oraculoId: oraculo.id });
       return;
     }
-    if (seccion === 'consejo' && oraculo.consejo) {
+    if (seccion === 'consejo' && oraculo.contenido) {
       navigation.navigate('ConsejoDelDia', { oraculoId: oraculo.id });
       return;
     }

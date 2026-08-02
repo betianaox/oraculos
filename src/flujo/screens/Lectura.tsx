@@ -13,6 +13,7 @@ import { fuente } from '@/shell/theme/fuentes';
 import { PARRAFOS_DEMO, TEXTO_DEMO } from '../demo';
 import { BotonIcono } from '../components/BotonIcono';
 import { BotonVoz } from '../components/BotonVoz';
+import { RUTAS_LECTURA } from '../voz';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Lectura'>;
 
@@ -69,7 +70,7 @@ export function LecturaScreen({ navigation, route }: Props) {
           <BotonIcono accessibilityLabel={t('flujo.verTirada')} onPress={() => navigation.goBack()}>
             <MaterialCommunityIcons name="cards-outline" size={26} color={colores.texto} />
           </BotonIcono>
-          <BotonVoz texto={TEXTO_DEMO} />
+          <BotonVoz texto={TEXTO_DEMO} rutas={RUTAS_LECTURA} />
           <BotonIcono
             accessibilityLabel={t('flujo.nuevaPregunta')}
             onPress={() => navigation.navigate('Oraculo', { oraculoId, seccion: 'pregunta' })}
