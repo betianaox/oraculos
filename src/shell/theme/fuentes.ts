@@ -12,16 +12,16 @@ import { familias, type RolFuente } from './tokens';
  * nombre de familia real en vez de la fuente del sistema.
  * ---------------------------------------------------------------------------
  */
-export const FUENTES_ACTIVAS = false;
+export const FUENTES_ACTIVAS = true;
 
 export const mapaFuentes: Record<string, number> = {
-  // [familias.titulo]:        require('../../../assets/fonts/Cinzel-Regular.ttf'),
-  // [familias.tituloBold]:    require('../../../assets/fonts/Cinzel-Bold.ttf'),
-  // [familias.subtitulo]:     require('../../../assets/fonts/CormorantGaramond-Regular.ttf'),
-  // [familias.subtituloMedium]: require('../../../assets/fonts/CormorantGaramond-Medium.ttf'),
-  // [familias.ui]:            require('../../../assets/fonts/Inter-Regular.ttf'),
-  // [familias.uiMedium]:      require('../../../assets/fonts/Inter-Medium.ttf'),
-  // [familias.uiSemiBold]:    require('../../../assets/fonts/Inter-SemiBold.ttf'),
+  [familias.titulo]: require('../../../assets/fonts/Cinzel-Regular.ttf'),
+  [familias.tituloBold]: require('../../../assets/fonts/Cinzel-Bold.ttf'),
+  [familias.subtitulo]: require('../../../assets/fonts/CormorantGaramond-Regular.ttf'),
+  [familias.subtituloMedium]: require('../../../assets/fonts/CormorantGaramond-Medium.ttf'),
+  [familias.ui]: require('../../../assets/fonts/Inter-Regular.ttf'),
+  [familias.uiMedium]: require('../../../assets/fonts/Inter-Medium.ttf'),
+  [familias.uiSemiBold]: require('../../../assets/fonts/Inter-SemiBold.ttf'),
 };
 
 /**
