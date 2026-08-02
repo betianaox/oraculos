@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "Oraculos",
+    "slug": "oraculos",
+    "owner": "betianare",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "predictiveBackGestureEnabled": false,
+      "package": "com.oraculos.app"
+    },
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "resizeMode": "contain",
+          "backgroundColor": "#0E0F14"
+        }
+      ],
+      "expo-asset",
+      "expo-font",
+      "expo-localization"
+    ],
+    "extra": {}
+  }
+}

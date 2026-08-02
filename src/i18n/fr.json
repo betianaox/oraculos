@@ -1,0 +1,45 @@
+{
+  "app": {
+    "nombre": "Oracles"
+  },
+  "home": {
+    "gemas": "Gemmes"
+  },
+  "footer": {
+    "consejo": "Conseil",
+    "wiki": "Wiki",
+    "quiz": "Quiz"
+  },
+  "secciones": {
+    "pregunta": "Question",
+    "consejo": "Conseil",
+    "wiki": "Wiki",
+    "quiz": "Quiz"
+  },
+  "ajustes": {
+    "titulo": "Réglages",
+    "idioma": "Langue"
+  },
+  "oraculos": {
+    "tarot": {
+      "nombre": "Tarot",
+      "subtitulo": "Le miroir des arcanes"
+    },
+    "runas": {
+      "nombre": "Runes",
+      "subtitulo": "La voix du vieux nord"
+    },
+    "angeles": {
+      "nombre": "Anges",
+      "subtitulo": "Messages d'en haut"
+    },
+    "egipcio": {
+      "nombre": "Égyptien",
+      "subtitulo": "L'oracle du Nil"
+    },
+    "iching": {
+      "nombre": "I Ching",
+      "subtitulo": "Le livre des mutations"
+    }
+  }
+}

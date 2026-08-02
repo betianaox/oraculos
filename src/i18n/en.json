@@ -1,0 +1,45 @@
+{
+  "app": {
+    "nombre": "Oracles"
+  },
+  "home": {
+    "gemas": "Gems"
+  },
+  "footer": {
+    "consejo": "Advice",
+    "wiki": "Wiki",
+    "quiz": "Quiz"
+  },
+  "secciones": {
+    "pregunta": "Question",
+    "consejo": "Advice",
+    "wiki": "Wiki",
+    "quiz": "Quiz"
+  },
+  "ajustes": {
+    "titulo": "Settings",
+    "idioma": "Language"
+  },
+  "oraculos": {
+    "tarot": {
+      "nombre": "Tarot",
+      "subtitulo": "The mirror of the arcana"
+    },
+    "runas": {
+      "nombre": "Runes",
+      "subtitulo": "The voice of the old north"
+    },
+    "angeles": {
+      "nombre": "Angels",
+      "subtitulo": "Messages from above"
+    },
+    "egipcio": {
+      "nombre": "Egyptian",
+      "subtitulo": "The oracle of the Nile"
+    },
+    "iching": {
+      "nombre": "I Ching",
+      "subtitulo": "The book of changes"
+    }
+  }
+}
