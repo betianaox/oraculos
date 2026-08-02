@@ -10,7 +10,6 @@ import { Header } from '@/shell/components/Header';
 import { colores, espaciado, radios } from '@/shell/theme/tokens';
 import { hexAlfa } from '@/shell/color';
 import { fuente } from '@/shell/theme/fuentes';
-import { PARRAFOS_DEMO, TEXTO_DEMO } from '../demo';
 import { BotonIcono } from '../components/BotonIcono';
 import { BotonVoz } from '../components/BotonVoz';
 import { RUTAS_LECTURA } from '../voz';
@@ -23,7 +22,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Lectura'>;
  * real armada a partir de la tirada y el analisis de la pregunta.
  */
 export function LecturaScreen({ navigation, route }: Props) {
-  const { oraculoId, pregunta } = route.params;
+  const { oraculoId, pregunta, parrafos } = route.params;
   const t = useT();
   const insets = useSafeAreaInsets();
   const oraculo = oraculoPorId(oraculoId);
@@ -39,7 +38,11 @@ export function LecturaScreen({ navigation, route }: Props) {
         end={{ x: 0.5, y: 0.9 }}
       />
 
-      <Header accion="cerrar" onAccion={() => navigation.popToTop()} titulo={nombre} />
+      <Header
+        accion="cerrar"
+        onAccion={() => navigation.popTo('Oraculo', { oraculoId, seccion: 'pregunta' })}
+        titulo={nombre}
+      />
 
       <View style={[estilos.cuerpo, { paddingBottom: insets.bottom + espaciado.lg }]}>
         <Text style={estilos.pregunta} numberOfLines={3}>
@@ -53,7 +56,7 @@ export function LecturaScreen({ navigation, route }: Props) {
             persistentScrollbar
             indicatorStyle="white"
           >
-            {PARRAFOS_DEMO.map((parrafo, i) => (
+            {parrafos.map((parrafo, i) => (
               <Text key={i} style={estilos.textoLectura}>
                 {parrafo}
               </Text>
@@ -70,13 +73,7 @@ export function LecturaScreen({ navigation, route }: Props) {
           <BotonIcono accessibilityLabel={t('flujo.verTirada')} onPress={() => navigation.goBack()}>
             <MaterialCommunityIcons name="cards-outline" size={26} color={colores.texto} />
           </BotonIcono>
-          <BotonVoz texto={TEXTO_DEMO} rutas={RUTAS_LECTURA} />
-          <BotonIcono
-            accessibilityLabel={t('flujo.nuevaPregunta')}
-            onPress={() => navigation.navigate('Oraculo', { oraculoId, seccion: 'pregunta' })}
-          >
-            <MaterialCommunityIcons name="crystal-ball" size={26} color={colores.texto} />
-          </BotonIcono>
+          <BotonVoz texto={parrafos.join('\n\n')} rutas={RUTAS_LECTURA} />
         </View>
       </View>
     </View>

@@ -5,7 +5,14 @@
 export interface Pieza {
   id: string;
   numero: number;
-  imagen: number | null; // require(...) del webp, o null -> placeholder
+  imagen: number | null; // require(...) del webp (frente), o null -> placeholder
+  // Dorso propio de la pieza (runas: el arte "-r"), para usar como reverso en
+  // el sorteo, el consejo o la wiki. La invertida NO usa esto: se rota 180.
+  dorso?: number;
+  // Nunca sale invertida (runas simetricas: gebo, ingwaz, dagaz, isa).
+  simetrica?: boolean;
+  // Relacion alto/ancho del arte (cartas ~1.8; runas ~1). Default: RATIO_PIEZA.
+  ratio?: number;
 }
 
 export type Posicion = 'normal' | 'invertida';
@@ -13,6 +20,17 @@ export type Posicion = 'normal' | 'invertida';
 export interface PiezaTirada {
   pieza: Pieza;
   posicion: Posicion;
+}
+
+/**
+ * Como tira un oraculo: la disposicion (cruz de 5, columna de 3...) y su sorteo
+ * propio. Si el oraculo no la define, se usa la cruz de 5 por defecto.
+ */
+export interface EspecieTirada {
+  disposicion: 'cruz' | 'fila';
+  tirar: (mazo: Pieza[]) => PiezaTirada[];
+  /** Efecto de sorteo: las piezas titilan al azar y se revelan una por una. */
+  sorteo?: boolean;
 }
 
 // Las invertidas salen menos seguido, para que no aparezcan demasiadas juntas.

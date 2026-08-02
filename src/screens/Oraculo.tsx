@@ -39,7 +39,7 @@ export function OraculoScreen({ route, navigation }: Props) {
         end={{ x: 0.5, y: 0.9 }}
       />
 
-      <Header accion="cerrar" onAccion={() => navigation.goBack()} titulo={nombre} />
+      <Header accion="cerrar" onAccion={() => navigation.popToTop()} titulo={nombre} />
 
       <View style={estilos.cuerpo}>
         {esPregunta && oraculo ? (
@@ -71,6 +71,7 @@ export function OraculoScreen({ route, navigation }: Props) {
                     oraculoId,
                     pregunta: datos.pregunta,
                     tema: datos.tema,
+                    analisis: datos.analisis,
                   });
                 } else {
                   setEnviado(datos);

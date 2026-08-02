@@ -1,7 +1,8 @@
 import type { ImageSourcePropType } from 'react-native';
 import type { CodigoIdioma } from '@/i18n/idiomas';
-import type { Pieza } from '@/flujo/pieza';
+import type { Pieza, EspecieTirada, PiezaTirada } from '@/flujo/pieza';
 import type { ContenidoOraculo } from '@/flujo/contenido';
+import type { AnalisisPregunta, Tema } from '@/pregunta/tipos';
 
 /**
  * Contrato de un ORACULO. Cada oraculo se describe a si mismo en su
@@ -41,6 +42,20 @@ export interface OraculoModulo {
    * el oraculo todavia no tiene motor y cae al placeholder.
    */
   mazo?: Pieza[];
+
+  /** Como tira este oraculo (disposicion + sorteo). Default: cruz de 5. */
+  tirada?: EspecieTirada;
+
+  /**
+   * Motor de lectura: arma los parrafos a partir de las piezas tiradas, el tema
+   * y el analisis de la pregunta. Si falta, la lectura muestra el demo.
+   */
+  lectura?: (
+    tirada: PiezaTirada[],
+    tema: Tema,
+    analisis: AnalisisPregunta,
+    idioma: CodigoIdioma
+  ) => string[];
 
   /**
    * Contenido del oraculo (Aprender + Consejo del dia) en el idioma dado. Si

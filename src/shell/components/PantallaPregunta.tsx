@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import {
   Image,
   Modal,
@@ -64,6 +65,15 @@ export function PantallaPregunta({ oraculo, onEnviar }: Props) {
       setTema(analisis.temaTexto);
     }
   }, [analisis.temaTexto, temaManual, tema]);
+
+  // "Nueva pregunta": al recuperar foco (X de Tirada/Lectura), arranca en blanco.
+  useFocusEffect(
+    useCallback(() => {
+      setPregunta('');
+      setTema('general');
+      setTemaManual(false);
+    }, [])
+  );
 
   const enviar = () => onEnviar({ pregunta: pregunta.trim(), tema, analisis });
 
@@ -220,7 +230,9 @@ function AvisoModal({
                   pressed && { opacity: 0.7 },
                 ]}
               >
-                <Text style={estilos.cardBotonTexto}>{a.label}</Text>
+                <Text style={estilos.cardBotonTexto} numberOfLines={1} adjustsFontSizeToFit>
+                  {a.label}
+                </Text>
               </Pressable>
             ))}
           </View>

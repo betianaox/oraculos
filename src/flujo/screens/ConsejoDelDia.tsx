@@ -22,16 +22,16 @@ import { hexAlfa } from '@/shell/color';
 import { fuente } from '@/shell/theme/fuentes';
 import { RATIO_PIEZA, CartaImagen } from '../components/CartaImagen';
 import { CartaAmpliable } from '../components/CartaAmpliable';
-import { tresAlAzar, type Pieza } from '../pieza';
+import { tresAlAzar, type Pieza, type Posicion } from '../pieza';
 import { consejoDeHoy, guardarConsejo } from '../consejo';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ConsejoDelDia'>;
 
-/**
- * Consejo del dia COMPARTIDO: elegir 1 de 3 piezas dadas vuelta, se voltea y da
- * el consejo. Queda quemado por hoy (por oraculo). El mazo, el dorso y el texto
- * del consejo los aporta el contenido del oraculo.
- */
+interface Elegida {
+  pieza: Pieza;
+  posicion: Posicion;
+}
+
 export function ConsejoDelDiaScreen({ navigation, route }: Props) {
   const { oraculoId } = route.params;
   const t = useT();
@@ -43,19 +43,31 @@ export function ConsejoDelDiaScreen({ navigation, route }: Props) {
 
   const contenido = useMemo(() => oraculo?.contenido?.(idioma), [oraculo, idioma]);
   const mazo = oraculo?.mazo ?? [];
+  const modo = contenido?.consejoModo ?? 'elegir';
+  const invierte = !!contenido?.invierte;
 
   const [cargando, setCargando] = useState(true);
   const [ofrecidas, setOfrecidas] = useState<Pieza[]>([]);
-  const [elegida, setElegida] = useState<Pieza | null>(null);
+  const [elegida, setElegida] = useState<Elegida | null>(null);
 
   const flip = useRef(new Animated.Value(0)).current; // 0 = dorso, 1 = frente
   const opacidadConsejo = useRef(new Animated.Value(0)).current;
 
+  const posicionDe = (pieza: Pieza): Posicion =>
+    invierte && !pieza.simetrica && Math.random() < 0.5 ? 'invertida' : 'normal';
+
   useEffect(() => {
-    consejoDeHoy(oraculoId).then((piezaId) => {
-      if (piezaId) {
-        const pieza = mazo.find((p) => p.id === piezaId) ?? null;
-        setElegida(pieza);
+    consejoDeHoy(oraculoId).then((guardado) => {
+      if (guardado) {
+        const pieza = mazo.find((p) => p.id === guardado.piezaId);
+        if (pieza) setElegida({ pieza, posicion: guardado.posicion });
+        flip.setValue(1);
+        opacidadConsejo.setValue(1);
+      } else if (modo === 'directo') {
+        const pieza = mazo[Math.floor(Math.random() * mazo.length)];
+        const posicion = posicionDe(pieza);
+        setElegida({ pieza, posicion });
+        guardarConsejo(oraculoId, pieza.id, posicion);
         flip.setValue(1);
         opacidadConsejo.setValue(1);
       } else {
@@ -67,8 +79,9 @@ export function ConsejoDelDiaScreen({ navigation, route }: Props) {
   }, []);
 
   const elegir = (pieza: Pieza) => {
-    setElegida(pieza);
-    guardarConsejo(oraculoId, pieza.id);
+    const posicion = posicionDe(pieza);
+    setElegida({ pieza, posicion });
+    guardarConsejo(oraculoId, pieza.id, posicion);
     flip.setValue(0);
     opacidadConsejo.setValue(0);
     Animated.sequence([
@@ -78,9 +91,9 @@ export function ConsejoDelDiaScreen({ navigation, route }: Props) {
   };
 
   const anchoCarta = Math.min(width * 0.5, 480 / PixelRatio.get());
-  const altoCarta = anchoCarta * RATIO_PIEZA;
+  const altoCarta = anchoCarta * (elegida?.pieza.ratio ?? RATIO_PIEZA);
   const anchoBack = Math.floor((width - espaciado.lg * 2 - 24) / 3);
-  const altoBack = anchoBack * RATIO_PIEZA;
+  const altoBack = anchoBack * (mazo[0]?.ratio ?? RATIO_PIEZA);
 
   const rotDorso = flip.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '180deg'] });
   const rotFrente = flip.interpolate({ inputRange: [0, 1], outputRange: ['180deg', '360deg'] });
@@ -101,15 +114,15 @@ export function ConsejoDelDiaScreen({ navigation, route }: Props) {
       <View style={estilos.cuerpo}>
         <Text style={estilos.titulo}>{t('consejo.titulo')}</Text>
 
-        {!cargando && !elegida && (
+        {!cargando && modo === 'elegir' && !elegida && (
           <View style={estilos.centro}>
             <Text style={estilos.prompt}>{t('consejo.elegir')}</Text>
             <View style={estilos.filaBacks}>
               {ofrecidas.map((pieza) => (
                 <Pressable key={pieza.id} onPress={() => elegir(pieza)}>
-                  {reverso != null ? (
+                  {(pieza.dorso ?? reverso) != null ? (
                     <Image
-                      source={reverso}
+                      source={pieza.dorso ?? reverso}
                       style={{ width: anchoBack, height: altoBack, borderRadius: 8 }}
                       resizeMode="cover"
                     />
@@ -122,14 +135,18 @@ export function ConsejoDelDiaScreen({ navigation, route }: Props) {
 
         {!cargando && elegida && (
           <ScrollView contentContainerStyle={estilos.resultado} showsVerticalScrollIndicator={false}>
-            <CartaAmpliable pieza={elegida}>
+            {modo === 'directo' ? (
+              <CartaAmpliable pieza={elegida.pieza} posicion={elegida.posicion}>
+                <CartaImagen pieza={elegida.pieza} width={anchoCarta} radio={10} posicion={elegida.posicion} />
+              </CartaAmpliable>
+            ) : (
               <View style={{ width: anchoCarta, height: altoCarta }}>
                 <Animated.View
                   style={[estilos.cara, { transform: [{ perspective: 900 }, { rotateY: rotDorso }] }]}
                 >
-                  {reverso != null ? (
+                  {(elegida.pieza.dorso ?? reverso) != null ? (
                     <Image
-                      source={reverso}
+                      source={elegida.pieza.dorso ?? reverso}
                       style={{ width: anchoCarta, height: altoCarta, borderRadius: 10 }}
                       resizeMode="cover"
                     />
@@ -138,14 +155,14 @@ export function ConsejoDelDiaScreen({ navigation, route }: Props) {
                 <Animated.View
                   style={[estilos.cara, { transform: [{ perspective: 900 }, { rotateY: rotFrente }] }]}
                 >
-                  <CartaImagen pieza={elegida} width={anchoCarta} radio={10} />
+                  <CartaImagen pieza={elegida.pieza} width={anchoCarta} radio={10} posicion={elegida.posicion} />
                 </Animated.View>
               </View>
-            </CartaAmpliable>
+            )}
 
             <Animated.View style={[estilos.bloqueConsejo, { opacity: opacidadConsejo }]}>
-              <Text style={estilos.nombre}>{contenido?.nombre(elegida)}</Text>
-              <Text style={estilos.consejo}>{contenido?.consejo(elegida)}</Text>
+              <Text style={estilos.nombre}>{contenido?.nombre(elegida.pieza)}</Text>
+              <Text style={estilos.consejo}>{contenido?.consejo(elegida.pieza, elegida.posicion)}</Text>
               <Text style={estilos.vuelveManana}>{t('consejo.vuelveManana')}</Text>
             </Animated.View>
           </ScrollView>
@@ -173,9 +190,10 @@ const estilos = StyleSheet.create({
   },
   centro: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     gap: espaciado.xxl,
+    paddingTop: espaciado.xxxl,
   },
   prompt: {
     color: 'rgba(230,232,239,0.85)',
@@ -191,7 +209,7 @@ const estilos = StyleSheet.create({
   },
   resultado: {
     alignItems: 'center',
-    paddingTop: espaciado.lg,
+    paddingTop: espaciado.xl,
     paddingBottom: espaciado.sm,
     gap: espaciado.xl,
   },

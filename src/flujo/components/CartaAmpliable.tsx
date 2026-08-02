@@ -7,7 +7,8 @@ import { CartaImagen, RATIO_PIEZA } from './CartaImagen';
 
 /**
  * Envuelve la vista normal de una pieza y, al tocarla, abre un visor a pantalla
- * completa lo mas grande que entre. Mantiene la orientacion (invertida).
+ * completa lo mas grande que entre. Mantiene la orientacion (invertida) usando
+ * el arte propio o la rotacion, segun la pieza.
  */
 export function CartaAmpliable({
   pieza,
@@ -20,8 +21,9 @@ export function CartaAmpliable({
 }) {
   const [abierta, setAbierta] = useState(false);
   const { width, height } = useWindowDimensions();
-  const invertida = posicion === 'invertida';
-  const anchoMax = Math.floor(Math.min(width * 0.94, (height * 0.86) / RATIO_PIEZA));
+  const ratio = pieza.ratio ?? RATIO_PIEZA;
+  // Agrandado a ~80% de la pantalla.
+  const anchoMax = Math.floor(Math.min(width * 0.8, (height * 0.8) / ratio));
 
   return (
     <>
@@ -42,9 +44,7 @@ export function CartaAmpliable({
         statusBarTranslucent
       >
         <Pressable style={estilos.fondo} onPress={() => setAbierta(false)}>
-          <View style={invertida ? estilos.invertida : undefined}>
-            <CartaImagen pieza={pieza} width={anchoMax} radio={16} />
-          </View>
+          <CartaImagen pieza={pieza} width={anchoMax} radio={16} posicion={posicion} />
         </Pressable>
       </Modal>
     </>
@@ -57,9 +57,6 @@ const estilos = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.9)',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  invertida: {
-    transform: [{ rotate: '180deg' }],
   },
   lupaCapa: {
     position: 'absolute',

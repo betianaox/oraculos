@@ -1,4 +1,4 @@
-import type { Pieza } from './pieza';
+import type { Pieza, Posicion } from './pieza';
 
 // Contenido de un oraculo para las secciones Aprender (biblioteca de piezas) y
 // Consejo del dia. Cada oraculo lo arma en el idioma activo; las pantallas son
@@ -37,8 +37,15 @@ export interface ContenidoOraculo {
   nombre: (pieza: Pieza) => string;
   /** Ficha de detalle, o null/undefined si todavia no hay contenido escrito. */
   ficha?: (pieza: Pieza) => Ficha | null;
-  /** Consejo del dia para una pieza. */
-  consejo: (pieza: Pieza) => string;
+  /** Consejo del dia para una pieza (la posicion importa en runas). */
+  consejo: (pieza: Pieza, posicion: Posicion) => string;
   /** Rotulo para cuando falta la ficha ("Contenido proximamente"). */
   proximamente: string;
+  /**
+   * UX del consejo: 'elegir' = elegir 1 de 3 dadas vuelta y voltear (tarot);
+   * 'directo' = mostrar directamente la pieza del dia (runas). Default 'elegir'.
+   */
+  consejoModo?: 'elegir' | 'directo';
+  /** Si las piezas pueden salir invertidas (runas). Default false. */
+  invierte?: boolean;
 }

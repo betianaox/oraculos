@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import type { Posicion } from './pieza';
 
 // Fecha del dispositivo YYYY-MM-DD (hora local), como clave de "dia calendario".
 function fechaDeHoy(): string {
@@ -13,29 +14,39 @@ function clave(oraculoId: string): string {
   return `oraculos:consejoDelDia:${oraculoId}`;
 }
 
-interface Guardado {
-  fecha: string;
+export interface ConsejoGuardado {
   piezaId: string;
+  posicion: Posicion;
+}
+
+interface Registro extends ConsejoGuardado {
+  fecha: string;
 }
 
 /**
- * Pieza del consejo de hoy si ya fue elegida (quemada), o null si todavia se
- * puede elegir. Anti-atraso de reloj: si el reloj retrocedio, sigue contando
- * como el mismo dia ya guardado. Por oraculo (cada uno tiene su consejo).
+ * Pieza (y posicion) del consejo de hoy si ya fue elegida, o null si todavia se
+ * puede elegir. Anti-atraso de reloj. Por oraculo.
  */
-export async function consejoDeHoy(oraculoId: string): Promise<string | null> {
+export async function consejoDeHoy(oraculoId: string): Promise<ConsejoGuardado | null> {
   const hoy = fechaDeHoy();
   const guardado = await AsyncStorage.getItem(clave(oraculoId));
   if (guardado) {
-    const estado: Guardado = JSON.parse(guardado);
+    const estado: Registro = JSON.parse(guardado);
     if (estado.fecha === hoy || hoy < estado.fecha) {
-      return estado.piezaId;
+      return { piezaId: estado.piezaId, posicion: estado.posicion ?? 'normal' };
     }
   }
   return null;
 }
 
-/** Fija la pieza elegida como el consejo de hoy (queda quemada hasta manana). */
-export async function guardarConsejo(oraculoId: string, piezaId: string): Promise<void> {
-  await AsyncStorage.setItem(clave(oraculoId), JSON.stringify({ fecha: fechaDeHoy(), piezaId }));
+/** Fija la pieza (y posicion) del consejo de hoy (quemada hasta manana). */
+export async function guardarConsejo(
+  oraculoId: string,
+  piezaId: string,
+  posicion: Posicion
+): Promise<void> {
+  await AsyncStorage.setItem(
+    clave(oraculoId),
+    JSON.stringify({ fecha: fechaDeHoy(), piezaId, posicion })
+  );
 }
