@@ -1,6 +1,7 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Svg, { Defs, LinearGradient as SvgLinearGradient, Path, Stop } from 'react-native-svg';
 import { useT } from '@/i18n';
 import { colores, espaciado } from '../theme/tokens';
 import { fuente } from '../theme/fuentes';
@@ -17,57 +18,134 @@ const ITEMS: { seccion: SeccionFooter; icono: keyof typeof Ionicons.glyphMap }[]
   { seccion: 'quiz', icono: 'school-outline' },
 ];
 
+// Geometria de la consola: plataforma elevada en el centro.
+const TECHO = 22; // y del borde superior de la plataforma
+const HOMBRO = 66; // y del borde superior de las barras laterales
+const TRANS = 40; // ancho de la curva que sube de la barra a la plataforma
+const CUERPO = 28; // alto de la barra por debajo del hombro (antes del safe area)
+const LADO = 0.05; // barra lateral plana visible a cada lado (fraccion del ancho)
+
+function armarPaths(W: number, altoTotal: number) {
+  const jorobaLeft = Math.round(W * LADO);
+  const jorobaRight = Math.round(W * (1 - LADO));
+  const plataformaLeft = jorobaLeft + TRANS;
+  const plataformaRight = jorobaRight - TRANS;
+  const cx = TRANS * 0.5;
+
+  // Borde superior (abierto), para el trazo.
+  const arriba =
+    `M 0 ${HOMBRO} ` +
+    `L ${jorobaLeft} ${HOMBRO} ` +
+    `C ${jorobaLeft + cx} ${HOMBRO} ${plataformaLeft - cx} ${TECHO} ${plataformaLeft} ${TECHO} ` +
+    `L ${plataformaRight} ${TECHO} ` +
+    `C ${plataformaRight + cx} ${TECHO} ${jorobaRight - cx} ${HOMBRO} ${jorobaRight} ${HOMBRO} ` +
+    `L ${W} ${HOMBRO}`;
+
+  // Relleno: el borde superior + bajar a los bordes inferiores.
+  const relleno = `${arriba} L ${W} ${altoTotal} L 0 ${altoTotal} Z`;
+
+  return { arriba, relleno, plataformaLeft, plataformaRight };
+}
+
 /**
- * Footer de la pantalla de inicio. Actua sobre el oraculo centrado en el
- * carrusel: Consejo, Wiki y Quiz de ESE oraculo.
+ * Footer de la pantalla de inicio: consola con plataforma central elevada, misma
+ * chapa metalica semitransparente y borde con glow que el panel del nombre. El
+ * borde va de cian (izquierda) a celeste (arriba) a dorado (derecha). Los 3
+ * botones (Consejo/Wiki/Quiz) van apoyados sobre la plataforma.
  */
 export function Footer({ onSelect }: Props) {
   const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
   const t = useT();
 
+  const altoTotal = HOMBRO + CUERPO + insets.bottom;
+  const { arriba, relleno, plataformaLeft, plataformaRight } = armarPaths(width, altoTotal);
+
   return (
-    <View style={[estilos.contenedor, { paddingBottom: insets.bottom + espaciado.md }]}>
-      {ITEMS.map(({ seccion, icono }) => (
-        <Pressable
-          key={seccion}
-          onPress={() => onSelect(seccion)}
-          style={({ pressed }) => [estilos.item, pressed && estilos.itemPresionado]}
-          accessibilityRole="button"
-        >
-          <Ionicons name={icono} size={22} color={colores.textoSuave} />
-          <Text style={estilos.etiqueta}>{t(`footer.${seccion}`)}</Text>
-        </Pressable>
-      ))}
+    <View style={{ height: altoTotal }}>
+      <Svg width={width} height={altoTotal} style={StyleSheet.absoluteFill} pointerEvents="none">
+        <Defs>
+          <SvgLinearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+            <Stop offset="0" stopColor="#53627e" />
+            <Stop offset="0.45" stopColor="#46536e" />
+            <Stop offset="1" stopColor="#566989" />
+          </SvgLinearGradient>
+          <SvgLinearGradient id="borde" x1="0" y1="0" x2="1" y2="0">
+            <Stop offset="0" stopColor="#4fd8ff" />
+            <Stop offset="0.3" stopColor="#b4d2ff" />
+            <Stop offset="0.7" stopColor="#b4d2ff" />
+            <Stop offset="1" stopColor="#e9c46a" />
+          </SvgLinearGradient>
+        </Defs>
+
+        {/* Relleno metalico semitransparente */}
+        <Path d={relleno} fill="url(#metal)" fillOpacity={0.6} />
+
+        {/* Glow del borde (trazo ancho y tenue) */}
+        <Path
+          d={arriba}
+          stroke="url(#borde)"
+          strokeWidth={6}
+          strokeOpacity={0.25}
+          strokeLinecap="round"
+          fill="none"
+        />
+        {/* Borde nitido */}
+        <Path d={arriba} stroke="url(#borde)" strokeWidth={2} strokeLinecap="round" fill="none" />
+      </Svg>
+
+      {/* Botones, apoyados sobre la plataforma */}
+      <View
+        style={[
+          estilos.botones,
+          {
+            left: plataformaLeft,
+            width: plataformaRight - plataformaLeft,
+            top: TECHO,
+            paddingBottom: insets.bottom,
+          },
+        ]}
+      >
+        {ITEMS.map(({ seccion, icono }) => (
+          <Pressable
+            key={seccion}
+            onPress={() => onSelect(seccion)}
+            style={({ pressed }) => [estilos.item, pressed && estilos.itemPresionado]}
+            accessibilityRole="button"
+            accessibilityLabel={t(`footer.${seccion}`)}
+          >
+            <Ionicons name={icono} size={22} color={colores.texto} />
+            <Text style={estilos.etiqueta}>{t(`footer.${seccion}`)}</Text>
+          </Pressable>
+        ))}
+      </View>
     </View>
   );
 }
 
 const estilos = StyleSheet.create({
-  contenedor: {
+  botones: {
+    position: 'absolute',
+    bottom: 0,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    paddingTop: espaciado.md,
-    paddingHorizontal: espaciado.lg,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colores.borde,
-    backgroundColor: colores.fondo,
   },
   item: {
     alignItems: 'center',
-    gap: espaciado.xs,
-    paddingHorizontal: espaciado.lg,
-    paddingVertical: espaciado.sm,
+    justifyContent: 'center',
+    gap: 3,
+    paddingHorizontal: espaciado.sm,
+    paddingVertical: espaciado.xs,
     borderRadius: 12,
   },
   itemPresionado: {
-    backgroundColor: colores.superficie,
+    opacity: 0.6,
   },
   etiqueta: {
     color: colores.textoSuave,
-    fontSize: 12,
-    letterSpacing: 0.5,
+    fontSize: 10,
+    letterSpacing: 0.4,
     fontFamily: fuente('uiMedium'),
-    fontWeight: '500',
   },
 });

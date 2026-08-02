@@ -11,8 +11,8 @@ export interface LayoutCarrusel {
 }
 
 export function calcularLayout(ancho: number): LayoutCarrusel {
-  const itemWidth = Math.round(ancho * 0.72);
-  const spacing = 14;
+  const itemWidth = Math.round(ancho * 0.62);
+  const spacing = -30;
   const stride = itemWidth + spacing;
   const side = Math.round((ancho - itemWidth) / 2);
   return { itemWidth, spacing, stride, side };

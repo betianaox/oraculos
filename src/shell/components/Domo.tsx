@@ -1,9 +1,10 @@
 import { Animated, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import type { OraculoModulo } from '@/oraculos/tipos';
 import { useT } from '@/i18n';
-import { colores, espaciado, radios } from '../theme/tokens';
+import { colores, espaciado } from '../theme/tokens';
 import { fuente } from '../theme/fuentes';
 import { hexAlfa } from '../color';
+import { PanelNombre } from './PanelNombre';
 
 interface Props {
   oraculo: OraculoModulo;
@@ -26,7 +27,7 @@ export function Domo({ oraculo, index, scrollX, stride, itemWidth, spacing, onPr
   const rango = [(index - 1) * stride, index * stride, (index + 1) * stride];
   const escala = scrollX.interpolate({
     inputRange: rango,
-    outputRange: [0.9, 1, 0.9],
+    outputRange: [0.7, 1, 0.7],
     extrapolate: 'clamp',
   });
   const opacidad = scrollX.interpolate({
@@ -45,29 +46,32 @@ export function Domo({ oraculo, index, scrollX, stride, itemWidth, spacing, onPr
       }}
     >
       {/* Nombre del oraculo */}
-      <View style={[estilos.etiqueta, { borderColor: hexAlfa(oraculo.acento, 0.6) }]}>
-        <Text style={estilos.nombre} numberOfLines={1}>
-          {t(oraculo.nombreKey)}
-        </Text>
-      </View>
+      <PanelNombre nombre={t(oraculo.nombreKey)} />
 
       {/* Domo enmarcado */}
       <Pressable
         onPress={onPress}
-        style={({ pressed }) => [
-          estilos.marco,
-          { borderColor: hexAlfa(oraculo.acento, 0.55) },
-          pressed && { transform: [{ scale: 0.98 }] },
-        ]}
+        style={({ pressed }) => [estilos.marco, pressed && estilos.marcoPress]}
         accessibilityRole="button"
         accessibilityLabel={t(oraculo.nombreKey)}
       >
-        {oraculo.domo ? (
-          <Image source={oraculo.domo} style={estilos.imagen} resizeMode="cover" />
-        ) : (
-          <View style={[estilos.placeholder, { backgroundColor: hexAlfa(oraculo.acento, 0.14) }]}>
-            <View style={[estilos.placeholderAnillo, { borderColor: hexAlfa(oraculo.acento, 0.5) }]} />
-          </View>
+        {({ pressed }) => (
+          <>
+            {/* Iluminacion sutil del color del oraculo al presionar */}
+            {pressed && (
+              <>
+                <View style={[estilos.glow, { backgroundColor: hexAlfa(oraculo.acento, 0.2) }]} />
+                <View style={[estilos.glowCentro, { backgroundColor: hexAlfa(oraculo.acento, 0.3) }]} />
+              </>
+            )}
+            {oraculo.domo ? (
+              <Image source={oraculo.domo} style={estilos.imagen} resizeMode="contain" />
+            ) : (
+              <View style={[estilos.placeholder, { backgroundColor: hexAlfa(oraculo.acento, 0.14) }]}>
+                <View style={[estilos.placeholderAnillo, { borderColor: hexAlfa(oraculo.acento, 0.5) }]} />
+              </View>
+            )}
+          </>
         )}
       </Pressable>
 
@@ -80,29 +84,28 @@ export function Domo({ oraculo, index, scrollX, stride, itemWidth, spacing, onPr
 }
 
 const estilos = StyleSheet.create({
-  etiqueta: {
-    alignSelf: 'center',
-    paddingHorizontal: espaciado.xl,
-    paddingVertical: espaciado.sm,
-    marginBottom: espaciado.md,
-    borderRadius: radios.md,
-    borderWidth: 1,
-    backgroundColor: colores.superficie,
-  },
-  nombre: {
-    color: colores.texto,
-    fontSize: 26,
-    textAlign: 'center',
-    letterSpacing: 1,
-    fontFamily: fuente('tituloBold'),
-    fontWeight: '700',
-  },
   marco: {
-    aspectRatio: 0.82,
-    borderRadius: radios.lg,
-    borderWidth: 1.5,
-    backgroundColor: colores.superficie,
-    overflow: 'hidden',
+    aspectRatio: 1,
+    backgroundColor: 'transparent',
+  },
+  marcoPress: {
+    transform: [{ scale: 1.02 }],
+  },
+  glow: {
+    position: 'absolute',
+    top: '12%',
+    left: '12%',
+    right: '12%',
+    bottom: '12%',
+    borderRadius: 999,
+  },
+  glowCentro: {
+    position: 'absolute',
+    top: '28%',
+    left: '28%',
+    right: '28%',
+    bottom: '28%',
+    borderRadius: 999,
   },
   imagen: {
     width: '100%',
@@ -120,10 +123,15 @@ const estilos = StyleSheet.create({
     borderWidth: 1.5,
   },
   subtitulo: {
-    marginTop: espaciado.md,
-    color: colores.textoSuave,
-    fontSize: 17,
+    marginTop: espaciado.lg,
+    color: 'rgba(240,242,248,0.9)',
+    fontSize: 18,
     textAlign: 'center',
+    fontStyle: 'italic',
+    letterSpacing: 0.3,
     fontFamily: fuente('subtitulo'),
+    textShadowColor: 'rgba(0,0,0,0.7)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 6,
   },
 });

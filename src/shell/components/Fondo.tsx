@@ -1,6 +1,6 @@
 import { Animated, Image, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ORACULOS } from '@/oraculos/registry';
+import { LISTA_LOOP } from '../carrusel';
 import { colores } from '../theme/tokens';
 import { hexAlfa } from '../color';
 
@@ -23,7 +23,7 @@ export function Fondo({ scrollX, stride }: Props) {
       {/* Base oscura constante, debajo de todo. */}
       <View style={[StyleSheet.absoluteFill, { backgroundColor: colores.fondo }]} />
 
-      {ORACULOS.map((oraculo, i) => {
+      {LISTA_LOOP.map((oraculo, i) => {
         const opacidad = scrollX.interpolate({
           inputRange: [(i - 1) * stride, i * stride, (i + 1) * stride],
           outputRange: [0, 1, 0],
@@ -31,9 +31,9 @@ export function Fondo({ scrollX, stride }: Props) {
         });
 
         return (
-          <Animated.View key={oraculo.id} style={[StyleSheet.absoluteFill, { opacity: opacidad }]}>
+          <Animated.View key={`${oraculo.id}-${i}`} style={[StyleSheet.absoluteFill, { opacity: opacidad }]}>
             {oraculo.fondo ? (
-              <Image source={oraculo.fondo} style={StyleSheet.absoluteFill} resizeMode="cover" />
+              <Image source={oraculo.fondo} style={estilos.imagen} resizeMode="cover" />
             ) : (
               <LinearGradient
                 colors={[hexAlfa(oraculo.acento, 0.32), colores.fondo]}
@@ -48,3 +48,10 @@ export function Fondo({ scrollX, stride }: Props) {
     </View>
   );
 }
+
+const estilos = StyleSheet.create({
+  imagen: {
+    width: '100%',
+    height: '100%',
+  },
+});

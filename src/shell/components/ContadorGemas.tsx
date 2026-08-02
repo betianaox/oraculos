@@ -32,6 +32,7 @@ const estilos = StyleSheet.create({
     color: colores.texto,
     fontSize: 15,
     fontFamily: fuente('uiSemiBold'),
-    fontWeight: '600',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
 });

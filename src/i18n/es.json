@@ -1,6 +1,6 @@
 {
   "app": {
-    "nombre": "Oráculos"
+    "nombre": "Oraculos"
   },
   "home": {
     "gemas": "Gemas"
@@ -30,7 +30,7 @@
       "subtitulo": "La voz del norte antiguo"
     },
     "angeles": {
-      "nombre": "Ángeles",
+      "nombre": "Angeles",
       "subtitulo": "Mensajes de lo alto"
     },
     "egipcio": {

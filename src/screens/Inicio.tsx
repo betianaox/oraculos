@@ -3,6 +3,7 @@ import { Animated, StyleSheet, useWindowDimensions, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '@/navigation/tipos';
 import { ORACULOS } from '@/oraculos/registry';
+import { useT } from '@/i18n';
 import { Header } from '@/shell/components/Header';
 import { Footer, type SeccionFooter } from '@/shell/components/Footer';
 import { CarruselDomos } from '@/shell/components/CarruselDomos';
@@ -22,6 +23,7 @@ export function InicioScreen({ navigation }: Props) {
   const { stride } = calcularLayout(width);
   const scrollX = useRef(new Animated.Value(0)).current;
   const [activo, setActivo] = useState(0);
+  const t = useT();
 
   const abrirSeccion = (seccion: SeccionFooter) => {
     navigation.navigate('Oraculo', { oraculoId: ORACULOS[activo].id, seccion });
@@ -31,7 +33,7 @@ export function InicioScreen({ navigation }: Props) {
     <View style={estilos.contenedor}>
       <Fondo scrollX={scrollX} stride={stride} />
 
-      <Header accion="config" onAccion={() => navigation.navigate('Ajustes')} />
+      <Header accion="config" onAccion={() => navigation.navigate('Ajustes')} titulo={t('app.nombre')} />
 
       <View style={estilos.centro}>
         <CarruselDomos
@@ -56,5 +58,6 @@ const estilos = StyleSheet.create({
   centro: {
     flex: 1,
     justifyContent: 'center',
+    paddingTop: 48,
   },
 });
