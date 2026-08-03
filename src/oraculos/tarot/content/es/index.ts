@@ -1,5 +1,6 @@
 import type { FuentesLectura } from '../../lib/resolverCarta';
 import { FRAGMENTOS_GENERAL_ES } from './fragmentos/general';
+import { FRAGMENTOS_GENERAL_MENORES_ES } from './fragmentos/menores';
 import { GENERICO_ES } from './generico';
 import { WIKI_MAYORES_ES } from './wiki/mayores';
 import { WIKI_MENORES_ES } from './wiki/menores';
@@ -9,7 +10,7 @@ import { WIKI_MENORES_ES } from './wiki/menores';
 // por palo), se agregan acá sin tocar el motor.
 export const FUENTES_ES: FuentesLectura = {
   fragmentos: {
-    general: FRAGMENTOS_GENERAL_ES,
+    general: { ...FRAGMENTOS_GENERAL_ES, ...FRAGMENTOS_GENERAL_MENORES_ES },
   },
   wiki: {
     ...WIKI_MAYORES_ES,

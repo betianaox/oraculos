@@ -3,6 +3,7 @@ import type { CartaId, NombresPack, WikiPorCarta } from './types';
 import { CONSEJOS_ES, CONSEJO_GENERICO_ES } from './es/consejos';
 import { NOMBRES_ES } from './es/nombres';
 import { WIKI_MAYORES_ES } from './es/wiki/mayores';
+import { WIKI_MENORES_ES } from './es/wiki/menores';
 
 // Todo el contenido de cartas que depende de idioma, para la Wiki y el Consejo
 // del día: nombres, fichas y consejos. El motor de lecturas usa su propio
@@ -17,7 +18,7 @@ export interface PaqueteCartas {
 
 const es: PaqueteCartas = {
   nombres: NOMBRES_ES,
-  wiki: { ...WIKI_MAYORES_ES },
+  wiki: { ...WIKI_MAYORES_ES, ...WIKI_MENORES_ES },
   consejos: CONSEJOS_ES,
   consejoGenerico: CONSEJO_GENERICO_ES,
 };
