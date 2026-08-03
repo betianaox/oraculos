@@ -44,10 +44,10 @@ export const BANCOS_TAROT_ES: BancosCruz = {
   ],
   verbos: ['habla de', 'trae', 'señala', 'pone sobre la mesa', 'apunta a', 'deja ver'],
   conectores: [
-    'Leídas juntas, {frag2} se vuelve el eje, y a su alrededor {frag1} y {frag3} tiran cada uno de su lado hasta buscar un equilibrio.',
+    'Leídas juntas, {frag2} se vuelve el eje; a su alrededor, {frag1} tira por un lado y {frag3} por el otro, hasta buscar un equilibrio.',
     'En el cruce, {frag1} prepara el terreno, {frag2} concentra lo esencial y {frag3} muestra hacia dónde se inclina la balanza.',
     'Lo que asoma como {frag1} se ordena en torno a {frag2}, y {frag3} le da su color final.',
-    'Entre {frag1} y {frag3}, lo que de verdad manda es {frag2}: ahí está el nudo de todo.',
+    'Con {frag1} de un lado y {frag3} del otro, lo que de verdad manda es {frag2}: ahí está el nudo de todo.',
   ],
   cabeza: [
     'En tu cabeza pesa {nombre}: {frag}.',

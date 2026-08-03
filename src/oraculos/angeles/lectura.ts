@@ -57,8 +57,13 @@ export function lecturaAngeles(
   analisis: AnalisisPregunta,
   _idioma: CodigoIdioma,
 ): string[] {
-  const nombre = (p: PiezaTirada) =>
-    WIKI_ANGELES_ES[p.pieza.numero]?.nombre ?? `Carta ${p.pieza.numero}`;
+  // En la lectura conviene el nombre corto: los ángeles negativos y algunos
+  // coros traen un epíteto tras la coma ("Rimmon, el Ángel del Rayo...") que
+  // pesa dentro de la frase. El nombre completo vive en la Wiki.
+  const nombre = (p: PiezaTirada) => {
+    const completo = WIKI_ANGELES_ES[p.pieza.numero]?.nombre ?? `Carta ${p.pieza.numero}`;
+    return completo.split(',')[0];
+  };
 
   const fuentes: FuentesCruz = {
     nombre,

@@ -44,10 +44,10 @@ export const BANCOS_ANGELES_ES: BancosCruz = {
   ],
   verbos: ['anuncia', 'trae', 'susurra', 'revela', 'señala', 'porta'],
   conectores: [
-    'Leídas juntas, {frag2} es la llama central, y a su lado {frag1} y {frag3} se entrelazan hasta hallar su equilibrio.',
+    'Leídas juntas, {frag2} es la llama central; alrededor, {frag1} tira por un lado y {frag3} por el otro, hasta hallar su equilibrio.',
     'En la cruz, {frag1} prepara el terreno, {frag2} concentra el mensaje y {frag3} muestra hacia dónde inclina la balanza celeste.',
     'Lo que asoma como {frag1} gira en torno a {frag2}, y {frag3} le da su resplandor final.',
-    'Entre {frag1} y {frag3}, lo que de verdad guía es {frag2}: ahí habla el ángel principal.',
+    'Con {frag1} de un lado y {frag3} del otro, lo que de verdad guía es {frag2}: ahí habla el ángel principal.',
   ],
   cabeza: [
     'En tu pensamiento pesa {nombre}: {frag}.',
