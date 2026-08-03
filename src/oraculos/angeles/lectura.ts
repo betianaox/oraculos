@@ -5,6 +5,7 @@ import { armarCruz, type FuentesCruz } from '@/flujo/motorCruz';
 import { WIKI_ANGELES_ES } from './content/wiki';
 import { BANCOS_ANGELES_ES } from './content/bancos';
 import { combinacionPresente } from './content/combinaciones';
+import { FRAGMENTOS_ANGELES_ES } from './content/fragmentos';
 
 function mezclar<T>(lista: readonly T[]): T[] {
   const copia = [...lista];
@@ -15,12 +16,22 @@ function mezclar<T>(lista: readonly T[]): T[] {
   return copia;
 }
 
-// Cláusula corta a partir de las palabras clave de la carta: toma dos al azar y
-// las une, para que P1 y P2 no repitan lo mismo. Las cartas "sin revés" caen a
-// sus claves derechas. Si no hubiera claves, usa el significado de la Wiki.
-function fragmentoAngel(p: PiezaTirada): string {
+// Cláusula corta para la carta en su posición. Escalera de fallback:
+//   1. Fragmento del tema consultado (amor/trabajo/dinero), si existe.
+//   2. Dos palabras clave al azar unidas (registro neutro del ángel).
+//   3. Significado de la Wiki (último recurso).
+// Las cartas "sin revés" caen a su lectura derecha en cualquier escalón.
+function fragmentoAngel(p: PiezaTirada, tema: Tema): string {
   const ficha = WIKI_ANGELES_ES[p.pieza.numero];
   if (!ficha) return '';
+
+  const porTema = FRAGMENTOS_ANGELES_ES[tema]?.[p.pieza.numero];
+  if (porTema) {
+    const arr =
+      p.posicion === 'invertida' && porTema.invertida ? porTema.invertida : porTema.normal;
+    if (arr && arr.length > 0) return arr[Math.floor(Math.random() * arr.length)];
+  }
+
   const claves =
     p.posicion === 'invertida' && ficha.claves.invertido
       ? ficha.claves.invertido
@@ -37,12 +48,12 @@ function fragmentoAngel(p: PiezaTirada): string {
  * Motor de lectura de Ángeles: de las 5 cartas de la cruz + el análisis a los
  * tres párrafos, con el armador compartido (flujo/motorCruz) y registro
  * místico. Suma, como gracia propia del oráculo, la nota de una combinación si
- * dos cartas relacionadas caen juntas. El `tema` no cambia el significado de
- * cada ángel (el mazo no trae bancos por tema); modula el tono vía el análisis.
+ * dos cartas relacionadas caen juntas. El `tema` reencuadra cada ángel hacia
+ * amor/trabajo/dinero cuando hay fragmento; si no, cae a su lectura neutra.
  */
 export function lecturaAngeles(
   tirada: PiezaTirada[],
-  _tema: Tema,
+  tema: Tema,
   analisis: AnalisisPregunta,
   _idioma: CodigoIdioma,
 ): string[] {
@@ -51,7 +62,7 @@ export function lecturaAngeles(
 
   const fuentes: FuentesCruz = {
     nombre,
-    fragmento: fragmentoAngel,
+    fragmento: (p) => fragmentoAngel(p, tema),
     bancos: BANCOS_ANGELES_ES,
   };
 
