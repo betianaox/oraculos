@@ -10,6 +10,7 @@ import {
 } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import * as SystemUI from 'expo-system-ui';
 import { Navegacion } from '@/navigation';
 import type { RootStackParamList } from '@/navigation/tipos';
 import { useVoz } from '@/flujo/voz';
@@ -17,6 +18,13 @@ import { mapaFuentes } from '@/shell/theme/fuentes';
 import { colores } from '@/shell/theme/tokens';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
+
+// En Expo 57 (edge-to-edge) la barra de navegacion de Android es transparente y
+// deja ver el fondo nativo de la ventana. Por defecto ese fondo es blanco en el
+// build, asi que la barra se ve blanca (en Expo Go se veia oscura porque hereda
+// otro fondo). Pintamos el root con el fondo de la app para que la barra quede
+// del mismo tono oscuro, con el footer transparente encima.
+SystemUI.setBackgroundColorAsync(colores.fondo).catch(() => {});
 
 const tema: Theme = {
   ...DarkTheme,
