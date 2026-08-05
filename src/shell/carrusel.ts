@@ -11,8 +11,11 @@ export const N = ORACULOS.length;
 /** Cuantas veces se repite la lista. 3 = una copia de buffer a cada lado. */
 export const COPIAS = 3;
 
-/** Indice (en la lista repetida) donde arranca: primer oraculo de la copia del medio (Tarot). */
-export const INICIO = N;
+/** Copia central (0-based) dentro de la lista repetida. */
+const CENTRAL = Math.floor(COPIAS / 2);
+
+/** Indice (en la lista repetida) donde arranca: primer oraculo de la copia central. */
+export const INICIO = CENTRAL * N;
 
 /** Lista repetida que consume el FlatList y el Fondo. */
 export const LISTA_LOOP = Array.from({ length: COPIAS }, () => ORACULOS).flat();
@@ -24,8 +27,9 @@ export function aLogico(indiceLoop: number): number {
 
 /**
  * Dado el indice al que se solto el carrusel, devuelve el indice equivalente en
- * la copia del medio (o el mismo si ya esta ahi). Sirve para recentrar y que el
- * buffer nunca se agote.
+ * la copia CENTRAL (o el mismo si ya esta ahi). Como es el mismo oraculo en la
+ * misma posicion, el salto es invisible, y despues de cada scroll siempre
+ * quedan las dos copias de buffer a cada lado.
  */
 export function recentrar(indiceLoop: number): number {
   const logico = aLogico(indiceLoop);

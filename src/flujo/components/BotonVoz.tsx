@@ -9,7 +9,15 @@ import { BotonIcono } from './BotonIcono';
  * `rutas` son las pantallas donde el audio puede seguir sonando (ej. Tirada +
  * Lectura). Al salir de esas rutas o al presionar stop, se corta.
  */
-export function BotonVoz({ texto, rutas }: { texto: string; rutas: string[] }) {
+export function BotonVoz({
+  texto,
+  rutas,
+  disabled = false,
+}: {
+  texto: string;
+  rutas: string[];
+  disabled?: boolean;
+}) {
   const hablando = useVoz((s) => s.hablando);
   const hablar = useVoz((s) => s.hablar);
   const parar = useVoz((s) => s.parar);
@@ -17,6 +25,7 @@ export function BotonVoz({ texto, rutas }: { texto: string; rutas: string[] }) {
 
   return (
     <BotonIcono
+      disabled={disabled}
       accessibilityLabel={hablando ? 'Detener' : 'Escuchar'}
       onPress={() => (hablando ? parar() : hablar(texto, idioma, rutas))}
     >

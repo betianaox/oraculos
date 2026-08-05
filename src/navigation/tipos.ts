@@ -10,6 +10,10 @@ export type RootStackParamList = {
   Oraculo: { oraculoId: string; seccion: SeccionOraculo };
   // Flujo de lectura COMPARTIDO: cualquier oraculo con `mazo` lo usa.
   Tirada: { oraculoId: string; pregunta: string; tema: Tema; analisis: AnalisisPregunta };
+  // Tirada PROPIA del I Ching (monedas -> hexagrama). Termina en la Lectura compartida.
+  TiradaIching: { oraculoId: string; pregunta: string; tema: Tema; analisis: AnalisisPregunta };
+  // Tirada PROPIA de Buzios (16 cauries). Termina en la Lectura compartida.
+  TiradaBuzios: { oraculoId: string; pregunta: string; tema: Tema; analisis: AnalisisPregunta };
   // La Tirada arma los parrafos (con el motor del oraculo o el demo) y los pasa.
   Lectura: { oraculoId: string; pregunta: string; parrafos: string[] };
   // Aprender (ex-Wiki) COMPARTIDO: cualquier oraculo con `contenido`.

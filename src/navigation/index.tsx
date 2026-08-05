@@ -4,6 +4,8 @@ import { InicioScreen } from '@/screens/Inicio';
 import { AjustesScreen } from '@/screens/Ajustes';
 import { OraculoScreen } from '@/screens/Oraculo';
 import { TiradaScreen } from '@/flujo/screens/Tirada';
+import { TiradaIchingScreen } from '@/oraculos/iching/screens/TiradaIching';
+import { TiradaBuziosScreen } from '@/oraculos/buzios/screens/TiradaBuzios';
 import { LecturaScreen } from '@/flujo/screens/Lectura';
 import { AprenderScreen } from '@/flujo/screens/Aprender';
 import { AprenderDetalleScreen } from '@/flujo/screens/AprenderDetalle';
@@ -17,6 +19,8 @@ export function Navegacion() {
       <Stack.Screen name="Inicio" component={InicioScreen} />
       <Stack.Screen name="Oraculo" component={OraculoScreen} />
       <Stack.Screen name="Tirada" component={TiradaScreen} />
+      <Stack.Screen name="TiradaIching" component={TiradaIchingScreen} />
+      <Stack.Screen name="TiradaBuzios" component={TiradaBuziosScreen} />
       <Stack.Screen name="Lectura" component={LecturaScreen} />
       <Stack.Screen name="Aprender" component={AprenderScreen} />
       <Stack.Screen name="AprenderDetalle" component={AprenderDetalleScreen} />

@@ -69,6 +69,14 @@ export interface OraculoModulo {
    */
   icono?: ImageSourcePropType;
 
+  /**
+   * El oraculo tiene su PROPIA pantalla de tirada y no usa el flujo compartido
+   * (mazo + cruz de 5). Ej: el I Ching, que tira monedas y arma un hexagrama.
+   * Con esto, tener `mazo` (que aca sirve solo para la wiki) no dispara la
+   * tirada compartida al enviar la pregunta.
+   */
+  tiradaPropia?: boolean;
+
   // --- Etapa 2 en adelante (todavia no se usa) ---
   // tirada?: React.ComponentType;        // tirada PROPIA del oraculo
   // cargarSignificados?: (idioma) => ... // significados perezosos por idioma

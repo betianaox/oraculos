@@ -26,11 +26,19 @@ export interface SeccionCartas {
   id: string;
   titulo: string;
   piezas: Pieza[];
+  /**
+   * Familia a la que pertenece la seccion, cuando varias secciones seguidas son
+   * partes de lo mismo (los menores del Egipcio, partidos en series). Se escribe
+   * UNA sola vez arriba del grupo; el titulo de cada seccion queda como subtitulo.
+   */
+  grupo?: string;
 }
 
 export interface ContenidoOraculo {
   /** Dorso de la pieza (para el Consejo del dia). */
   reverso: number;
+  /** Nota breve opcional arriba de la grilla de Aprender (ej: encuadre simbolico). */
+  intro?: string;
   /** Agrupacion de las piezas para la grilla de Aprender. */
   secciones: SeccionCartas[];
   /** Nombre visible de una pieza. */

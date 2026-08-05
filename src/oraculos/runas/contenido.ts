@@ -53,7 +53,9 @@ export function crearContenidoRunas(idioma: CodigoIdioma): ContenidoOraculo {
     ficha,
     consejo,
     proximamente: tt.wiki.proximamente,
-    consejoModo: 'directo',
-    invierte: true,
+    // Elegir 1 de 3 dadas vuelta y voltear (como las cartas). Cada runa muestra
+    // su propio dorso. Nunca sale invertida.
+    consejoModo: 'elegir',
+    invierte: false,
   };
 }

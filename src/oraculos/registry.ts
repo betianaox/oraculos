@@ -1,9 +1,10 @@
-import type { OraculoModulo } from './tipos';
-import tarot from './tarot/modulo';
-import runas from './runas/modulo';
 import angeles from './angeles/modulo';
+import buzios from './buzios/modulo';
 import egipcio from './egipcio/modulo';
 import iching from './iching/modulo';
+import runas from './runas/modulo';
+import tarot from './tarot/modulo';
+import type { OraculoModulo } from './tipos';
 
 /**
  * REGISTRO CENTRAL de oraculos.
@@ -14,9 +15,10 @@ import iching from './iching/modulo';
  */
 export const ORACULOS: readonly OraculoModulo[] = [
   tarot,
-  runas,
   angeles,
   egipcio,
+  runas,
+  buzios,
   iching,
 ];
 

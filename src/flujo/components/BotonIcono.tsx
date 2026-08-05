@@ -12,16 +12,24 @@ export function BotonIcono({
   children,
   onPress,
   accessibilityLabel,
+  disabled = false,
 }: {
   children: ReactNode;
   onPress: () => void;
   accessibilityLabel: string;
+  disabled?: boolean;
 }) {
   return (
     <Pressable
-      style={({ pressed }) => [estilos.boton, pressed && estilos.press]}
+      style={({ pressed }) => [
+        estilos.boton,
+        disabled && estilos.deshabilitado,
+        pressed && !disabled && estilos.press,
+      ]}
       onPress={onPress}
+      disabled={disabled}
       accessibilityRole="button"
+      accessibilityState={{ disabled }}
       accessibilityLabel={accessibilityLabel}
       hitSlop={8}
     >
@@ -56,5 +64,8 @@ const estilos = StyleSheet.create({
   },
   press: {
     opacity: 0.8,
+  },
+  deshabilitado: {
+    opacity: 0.35,
   },
 });

@@ -37,7 +37,9 @@
     "verTirada": "Back to the spread",
     "nuevaPregunta": "New question",
     "escuchar": "Listen",
-    "detener": "Stop"
+    "detener": "Stop",
+    "tirada": "Spread",
+    "lectura": "Reading"
   },
   "aprender": {
     "seccionCartas": "Cards",
@@ -70,6 +72,10 @@
     "egipcio": {
       "nombre": "Egyptian",
       "subtitulo": "The oracle of the Nile"
+    },
+    "buzios": {
+      "nombre": "Buzios",
+      "subtitulo": "The oracle of the cauries"
     },
     "iching": {
       "nombre": "I Ching",

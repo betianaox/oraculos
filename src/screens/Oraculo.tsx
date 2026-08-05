@@ -7,6 +7,8 @@ import { oraculoPorId } from '@/oraculos/registry';
 import { useT } from '@/i18n';
 import { Header } from '@/shell/components/Header';
 import { PantallaPregunta, type DatosPregunta } from '@/shell/components/PantallaPregunta';
+import { ModalRecompensa } from '@/shell/components/ModalRecompensa';
+import { useApp } from '@/store/useApp';
 import { colores, espaciado, radios } from '@/shell/theme/tokens';
 import { fuente } from '@/shell/theme/fuentes';
 import { hexAlfa } from '@/shell/color';
@@ -25,10 +27,40 @@ export function OraculoScreen({ route, navigation }: Props) {
   const oraculo = oraculoPorId(oraculoId);
   const [enviado, setEnviado] = useState<DatosPregunta | null>(null);
 
+  const gemas = useApp((s) => s.gemas);
+  const sumarGemas = useApp((s) => s.sumarGemas);
+  const [mostrarVideo, setMostrarVideo] = useState(false);
+  const [pendiente, setPendiente] = useState<DatosPregunta | null>(null);
+
   const acento = oraculo?.acento ?? colores.cromo;
   const nombre = oraculo ? t(oraculo.nombreKey) : oraculoId;
 
   const esPregunta = seccion === 'pregunta' && !!oraculo;
+
+  // Lleva a la tirada del oraculo (compartida o propia). La gema se descuenta en
+  // la propia pantalla de tirada.
+  const irATirada = (datos: DatosPregunta) => {
+    if (oraculo?.mazo && !oraculo.tiradaPropia) {
+      navigation.navigate('Tirada', { oraculoId, pregunta: datos.pregunta, tema: datos.tema, analisis: datos.analisis });
+    } else if (oraculo?.id === 'iching') {
+      navigation.navigate('TiradaIching', { oraculoId, pregunta: datos.pregunta, tema: datos.tema, analisis: datos.analisis });
+    } else if (oraculo?.id === 'buzios') {
+      navigation.navigate('TiradaBuzios', { oraculoId, pregunta: datos.pregunta, tema: datos.tema, analisis: datos.analisis });
+    } else {
+      setEnviado(datos);
+    }
+  };
+
+  // Al consultar: si hay al menos una gema, va a la tirada; si no, se ofrece el
+  // video para sumar una y despues seguir.
+  const consultar = (datos: DatosPregunta) => {
+    if (gemas >= 1) {
+      irATirada(datos);
+    } else {
+      setPendiente(datos);
+      setMostrarVideo(true);
+    }
+  };
 
   return (
     <View style={estilos.contenedor}>
@@ -62,22 +94,7 @@ export function OraculoScreen({ route, navigation }: Props) {
               </Pressable>
             </View>
           ) : (
-            <PantallaPregunta
-              oraculo={oraculo}
-              onEnviar={(datos) => {
-                // Si el oraculo tiene mazo, va al flujo de tirada+lectura.
-                if (oraculo.mazo) {
-                  navigation.navigate('Tirada', {
-                    oraculoId,
-                    pregunta: datos.pregunta,
-                    tema: datos.tema,
-                    analisis: datos.analisis,
-                  });
-                } else {
-                  setEnviado(datos);
-                }
-              }}
-            />
+            <PantallaPregunta oraculo={oraculo} onEnviar={consultar} />
           )
         ) : (
           <View style={estilos.centro}>
@@ -88,6 +105,19 @@ export function OraculoScreen({ route, navigation }: Props) {
           </View>
         )}
       </View>
+
+      <ModalRecompensa
+        visible={mostrarVideo}
+        onClose={() => setMostrarVideo(false)}
+        titulo="Te quedaste sin gemas"
+        recompensa="Recibir 1 gema"
+        onReward={() => {
+          sumarGemas(1);
+          const datos = pendiente;
+          setPendiente(null);
+          if (datos) irATirada(datos);
+        }}
+      />
     </View>
   );
 }

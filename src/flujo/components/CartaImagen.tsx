@@ -23,6 +23,11 @@ export function CartaImagen({ pieza, width, radio = 8, posicion = 'normal' }: Pr
   // La invertida se muestra rotando 180 la imagen (como las cartas).
   const rotar = posicion === 'invertida';
 
+  // Dibujo propio (I Ching: las lineas del hexagrama) tiene prioridad.
+  if (pieza.dibujo) {
+    return <View style={dimensiones}>{pieza.dibujo({ width, height })}</View>;
+  }
+
   if (pieza.imagen != null) {
     return (
       <Image

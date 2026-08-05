@@ -37,7 +37,9 @@
     "verTirada": "Torna alla stesa",
     "nuevaPregunta": "Nuova domanda",
     "escuchar": "Ascolta",
-    "detener": "Ferma"
+    "detener": "Ferma",
+    "tirada": "Stesa",
+    "lectura": "Lettura"
   },
   "aprender": {
     "seccionCartas": "Carte",
@@ -70,6 +72,10 @@
     "egipcio": {
       "nombre": "Egizio",
       "subtitulo": "L'oracolo del Nilo"
+    },
+    "buzios": {
+      "nombre": "Buzios",
+      "subtitulo": "L'oracolo dei cauries"
     },
     "iching": {
       "nombre": "I Ching",

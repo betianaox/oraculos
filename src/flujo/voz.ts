@@ -60,5 +60,6 @@ export const useVoz = create<VozState>((set, get) => ({
   },
 }));
 
-/** Rutas del flujo de lectura: el audio sigue sonando entre estas dos. */
-export const RUTAS_LECTURA = ['Tirada', 'Lectura'];
+/** Rutas del flujo de lectura: el audio sigue sonando entre la tirada (la
+ * compartida y las propias de cada oraculo) y la lectura. */
+export const RUTAS_LECTURA = ['Tirada', 'TiradaIching', 'TiradaBuzios', 'Lectura'];

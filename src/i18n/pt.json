@@ -37,7 +37,9 @@
     "verTirada": "Voltar à tiragem",
     "nuevaPregunta": "Nova pergunta",
     "escuchar": "Ouvir",
-    "detener": "Parar"
+    "detener": "Parar",
+    "tirada": "Tiragem",
+    "lectura": "Leitura"
   },
   "aprender": {
     "seccionCartas": "Cartas",
@@ -70,6 +72,10 @@
     "egipcio": {
       "nombre": "Egípcio",
       "subtitulo": "O oráculo do Nilo"
+    },
+    "buzios": {
+      "nombre": "Buzios",
+      "subtitulo": "O oráculo dos cauries"
     },
     "iching": {
       "nombre": "I Ching",

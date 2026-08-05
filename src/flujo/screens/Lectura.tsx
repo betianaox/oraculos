@@ -1,6 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '@/navigation/tipos';
@@ -10,8 +9,8 @@ import { Header } from '@/shell/components/Header';
 import { colores, espaciado, radios } from '@/shell/theme/tokens';
 import { hexAlfa } from '@/shell/color';
 import { fuente } from '@/shell/theme/fuentes';
-import { BotonIcono } from '../components/BotonIcono';
 import { BotonVoz } from '../components/BotonVoz';
+import { SelectorFlujo } from '../components/SelectorFlujo';
 import { RUTAS_LECTURA } from '../voz';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Lectura'>;
@@ -70,9 +69,11 @@ export function LecturaScreen({ navigation, route }: Props) {
         </View>
 
         <View style={estilos.pie}>
-          <BotonIcono accessibilityLabel={t('flujo.verTirada')} onPress={() => navigation.goBack()}>
-            <MaterialCommunityIcons name="cards-outline" size={26} color={colores.texto} />
-          </BotonIcono>
+          <SelectorFlujo
+            actual="lectura"
+            onTirada={() => navigation.goBack()}
+            onLectura={() => {}}
+          />
           <BotonVoz texto={parrafos.join('\n\n')} rutas={RUTAS_LECTURA} />
         </View>
       </View>

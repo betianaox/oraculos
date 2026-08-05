@@ -19,11 +19,12 @@ import { colores } from '@/shell/theme/tokens';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
-// En Expo 57 (edge-to-edge) la barra de navegacion de Android es transparente y
-// deja ver el fondo nativo de la ventana. Por defecto ese fondo es blanco en el
-// build, asi que la barra se ve blanca (en Expo Go se veia oscura porque hereda
-// otro fondo). Pintamos el root con el fondo de la app para que la barra quede
-// del mismo tono oscuro, con el footer transparente encima.
+// En Expo 57 (edge-to-edge) la barra de navegacion de Android es transparente.
+// El "velo" (scrim) blanco que Android le pone a la barra de 3 botones se saca
+// SOLO con el plugin expo-navigation-bar (enforceContrast:false + style:"dark",
+// en app.json), que actua en el build/prebuild. El componente de runtime NO se
+// usa: en Expo Go no puede desactivar el scrim y lo empeora. Este fondo oscuro
+// queda detras de la barra transparente.
 SystemUI.setBackgroundColorAsync(colores.fondo).catch(() => {});
 
 const tema: Theme = {

@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, LayoutChangeEvent, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '@/navigation/tipos';
@@ -15,8 +14,8 @@ import { tirarCruz, type EspecieTirada, type Pieza, type PiezaTirada } from '../
 import { PARRAFOS_DEMO } from '../demo';
 import { RATIO_PIEZA, CartaImagen } from '../components/CartaImagen';
 import { CartaAmpliable } from '../components/CartaAmpliable';
-import { BotonIcono } from '../components/BotonIcono';
 import { BotonVoz } from '../components/BotonVoz';
+import { SelectorFlujo } from '../components/SelectorFlujo';
 import { RUTAS_LECTURA } from '../voz';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Tirada'>;
@@ -60,12 +59,26 @@ export function TiradaScreen({ navigation, route }: Props) {
   const enFila = spec.disposicion === 'fila';
   const conSorteo = !!spec.sorteo;
 
+  // Los botones de Lectura y voz se habilitan recien cuando termina la
+  // animacion de entrada (si no, el texto queda disponible antes y se ve raro).
+  const [listo, setListo] = useState(false);
+
   // Estado del sorteo (titileo + revelado uno por uno).
   const [revelado, setRevelado] = useState<boolean[]>(() => tirada.map(() => !conSorteo));
   const [vista, setVista] = useState<Pieza[]>(() => tirada.map((p) => p.pieza));
 
   useEffect(() => {
     gastarGemas(COSTO);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Habilita los botones cuando la entrada (sorteo o escalonado) termino.
+  useEffect(() => {
+    const dur = conSorteo
+      ? demoraRevelado(tirada.length - 1) + 500
+      : PASO_MS * (tirada.length - 1) + 350;
+    const to = setTimeout(() => setListo(true), dur);
+    return () => clearTimeout(to);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -196,13 +209,13 @@ export function TiradaScreen({ navigation, route }: Props) {
       </View>
 
       <View style={[estilos.pie, { paddingBottom: insets.bottom + RESPIRO }]}>
-        <BotonIcono
-          accessibilityLabel={t('flujo.verLectura')}
-          onPress={() => navigation.navigate('Lectura', { oraculoId, pregunta, parrafos })}
-        >
-          <MaterialCommunityIcons name="script-text-outline" size={26} color={colores.texto} />
-        </BotonIcono>
-        <BotonVoz texto={textoVoz} rutas={RUTAS_LECTURA} />
+        <SelectorFlujo
+          actual="tirada"
+          onTirada={() => {}}
+          onLectura={() => navigation.navigate('Lectura', { oraculoId, pregunta, parrafos })}
+          lecturaDisabled={!listo}
+        />
+        <BotonVoz texto={textoVoz} rutas={RUTAS_LECTURA} disabled={!listo} />
       </View>
     </View>
   );

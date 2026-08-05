@@ -1,9 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { Animated, Easing, Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import type { OraculoModulo } from '@/oraculos/tipos';
 import { useT } from '@/i18n';
-import { colores, espaciado } from '../theme/tokens';
+import { espaciado } from '../theme/tokens';
 import { fuente } from '../theme/fuentes';
 import { hexAlfa } from '../color';
 import { PanelNombre } from './PanelNombre';
@@ -16,6 +15,9 @@ interface Props {
   itemWidth: number;
   spacing: number;
   onPress: () => void;
+  // Solo el domo centrado anima sus particulas (los demas ni las montan, para
+  // no correr decenas de animaciones a la vez y trabar el scroll).
+  activo?: boolean;
 }
 
 /**
@@ -23,7 +25,7 @@ interface Props {
  * placeholder) y el subtitulo (Cormorant) abajo. Crece y se enfoca cuando queda
  * centrado; se achica y atenua cuando esta al costado.
  */
-export function Domo({ oraculo, index, scrollX, stride, itemWidth, spacing, onPress }: Props) {
+export function Domo({ oraculo, index, scrollX, stride, itemWidth, spacing, onPress, activo = false }: Props) {
   const t = useT();
 
   const rango = [(index - 1) * stride, index * stride, (index + 1) * stride];
@@ -38,32 +40,11 @@ export function Domo({ oraculo, index, scrollX, stride, itemWidth, spacing, onPr
     extrapolate: 'clamp',
   });
 
-  // Foco: 1 cuando el domo esta centrado. Solo el activo brilla.
+  // Foco: 1 cuando el domo esta centrado. Las particulas solo se ven en el activo.
   const foco = scrollX.interpolate({
     inputRange: rango,
     outputRange: [0, 1, 0],
     extrapolate: 'clamp',
-  });
-
-  // Barrido de luz en loop (movimiento de luz dentro del domo activo).
-  const brillo = useRef(new Animated.Value(0)).current;
-  useEffect(() => {
-    const anim = Animated.loop(
-      Animated.timing(brillo, {
-        toValue: 1,
-        duration: 3200,
-        delay: 600,
-        easing: Easing.inOut(Easing.ease),
-        useNativeDriver: true,
-      })
-    );
-    anim.start();
-    return () => anim.stop();
-  }, [brillo]);
-
-  const desliz = brillo.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-itemWidth * 0.7, itemWidth * 1.3],
   });
 
   return (
@@ -102,24 +83,8 @@ export function Domo({ oraculo, index, scrollX, stride, itemWidth, spacing, onPr
               </View>
             )}
 
-            {/* Barrido de luz (solo visible en el domo centrado) */}
-            {oraculo.domo && (
-              <Animated.View style={[estilos.shimmerWrap, { opacity: foco }]} pointerEvents="none">
-                <Animated.View
-                  style={[
-                    estilos.shimmerBand,
-                    { width: itemWidth * 0.45, transform: [{ translateX: desliz }, { rotate: '18deg' }] },
-                  ]}
-                >
-                  <LinearGradient
-                    colors={['transparent', 'rgba(255,255,255,0.14)', 'transparent']}
-                    start={{ x: 0, y: 0.5 }}
-                    end={{ x: 1, y: 0.5 }}
-                    style={StyleSheet.absoluteFill}
-                  />
-                </Animated.View>
-              </Animated.View>
-            )}
+            {/* Particulas magicas que suben (solo en el domo centrado) */}
+            {oraculo.domo && activo && <ParticulasDomo size={itemWidth} foco={foco} />}
           </>
         )}
       </Pressable>
@@ -132,7 +97,92 @@ export function Domo({ oraculo, index, scrollX, stride, itemWidth, spacing, onPr
   );
 }
 
+const CANT_PART = 10; // particulas que suben en el domo activo
+
+/**
+ * Puntitos de luz que ascienden y se desvanecen dentro del domo, en loop. Cada
+ * uno arranca con un desfase al azar para que no vayan sincronizados. La capa
+ * entera se atenua con `foco`, asi solo se ven en el domo centrado.
+ */
+function ParticulasDomo({
+  size,
+  foco,
+}: {
+  size: number;
+  foco: Animated.AnimatedInterpolation<number>;
+}) {
+  const particulas = useRef(
+    Array.from({ length: CANT_PART }, () => ({
+      val: new Animated.Value(0),
+      leftPct: 12 + Math.random() * 76, // posicion horizontal dentro de la caja
+      dim: 2 + Math.random() * 2.2, // tamaño del punto (mas chico)
+      dur: 2200 + Math.random() * 1800, // duracion de la subida (mas rapida)
+      delay: Math.random() * 2600, // desfase inicial
+      drift: (Math.random() * 2 - 1) * 14, // leve deriva horizontal
+    }))
+  ).current;
+
+  useEffect(() => {
+    const anims = particulas.map((p) =>
+      Animated.sequence([
+        Animated.delay(p.delay),
+        Animated.loop(
+          Animated.timing(p.val, {
+            toValue: 1,
+            duration: p.dur,
+            easing: Easing.linear,
+            useNativeDriver: true,
+          })
+        ),
+      ])
+    );
+    anims.forEach((a) => a.start());
+    return () => anims.forEach((a) => a.stop());
+  }, [particulas]);
+
+  // Arrancan un poco por debajo del centro (por encima de la base del domo) y
+  // suben hasta bien arriba.
+  const startY = size * 0.16;
+  const endY = -size * 0.5;
+
+  return (
+    <Animated.View style={[estilos.particulasWrap, { opacity: foco }]} pointerEvents="none">
+      {particulas.map((p, i) => (
+        <Animated.View
+          key={i}
+          style={{
+            position: 'absolute',
+            left: `${p.leftPct}%`,
+            top: '50%',
+            width: p.dim,
+            height: p.dim,
+            borderRadius: p.dim / 2,
+            backgroundColor: 'rgba(255,255,255,0.9)',
+            opacity: p.val.interpolate({
+              inputRange: [0, 0.15, 0.7, 1],
+              outputRange: [0, 1, 1, 0],
+            }),
+            transform: [
+              { translateX: p.val.interpolate({ inputRange: [0, 1], outputRange: [0, p.drift] }) },
+              { translateY: p.val.interpolate({ inputRange: [0, 1], outputRange: [startY, endY] }) },
+            ],
+          }}
+        />
+      ))}
+    </Animated.View>
+  );
+}
+
 const estilos = StyleSheet.create({
+  particulasWrap: {
+    position: 'absolute',
+    top: '8%',
+    left: '15%',
+    right: '15%',
+    bottom: '30%', // deja afuera la base del domo (las particulas no nacen ahi)
+    borderRadius: 20,
+    overflow: 'hidden',
+  },
   marco: {
     aspectRatio: 1,
     backgroundColor: 'transparent',
@@ -155,20 +205,6 @@ const estilos = StyleSheet.create({
     right: '28%',
     bottom: '28%',
     borderRadius: 999,
-  },
-  shimmerWrap: {
-    position: 'absolute',
-    top: '6%',
-    left: '6%',
-    right: '6%',
-    bottom: '6%',
-    borderRadius: 24,
-    overflow: 'hidden',
-  },
-  shimmerBand: {
-    position: 'absolute',
-    top: '-25%',
-    height: '150%',
   },
   imagen: {
     width: '100%',

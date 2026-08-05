@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 // Una "pieza" es la unidad que se tira: una carta de tarot, una carta de
 // angeles, una runa, etc. Es lo minimo que el flujo compartido (tirada +
 // lectura) necesita para mostrarla. Cada oraculo aporta su mazo de piezas.
@@ -13,6 +15,10 @@ export interface Pieza {
   simetrica?: boolean;
   // Relacion alto/ancho del arte (cartas ~1.8; runas ~1). Default: RATIO_PIEZA.
   ratio?: number;
+  // Dibujo propio en vez de imagen. El I Ching lo usa para trazar las 6 lineas
+  // del hexagrama (que se dibujan con Views, no son un asset). Si esta presente,
+  // CartaImagen lo usa en lugar de `imagen`.
+  dibujo?: (opts: { width: number; height: number }) => ReactNode;
 }
 
 export type Posicion = 'normal' | 'invertida';

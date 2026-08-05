@@ -1,8 +1,9 @@
-import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { Animated, Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Defs, LinearGradient as SvgLinearGradient, Path, Stop } from 'react-native-svg';
 import { useT } from '@/i18n';
+import { LISTA_LOOP } from '../carrusel';
 import { colores, espaciado } from '../theme/tokens';
 import { fuente } from '../theme/fuentes';
 
@@ -10,6 +11,10 @@ export type SeccionFooter = 'consejo' | 'wiki' | 'quiz';
 
 interface Props {
   onSelect: (seccion: SeccionFooter) => void;
+  /** Desplazamiento del carrusel: tiñe la pill del footer con el acento del oraculo. */
+  scrollX: Animated.Value;
+  /** Paso entre domos (mismo valor que el carrusel y el fondo). */
+  stride: number;
 }
 
 const ITEMS: { seccion: SeccionFooter; icono: keyof typeof Ionicons.glyphMap }[] = [
@@ -53,7 +58,7 @@ function armarPaths(W: number, altoTotal: number) {
  * borde va de cian (izquierda) a celeste (arriba) a dorado (derecha). Los 3
  * botones (Consejo/Wiki/Quiz) van apoyados sobre la plataforma.
  */
-export function Footer({ onSelect }: Props) {
+export function Footer({ onSelect, scrollX, stride }: Props) {
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const t = useT();
@@ -63,6 +68,7 @@ export function Footer({ onSelect }: Props) {
 
   return (
     <View style={{ height: altoTotal }}>
+      {/* Chapa metalica (base, da la textura/degrade) */}
       <Svg width={width} height={altoTotal} style={StyleSheet.absoluteFill} pointerEvents="none">
         <Defs>
           <SvgLinearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
@@ -70,6 +76,34 @@ export function Footer({ onSelect }: Props) {
             <Stop offset="0.45" stopColor="#46536e" />
             <Stop offset="1" stopColor="#566989" />
           </SvgLinearGradient>
+        </Defs>
+        <Path d={relleno} fill="url(#metal)" fillOpacity={0.6} />
+      </Svg>
+
+      {/* Fondo del footer teñido con el acento del oraculo centrado (el borde
+          celeste no se tiñe). Se cruzan por opacidad segun el scroll del carrusel. */}
+      {LISTA_LOOP.map((oraculo, i) => {
+        const opacidad = scrollX.interpolate({
+          inputRange: [(i - 1) * stride, i * stride, (i + 1) * stride],
+          outputRange: [0, 1, 0],
+          extrapolate: 'clamp',
+        });
+        return (
+          <Animated.View
+            key={`${oraculo.id}-${i}`}
+            style={[StyleSheet.absoluteFill, { opacity: opacidad }]}
+            pointerEvents="none"
+          >
+            <Svg width={width} height={altoTotal}>
+              <Path d={relleno} fill={oraculo.acento} fillOpacity={0.2} />
+            </Svg>
+          </Animated.View>
+        );
+      })}
+
+      {/* Borde celeste (encima, no se tiñe) */}
+      <Svg width={width} height={altoTotal} style={StyleSheet.absoluteFill} pointerEvents="none">
+        <Defs>
           {/* Borde: celeste (como el panel) que brilla casi blanco al centro. */}
           <SvgLinearGradient id="borde" x1="0" y1="0" x2="1" y2="0">
             <Stop offset="0" stopColor="#AFD2FF" stopOpacity="0.75" />
@@ -79,19 +113,8 @@ export function Footer({ onSelect }: Props) {
             <Stop offset="1" stopColor="#AFD2FF" stopOpacity="0.75" />
           </SvgLinearGradient>
         </Defs>
-
-        {/* Relleno metalico semitransparente */}
-        <Path d={relleno} fill="url(#metal)" fillOpacity={0.6} />
-
         {/* Glow del borde (trazo ancho y tenue) */}
-        <Path
-          d={arriba}
-          stroke="url(#borde)"
-          strokeWidth={6}
-          strokeOpacity={0.3}
-          strokeLinecap="round"
-          fill="none"
-        />
+        <Path d={arriba} stroke="url(#borde)" strokeWidth={6} strokeOpacity={0.3} strokeLinecap="round" fill="none" />
         {/* Borde nitido con destello al centro */}
         <Path d={arriba} stroke="url(#borde)" strokeWidth={2} strokeLinecap="round" fill="none" />
       </Svg>

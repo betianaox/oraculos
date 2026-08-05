@@ -4,14 +4,12 @@ import {
   FlatList,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  StyleSheet,
   useWindowDimensions,
   View,
 } from 'react-native';
 import type { OraculoModulo } from '@/oraculos/tipos';
 import { calcularLayout } from '../layout';
-import { INICIO, LISTA_LOOP, N, aLogico, recentrar } from '../carrusel';
-import { colores, espaciado } from '../theme/tokens';
+import { INICIO, LISTA_LOOP, aLogico, recentrar } from '../carrusel';
 import { Domo } from './Domo';
 
 interface Props {
@@ -22,27 +20,12 @@ interface Props {
   onIndexChange: (index: number) => void;
 }
 
-// Puntos de navegacion: las bolitas quedan fijas y el marcador se desplaza.
-const PUNTO = 7;
-const GAP = 9;
-const PASO = PUNTO + GAP;
-
 export function CarruselDomos({ scrollX, onSelect, onIndexChange }: Props) {
   const { width } = useWindowDimensions();
   const { itemWidth, spacing, stride, side } = calcularLayout(width);
-  const [activo, setActivo] = useState(0);
   const lista = useRef<FlatList<OraculoModulo>>(null);
-
-  // El marcador se desliza hasta la bolita del oraculo activo.
-  const marcador = useRef(new Animated.Value(0)).current;
-  useEffect(() => {
-    Animated.spring(marcador, {
-      toValue: activo * PASO,
-      useNativeDriver: true,
-      speed: 14,
-      bounciness: 6,
-    }).start();
-  }, [activo, marcador]);
+  // Indice (en la lista repetida) del domo centrado: solo ese anima particulas.
+  const [centrado, setCentrado] = useState(INICIO);
 
   // Arranca en la copia del medio, con Tarot centrado.
   useEffect(() => {
@@ -57,7 +40,6 @@ export function CarruselDomos({ scrollX, onSelect, onIndexChange }: Props) {
 
   const onMomentumEnd = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const raw = Math.round(e.nativeEvent.contentOffset.x / stride);
-    setActivo(aLogico(raw));
     onIndexChange(aLogico(raw));
 
     // Si quedo en una copia de los extremos, salta a la del medio (invisible).
@@ -65,8 +47,11 @@ export function CarruselDomos({ scrollX, onSelect, onIndexChange }: Props) {
     if (destino !== raw) {
       lista.current?.scrollToOffset({ offset: destino * stride, animated: false });
     }
+    setCentrado(destino);
   };
 
+  // El View contenedor se ajusta al alto de los domos (si se devuelve la lista
+  // suelta, se estira a lo alto y los domos quedan pegados arriba).
   return (
     <View>
       <Animated.FlatList
@@ -90,48 +75,11 @@ export function CarruselDomos({ scrollX, onSelect, onIndexChange }: Props) {
             stride={stride}
             itemWidth={itemWidth}
             spacing={spacing}
+            activo={index === centrado}
             onPress={() => onSelect(item as OraculoModulo)}
           />
         )}
       />
-
-      <View style={estilos.puntos}>
-        <View style={estilos.puntosFila}>
-          {Array.from({ length: N }).map((_, i) => (
-            <View key={i} style={estilos.punto} />
-          ))}
-          <Animated.View
-            style={[estilos.marcador, { transform: [{ translateX: marcador }, { scale: 1.35 }] }]}
-          />
-        </View>
-      </View>
     </View>
   );
 }
-
-const estilos = StyleSheet.create({
-  puntos: {
-    marginTop: espaciado.xl,
-    alignItems: 'center',
-  },
-  puntosFila: {
-    flexDirection: 'row',
-    position: 'relative',
-  },
-  punto: {
-    width: PUNTO,
-    height: PUNTO,
-    borderRadius: PUNTO / 2,
-    marginHorizontal: GAP / 2,
-    backgroundColor: 'rgba(230,232,239,0.45)',
-  },
-  marcador: {
-    position: 'absolute',
-    left: GAP / 2,
-    top: 0,
-    width: PUNTO,
-    height: PUNTO,
-    borderRadius: PUNTO / 2,
-    backgroundColor: colores.texto,
-  },
-});

@@ -44,7 +44,6 @@ export function ConsejoDelDiaScreen({ navigation, route }: Props) {
   const contenido = useMemo(() => oraculo?.contenido?.(idioma), [oraculo, idioma]);
   const mazo = oraculo?.mazo ?? [];
   const modo = contenido?.consejoModo ?? 'elegir';
-  const invierte = !!contenido?.invierte;
 
   const [cargando, setCargando] = useState(true);
   const [ofrecidas, setOfrecidas] = useState<Pieza[]>([]);
@@ -53,8 +52,8 @@ export function ConsejoDelDiaScreen({ navigation, route }: Props) {
   const flip = useRef(new Animated.Value(0)).current; // 0 = dorso, 1 = frente
   const opacidadConsejo = useRef(new Animated.Value(0)).current;
 
-  const posicionDe = (pieza: Pieza): Posicion =>
-    invierte && !pieza.simetrica && Math.random() < 0.5 ? 'invertida' : 'normal';
+  // El consejo del dia nunca sale invertido (ni cartas ni runas).
+  const posicionDe = (_pieza: Pieza): Posicion => 'normal';
 
   useEffect(() => {
     consejoDeHoy(oraculoId).then((guardado) => {
@@ -155,7 +154,9 @@ export function ConsejoDelDiaScreen({ navigation, route }: Props) {
                 <Animated.View
                   style={[estilos.cara, { transform: [{ perspective: 900 }, { rotateY: rotFrente }] }]}
                 >
-                  <CartaImagen pieza={elegida.pieza} width={anchoCarta} radio={10} posicion={elegida.posicion} />
+                  <CartaAmpliable pieza={elegida.pieza} posicion={elegida.posicion}>
+                    <CartaImagen pieza={elegida.pieza} width={anchoCarta} radio={10} posicion={elegida.posicion} />
+                  </CartaAmpliable>
                 </Animated.View>
               </View>
             )}

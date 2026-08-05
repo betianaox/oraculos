@@ -55,7 +55,7 @@ export function InicioScreen({ navigation }: Props) {
         />
       </View>
 
-      <Footer onSelect={abrirSeccion} />
+      <Footer onSelect={abrirSeccion} scrollX={scrollX} stride={stride} />
     </View>
   );
 }
@@ -68,6 +68,5 @@ const estilos = StyleSheet.create({
   centro: {
     flex: 1,
     justifyContent: 'center',
-    paddingTop: 48,
   },
 });

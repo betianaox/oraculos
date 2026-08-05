@@ -32,19 +32,15 @@ export interface FichaAngel {
   encuentros?: string;
 }
 
-// Secciones de la grilla Aprender: agrupan las 78 cartas por familia (los 9
-// Coros, Arcángeles, representativos y negativos), como el Tarot las agrupa por
-// Mayores y palos. Cada sección toma un rango contiguo de números de carta.
+// Secciones de la grilla Aprender: agrupan las 78 cartas por familia, como el
+// Tarot las agrupa por Mayores y palos. Cada sección toma un rango contiguo de
+// números de carta.
+//
+// Son POCAS y GRANDES a proposito: cada seccion se desbloquea con un video, asi
+// que los nueve Coros (de 3 cartas cada uno) van juntos en un solo bloque. El
+// coro al que pertenece cada angel igual se lee en su ficha ("Coro").
 export const SECCIONES_ANGELES_ES: { id: string; titulo: string; desde: number; hasta: number }[] = [
-  { id: 'serafines', titulo: 'Serafines', desde: 1, hasta: 3 },
-  { id: 'querubines', titulo: 'Querubines', desde: 4, hasta: 6 },
-  { id: 'tronos', titulo: 'Tronos', desde: 7, hasta: 9 },
-  { id: 'dominaciones', titulo: 'Dominaciones', desde: 10, hasta: 12 },
-  { id: 'virtudes', titulo: 'Virtudes', desde: 13, hasta: 15 },
-  { id: 'potestades', titulo: 'Potestades', desde: 16, hasta: 18 },
-  { id: 'principados', titulo: 'Principados', desde: 19, hasta: 21 },
-  { id: 'mensajeros', titulo: 'Mensajeros', desde: 22, hasta: 24 },
-  { id: 'noveno-coro', titulo: 'Noveno Coro', desde: 25, hasta: 27 },
+  { id: 'coros', titulo: 'Los nueve Coros', desde: 1, hasta: 27 },
   { id: 'arcangeles', titulo: 'Arcángeles', desde: 28, hasta: 37 },
   { id: 'representativos', titulo: 'Ángeles representativos', desde: 38, hasta: 66 },
   { id: 'negativos', titulo: 'Ángeles negativos', desde: 67, hasta: 78 },
