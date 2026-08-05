@@ -7,7 +7,7 @@ import { crearContenidoBuzios } from './contenido';
 const buzios: OraculoModulo = {
   id: 'buzios',
   nombreKey: 'oraculos.buzios.nombre',
-  acento: '#6E747E', // gris plateado oscuro
+  acento: '#8A909A', // gris plateado, un poco mas claro para que el degrade se note
   domo: require('../../../assets/oraculos/buzios/domo.webp'),
   fondo: require('../../../assets/oraculos/buzios/fondo.webp'),
   icono: require('../../../assets/oraculos/buzios/icono.webp'),

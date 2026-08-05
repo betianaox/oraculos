@@ -19,6 +19,7 @@ import type { AnalisisPregunta, Tema } from '@/pregunta/tipos';
 import { colores, espaciado, radios } from '../theme/tokens';
 import { fuente } from '../theme/fuentes';
 import { hexAlfa } from '../color';
+import { ModalRecompensa } from './ModalRecompensa';
 
 const TEMAS: Tema[] = ['general', 'amor', 'trabajo', 'dinero'];
 const COSTO = 1;
@@ -179,16 +180,12 @@ export function PantallaPregunta({ oraculo, onEnviar }: Props) {
         ]}
       />
 
-      <OverlaySinGemas
+      <ModalRecompensa
         visible={sinGemas}
-        acento={acento}
-        onVerVideo={() => {
-          // TODO(AdMob): reemplazar por un video con recompensa. Por ahora,
-          // para poder probar, simplemente suma una gema.
-          sumarGemas(1);
-          setSinGemas(false);
-        }}
-        onCerrar={() => setSinGemas(false)}
+        onClose={() => setSinGemas(false)}
+        titulo={t('pregunta.sinGemasTitulo')}
+        recompensa={t('pregunta.verVideo')}
+        onReward={() => sumarGemas(1)}
       />
     </ScrollView>
   );
@@ -242,46 +239,6 @@ function AvisoModal({
   );
 }
 
-function OverlaySinGemas({
-  visible,
-  acento,
-  onVerVideo,
-  onCerrar,
-}: {
-  visible: boolean;
-  acento: string;
-  onVerVideo: () => void;
-  onCerrar: () => void;
-}) {
-  const t = useT();
-  return (
-    <Modal visible={visible} transparent animationType="fade" statusBarTranslucent>
-      <View style={estilos.overlay}>
-        <View style={[estilos.card, { borderColor: hexAlfa(acento, 0.5) }]}>
-          <Text style={estilos.cardTitulo}>{t('pregunta.sinGemasTitulo')}</Text>
-          <Text style={estilos.cardTexto}>{t('pregunta.sinGemasTexto')}</Text>
-
-          <Pressable
-            onPress={onVerVideo}
-            style={({ pressed }) => [
-              estilos.botonVideo,
-              { backgroundColor: hexAlfa(acento, 0.25), borderColor: hexAlfa(acento, 0.9) },
-              pressed && { opacity: 0.75 },
-            ]}
-          >
-            <Ionicons name="videocam" size={20} color={colores.texto} />
-            <Text style={estilos.botonVideoTexto}>{t('pregunta.verVideo')}</Text>
-          </Pressable>
-
-          <Pressable onPress={onCerrar} hitSlop={10} style={estilos.enlace}>
-            <Text style={estilos.enlaceTexto}>{t('pregunta.ahoraNo')}</Text>
-          </Pressable>
-        </View>
-      </View>
-    </Modal>
-  );
-}
-
 const estilos = StyleSheet.create({
   scroll: {
     flexGrow: 1,
@@ -304,11 +261,13 @@ const estilos = StyleSheet.create({
   },
   chips: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'center',
     gap: espaciado.sm,
   },
   chip: {
-    flex: 1,
+    flexBasis: '47%',
+    flexGrow: 0,
     borderRadius: radios.pill,
     paddingVertical: espaciado.md,
     paddingHorizontal: espaciado.md,
@@ -425,32 +384,5 @@ const estilos = StyleSheet.create({
     color: colores.texto,
     fontSize: 14,
     fontFamily: fuente('uiMedium'),
-  },
-  botonVideo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: espaciado.sm,
-    marginTop: espaciado.sm,
-    paddingVertical: espaciado.lg,
-    paddingHorizontal: espaciado.xl,
-    borderRadius: radios.md,
-    borderWidth: 1,
-  },
-  botonVideoTexto: {
-    color: colores.texto,
-    fontSize: 16,
-    fontFamily: fuente('uiSemiBold'),
-  },
-  enlace: {
-    alignSelf: 'center',
-    marginTop: espaciado.md,
-    paddingVertical: espaciado.xs,
-  },
-  enlaceTexto: {
-    color: colores.textoSuave,
-    fontSize: 14,
-    textDecorationLine: 'underline',
-    fontFamily: fuente('ui'),
   },
 });

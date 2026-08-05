@@ -59,9 +59,27 @@ export function crearContenidoIChing(_idioma: CodigoIdioma): ContenidoOraculo {
 
   const consejo = (p: Pieza) => hexDeId(p.id)?.dictamen ?? '';
 
+  // 64 hexagramas partidos en 4 bloques de 16, cada uno con su propio video
+  // de desbloqueo (como los palos del Tarot). Van agrupados bajo un solo
+  // titulo ("Hexagramas") que se escribe una vez arriba del primero; el
+  // titulo de cada bloque ("1 a 16"...) solo se usa en el texto del banner.
+  const TAMANO_BLOQUE = 16;
+  const secciones = [];
+  for (let i = 0; i < MAZO_ICHING.length; i += TAMANO_BLOQUE) {
+    const piezas = MAZO_ICHING.slice(i, i + TAMANO_BLOQUE);
+    const desde = i + 1;
+    const hasta = i + piezas.length;
+    secciones.push({
+      id: `bloque${desde}`,
+      titulo: `${desde} a ${hasta}`,
+      grupo: 'Hexagramas',
+      piezas,
+    });
+  }
+
   return {
     reverso: 0,
-    secciones: [{ id: 'hexagramas', titulo: 'Hexagramas', piezas: MAZO_ICHING }],
+    secciones,
     nombre,
     ficha,
     consejo,

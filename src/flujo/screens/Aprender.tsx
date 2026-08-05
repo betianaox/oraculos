@@ -39,11 +39,9 @@ type Pedido = { seccionId: string | null; titulo: string };
  * las primeras PREVIEW de cada seccion; el resto queda dado vuelta (se ve el
  * dorso, del mismo tamaño que el frente) hasta que el usuario mira un video.
  *
- * El desbloqueo tiene dos formas segun el oraculo:
- *   - un solo bloque (runas, iching, buzios): un banner arriba destraba la wiki
- *     entera;
- *   - varios bloques (los mazos): un banner debajo de cada titulo destraba solo
- *     ese bloque (los arcanos mayores, cada palo...).
+ * Cada seccion tiene su propio banner debajo del titulo: en los oraculos de un
+ * solo bloque (runas, buzios) destraba la wiki entera; en los de varios
+ * bloques (I Ching, los mazos) destraba solo ese bloque.
  */
 export function AprenderScreen({ navigation, route }: Props) {
   const { oraculoId } = route.params;
@@ -72,12 +70,13 @@ export function AprenderScreen({ navigation, route }: Props) {
   const anchoItem = Math.floor((width - PADDING * 2 - GAP * (COLUMNAS - 1)) / COLUMNAS);
   const secciones = contenido?.secciones ?? [];
   const porBloques = secciones.length > 1;
-  const todaDesbloqueada = !!desbloqueos[oraculoId];
+  // El flag "oraculo entero" solo aplica a los oraculos de un solo bloque: si
+  // uno paso a tener bloques (I Ching), un desbloqueo viejo de "todo" no debe
+  // seguir abriendo los bloques nuevos, cada uno se desbloquea por separado.
+  const todaDesbloqueada = !porBloques && !!desbloqueos[oraculoId];
 
   const abierta = (seccionId: string) =>
     todaDesbloqueada || (porBloques && !!desbloqueos[claveWiki(oraculoId, seccionId)]);
-
-  const hayBloqueadas = secciones.some((s) => !abierta(s.id) && s.piezas.length > PREVIEW);
 
   return (
     <View style={estilos.contenedor}>
@@ -93,16 +92,6 @@ export function AprenderScreen({ navigation, route }: Props) {
       <ScrollView contentContainerStyle={estilos.scroll} showsVerticalScrollIndicator={false}>
         {contenido?.intro ? <Text style={estilos.intro}>{contenido.intro}</Text> : null}
 
-        {/* Un solo bloque: el banner va arriba y destraba todo. */}
-        {!porBloques && hayBloqueadas ? (
-          <View style={estilos.bannerArriba}>
-            <BannerVideo
-              texto="Mirá un video para desbloquear"
-              onPress={() => pedirVideo({ seccionId: null, titulo: nombre })}
-            />
-          </View>
-        ) : null}
-
         {secciones.map((seccion, i) => {
           const abierto = abierta(seccion.id);
           const bloqueado = !abierto && seccion.piezas.length > PREVIEW;
@@ -116,12 +105,21 @@ export function AprenderScreen({ navigation, route }: Props) {
                   lo dice el banner que las desbloquea. */}
               {seccion.grupo ? null : <Text style={estilos.seccionTitulo}>{seccion.titulo}</Text>}
 
-              {/* Varios bloques: cada uno se destraba con su propio video. */}
-              {porBloques && bloqueado ? (
+              {/* Cada bloque se destraba con su propio video, debajo del titulo. */}
+              {bloqueado ? (
                 <View style={estilos.bannerBloque}>
                   <BannerVideo
-                    texto={`Mirá un video para desbloquear ${seccion.titulo}`}
-                    onPress={() => pedirVideo({ seccionId: seccion.id, titulo: seccion.titulo })}
+                    texto={
+                      porBloques
+                        ? `Mira un video para desbloquear ${seccion.titulo}`
+                        : 'Mira un video para desbloquear'
+                    }
+                    onPress={() =>
+                      pedirVideo({
+                        seccionId: porBloques ? seccion.id : null,
+                        titulo: porBloques ? seccion.titulo : nombre,
+                      })
+                    }
                   />
                 </View>
               ) : null}
@@ -230,9 +228,6 @@ const estilos = StyleSheet.create({
     fontStyle: 'italic',
     marginTop: espaciado.md,
     fontFamily: fuente('ui'),
-  },
-  bannerArriba: {
-    marginTop: espaciado.lg,
   },
   bannerBloque: {
     marginBottom: espaciado.lg,

@@ -21,10 +21,11 @@ SplashScreen.preventAutoHideAsync().catch(() => {});
 
 // En Expo 57 (edge-to-edge) la barra de navegacion de Android es transparente.
 // El "velo" (scrim) blanco que Android le pone a la barra de 3 botones se saca
-// SOLO con el plugin expo-navigation-bar (enforceContrast:false + style:"dark",
-// en app.json), que actua en el build/prebuild. El componente de runtime NO se
-// usa: en Expo Go no puede desactivar el scrim y lo empeora. Este fondo oscuro
-// queda detras de la barra transparente.
+// SOLO con el plugin expo-navigation-bar (enforceContrast:false + style:"light",
+// en app.json: iconos claros porque el fondo detras es oscuro), que actua en el
+// build/prebuild. El componente de runtime NO se usa: en Expo Go no puede
+// desactivar el scrim y lo empeora. Este fondo oscuro queda detras de la barra
+// transparente.
 SystemUI.setBackgroundColorAsync(colores.fondo).catch(() => {});
 
 const tema: Theme = {
