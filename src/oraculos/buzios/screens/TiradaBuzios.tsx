@@ -24,7 +24,7 @@ import { SelectorFlujo } from '@/flujo/components/SelectorFlujo';
 import { RUTAS_LECTURA } from '@/flujo/voz';
 import { tirarBuzios } from '../tirada';
 import { lecturaBuzios } from '../lectura';
-import { ODUS_ES } from '../content/es/odus';
+import { paqueteBuzios } from '../content/paquete';
 
 const BASE = require('../../../../assets/oraculos/buzios/caracoles/base.webp');
 const ABIERTO = require('../../../../assets/oraculos/buzios/caracoles/abierto.webp');
@@ -97,6 +97,7 @@ function repartirPosiciones(): Pos[] {
 export function TiradaBuziosScreen({ navigation, route }: Props) {
   const { oraculoId, pregunta, tema, analisis } = route.params;
   const t = useT();
+  const idioma = useApp((s) => s.idioma);
   const insets = useSafeAreaInsets();
   const oraculo = oraculoPorId(oraculoId);
   const acento = oraculo?.acento ?? colores.cromo;
@@ -105,8 +106,8 @@ export function TiradaBuziosScreen({ navigation, route }: Props) {
 
   const caida = useMemo(() => tirarBuzios(), []);
   const parrafos = useMemo(
-    () => lecturaBuzios(caida, tema, analisis),
-    [caida, tema, analisis],
+    () => lecturaBuzios(caida, tema, analisis, idioma),
+    [caida, tema, analisis, idioma],
   );
   const pos1 = useMemo(() => repartirPosiciones(), []);
   const pos2 = useMemo(() => repartirPosiciones(), []);
@@ -174,14 +175,15 @@ export function TiradaBuziosScreen({ navigation, route }: Props) {
   const pos = mostrando === 1 ? pos1 : pos2;
   const caras = mostrando === 1 ? caida.caras1 : caida.caras2;
 
-  const oduNombre = ODUS_ES[caida.odu].nombre;
+  const { odus, textos: textosBuzios } = paqueteBuzios(idioma);
+  const oduNombre = odus[caida.odu].nombre;
   const rotulo =
     fase === 'una'
-      ? 'Primera tirada…'
+      ? textosBuzios.primeraTirada
       : fase === 'entreacto'
         ? `${caida.abiertos1} abiertos · ${oduNombre}`
         : fase === 'dos'
-          ? 'Segunda tirada…'
+          ? textosBuzios.segundaTirada
           : `${oduNombre} · ${
               caida.orientacion === 'favorable' ? t('buzios.aFavor') : t('buzios.desafio')
             }`;

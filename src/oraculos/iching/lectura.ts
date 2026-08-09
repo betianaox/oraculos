@@ -42,14 +42,33 @@ export function lecturaIching(
 
   // Sin ficha del hexagrama: se presenta dentro de una frase que ya esta
   // hablando de la consulta.
+  // Si se reconocio de que trata la pregunta, se prefiere esa apertura: decir
+  // "preguntas si vuelve" habla de lo suyo; la comun habla del oraculo.
+  const porIntencion = analisis.intencion
+    ? b.aperturasIntencion?.[analisis.intencion]
+    : undefined;
+  const poolApertura =
+    porIntencion && porIntencion.length > 0
+      ? porIntencion
+      : porTono(b.aperturas[modo], tono);
+
   parrafos.push(
-    elegir(porTono(b.aperturas[modo], tono))
+    elegir(poolApertura)
       .replace('{tema}', elegir(b.temas[tema]))
       .replace('{hex}', hexPrim.nombre)
       .replace('{num}', String(hexPrim.numero)),
   );
 
   parrafos.push(hexPrim.dictamen);
+
+  // Una frase de eco: primero un tercero (lo mas personal), si no, la marca
+  // temporal fuerte.
+  const eco = analisis.mencionaTercero
+    ? elegir(b.ecoTercero)
+    : analisis.tiempo !== 'presente'
+      ? elegir(b.ecoTiempo[analisis.tiempo])
+      : '';
+  if (eco) parrafos.push(eco);
   parrafos.push(hexPrim.significado[tema]);
 
   const posicionesCambio = tirada.cambiantes

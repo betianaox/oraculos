@@ -32,11 +32,11 @@ export const BANCOS_EGIPCIO_ES: BancosCruz = {
     abierta: {
       neutro: [
         'Para lo que quieres comprender {tema}, se abre este espejo.',
-        'Los arcanos te invitan a mirar {tema} desde estas cinco caras.',
+        'Los arcanos abren cinco caras para lo que preguntas {tema}.',
       ],
       preocupacion: [
-        'Sin prisa: lo que hoy te pesa {tema} queda acomodado para que puedas verlo.',
-        'Los arcanos acompañan tu desasosiego {tema} con esta mirada.',
+        'Sin prisa: queda acomodado, para que puedas verlo, eso que hoy te pesa {tema}.',
+        'Los arcanos acompañan con esta mirada tu desasosiego {tema}.',
       ],
       impulso: [
         'Detén un instante el impulso; hay una reflexión para hacer {tema}.',
@@ -50,17 +50,55 @@ export const BANCOS_EGIPCIO_ES: BancosCruz = {
     dinero: ['sobre el dinero', 'sobre lo material', 'sobre tus cuentas'],
     general: ['sobre tu momento', 'sobre lo que estás viviendo', 'sobre esto que traes'],
   },
+  // Retoman de qué trata la pregunta, en registro propio. Ninguna afirma ni
+  // niega lo consultado: reformulan y mueven la mirada a lo que los arcanos sí
+  // pueden mostrar.
+  aperturasIntencion: {
+    retorno: [
+      'Preguntas si vuelve. Los arcanos no deciden regresos, pero muestran qué quedó abierto.',
+      'Quieres saber si va a volver. La piedra no promete eso; sí muestra el estado del vínculo.',
+      'La pregunta es por un regreso. Mira primero qué sostiene hoy la distancia.',
+    ],
+    sentimiento: [
+      'Preguntas qué siente esa persona, y eso solo lo sabe ella. Los arcanos hablan del vínculo tal como está.',
+      'Quieres saber si te quiere. Nadie responde por otro, pero acá aparece qué se juega entre los dos.',
+      'La pregunta apunta al corazón del otro. Lo que se despliega es el lazo, no su decisión.',
+    ],
+    ruptura: [
+      'Estás pensando en cortar, y esa decisión es tuya. Los arcanos acercan lo que pesa de cada lado.',
+      'Preguntas si dejarlo. Antes de decidir, mira qué se está sosteniendo.',
+      'La pregunta es si irte. Aparece lo que te retiene y lo que te empuja.',
+    ],
+    decision: [
+      'Preguntas qué te conviene. Los arcanos no eligen por ti, pero ordenan lo que está en juego.',
+      'Estás entre dos caminos. Mira lo que se pone de cada lado antes de decidir.',
+      'La pregunta es qué hacer. Esto es lo que queda a la vista.',
+    ],
+    comienzo: [
+      'Preguntas si esto que empieza va a prosperar. Lo que se despliega muestra con qué arranca.',
+      'Quieres saber si sale bien. Aparece el terreno donde se planta.',
+      'La pregunta mira a lo que está por empezar. Esto es lo que trae.',
+    ],
+    espera: [
+      'Preguntas cuándo. Los tiempos no se leen en la piedra, pero sí qué falta para que eso madure.',
+      'Quieres saber cuánto falta. No hay fechas acá; sí lo que se está cocinando.',
+      'La pregunta es por el momento. Mira qué tiene que acomodarse todavía.',
+    ],
+  },
   situacion: [
     'Alrededor del asunto: {frag1}. Y en el centro: {frag2}.',
     'La arena muestra primero esto: {frag1}. Y en el eje: {frag2}.',
     'Rodeando la escena: {frag1}. Sosteniéndolo todo: {frag2}.',
     'Lo que asoma al borde: {frag1}. Lo que late en el medio: {frag2}.',
   ],
+  // Menos dos puntos que antes: cuatro seguidos en un párrafo se leen como una
+  // lista, no como una lectura. Se mantienen solo donde hacen falta para que
+  // entre un fragmento con verbo.
   tension: [
-    'Por un lado: {frag1}. Por el otro: {frag3}. Y en el medio, lo que manda: {frag2}.',
-    'A un costado tira esto: {frag1}. Al otro: {frag3}. El eje, sin embargo, es otro: {frag2}.',
-    'Los extremos hablan: {frag1}, y también {frag3}. Pero el centro pesa más: {frag2}.',
-    'Un brazo trae: {frag1}. El opuesto: {frag3}. Y entre ambos se impone: {frag2}.',
+    'Por un lado tira {frag1}, y por el otro {frag3}; en el medio manda {frag2}.',
+    'A un costado se ve {frag1}, al otro {frag3}. Pero el eje es otro: {frag2}.',
+    'Los extremos hablan de {frag1} y de {frag3}. El centro, en cambio, pesa más: {frag2}.',
+    'Hay algo que abre el camino, {frag1}, y algo que lo estrecha, {frag3}; entre ambos se impone {frag2}.',
   ],
   cabeza: [
     'En lo alto, lo que ocupa tu mente: {frag}.',

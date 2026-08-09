@@ -1,4 +1,5 @@
 import type { CodigoIdioma } from '@/i18n/idiomas';
+import type { Intencion } from '@/pregunta/tipos';
 import type { FichaWikiRuna } from './es/wiki';
 import type {
   Modo,
@@ -21,6 +22,17 @@ export interface PaqueteContenido {
   fragmentos: Partial<Record<Tema, FragmentosDeTema>>;
   aperturasAbiertas: Partial<Record<Tema, Record<Tono, string[]>>>;
   aperturasCerradas: Record<Tono, string[]>;
+  /**
+   * Aperturas que retoman DE QUÉ trata la pregunta, no sólo su tema.
+   *
+   * "Preguntas si va a volver" le habla a la persona de lo suyo; "para lo que
+   * quieres ver sobre el amor" le habla del oráculo. Es lo que más acerca esta
+   * lectura a la que escribe la IA.
+   *
+   * Opcional y parcial: sin intención reconocida, o sin texto para la que se
+   * reconoció, se usa la apertura común.
+   */
+  aperturasIntencion?: Partial<Record<Intencion, string[]>>;
   /**
    * Cierre del primer párrafo: teje las runas 1 y 2 con {frag1} y {frag2}.
    *

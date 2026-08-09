@@ -166,6 +166,12 @@ function traducible(nodo) {
   // Clave de un objeto ({ 'mayor-01': {...} }): es un identificador.
   if (ts.isPropertyAssignment(padre) && padre.name === nodo) return false;
 
+  // Literal en posicion de TIPO: Record<'pasado' | 'futuro', string[]>. No es
+  // texto, es parte de la firma, y traducirlo rompe el tipo. El verificador de
+  // tipos no lo atrapa porque estos literales no tienen "tipo contextual": son
+  // el tipo.
+  if (ts.isLiteralTypeNode(padre)) return false;
+
   // Valor de una propiedad marcada como no traducible.
   if (ts.isPropertyAssignment(padre) && padre.name) {
     const nombre = padre.name.getText();

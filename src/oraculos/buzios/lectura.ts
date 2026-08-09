@@ -1,6 +1,7 @@
-import type { AnalisisPregunta, Modo, Tema, Tono } from '@/pregunta/tipos';
-import { ODUS_ES } from './content/es/odus';
-import { BANCO_BUZIOS_ES } from './content/es/bancos';
+import type { CodigoIdioma } from '@/i18n/idiomas';
+import type { AnalisisPregunta, Tema, Tono } from '@/pregunta/tipos';
+import { paqueteBuzios } from './content/paquete';
+import type { BancoBuzios } from './content/es/bancos';
 import type { CaidaBuzios } from './tirada';
 
 /**
@@ -13,41 +14,66 @@ import type { CaidaBuzios } from './tirada';
  * la orientacion salen tal cual estan escritos, sin parafrasear ni ampliar. No
  * agregamos interpretacion propia sobre un corpus religioso.
  *
- * Lo unico que aporta este archivo es el envoltorio: presentar el odu sin
- * formato de ficha y conectar la lectura con como se formulo la pregunta.
+ * Lo que aporta este archivo es el envoltorio: presentar el odu sin formato de
+ * ficha, retomar de que trata la pregunta y reconocer lo que la persona conto.
+ * Este oraculo NUNCA usa IA, asi que esto es todo lo que va a leer: por eso se
+ * aprovecha cada dato del analisis en vez de descartarlo.
  */
 export function lecturaBuzios(
   caida: CaidaBuzios,
   tema: Tema,
   analisis: AnalisisPregunta,
+  idioma: CodigoIdioma,
 ): string[] {
-  const odu = ODUS_ES[caida.odu];
+  const { odus, banco } = paqueteBuzios(idioma);
+  const odu = odus[caida.odu];
   if (!odu) return [];
 
-  const b = BANCO_BUZIOS_ES;
   const { modo, tono } = analisis;
   const parrafos: string[] = [];
 
+  // Si se reconocio de que trata la pregunta, se prefiere esa apertura: decir
+  // "preguntas si vuelve" habla de lo suyo; la comun habla del oraculo.
+  const porIntencion = analisis.intencion
+    ? banco.aperturasIntencion?.[analisis.intencion]
+    : undefined;
+  const pool =
+    porIntencion && porIntencion.length > 0
+      ? porIntencion
+      : porTono(banco.aperturas[modo], tono);
+
   parrafos.push(
-    elegir(porTono(b.aperturas[modo], tono))
-      .replace('{tema}', elegir(b.temas[tema]))
+    elegir(pool)
+      .replace('{tema}', elegir(banco.temas[tema]))
       .replace('{odu}', odu.nombre)
       .replace('{num}', String(caida.abiertos1)),
   );
 
   parrafos.push(odu.significado[tema]);
 
+  // Una sola frase de eco: primero un tercero (lo mas personal), si no, la
+  // marca temporal fuerte.
+  const eco = elegirEco(analisis, banco);
+  if (eco) parrafos.push(eco);
+
   parrafos.push(
-    elegir(b.orientaciones[caida.orientacion]).replace(
+    elegir(banco.orientaciones[caida.orientacion]).replace(
       '{abiertos}',
       String(caida.abiertos2),
     ),
   );
   parrafos.push(odu.orientacion[caida.orientacion]);
-
-  parrafos.push(elegir(porTono(b.cierres[modo], tono)));
+  parrafos.push(elegir(porTono(banco.cierres[modo], tono)));
 
   return parrafos;
+}
+
+function elegirEco(analisis: AnalisisPregunta, banco: BancoBuzios): string {
+  if (analisis.mencionaTercero && banco.ecoTercero.length > 0) {
+    return elegir(banco.ecoTercero);
+  }
+  if (analisis.tiempo !== 'presente') return elegir(banco.ecoTiempo[analisis.tiempo]);
+  return '';
 }
 
 function elegir<T>(lista: readonly T[]): T {

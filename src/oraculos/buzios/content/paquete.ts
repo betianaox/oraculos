@@ -1,9 +1,12 @@
 import type { CodigoIdioma } from '@/i18n/idiomas';
 import type { BaseOdus } from './types';
+import { BANCO_BUZIOS_EN } from './en/bancos';
 import { ODUS_EN } from './en/odus';
 import { TEXTOS_EN } from './en/textos';
+import { BANCO_BUZIOS_ES, type BancoBuzios } from './es/bancos';
 import { ODUS_ES } from './es/odus';
 import { TEXTOS_ES } from './es/textos';
+import { BANCO_BUZIOS_PT } from './pt/bancos';
 import { ODUS_PT } from './pt/odus';
 import { TEXTOS_PT } from './pt/textos';
 
@@ -33,16 +36,20 @@ export interface TextosBuzios {
   aFavor: string;
   comoDesafio: string;
   proximamente: string;
+  primeraTirada: string;
+  segundaTirada: string;
 }
 
 export interface PaqueteBuzios {
   odus: BaseOdus;
   textos: TextosBuzios;
+  /** Tejido de la lectura: aperturas, ecos, orientaciones y cierres. */
+  banco: BancoBuzios;
 }
 
-const es: PaqueteBuzios = { odus: ODUS_ES, textos: TEXTOS_ES };
-const en: PaqueteBuzios = { odus: ODUS_EN, textos: TEXTOS_EN };
-const pt: PaqueteBuzios = { odus: ODUS_PT, textos: TEXTOS_PT };
+const es: PaqueteBuzios = { odus: ODUS_ES, textos: TEXTOS_ES, banco: BANCO_BUZIOS_ES };
+const en: PaqueteBuzios = { odus: ODUS_EN, textos: TEXTOS_EN, banco: BANCO_BUZIOS_EN };
+const pt: PaqueteBuzios = { odus: ODUS_PT, textos: TEXTOS_PT, banco: BANCO_BUZIOS_PT };
 
 const PAQUETES: Partial<Record<CodigoIdioma, PaqueteBuzios>> = { es, en, pt };
 

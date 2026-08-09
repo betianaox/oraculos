@@ -15,4 +15,6 @@ export const TEXTOS_EN: TextosBuzios = {
   aFavor: 'In your favor (ire)',
   comoDesafio: 'As a challenge (osogbo)',
   proximamente: 'Content coming soon',
+  primeraTirada: 'First reading…',
+  segundaTirada: 'Second draw…',
 };

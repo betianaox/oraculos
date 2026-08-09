@@ -1,4 +1,5 @@
 import type { PaqueteContenido } from '../paquete';
+import { aperturasIntencion } from './intenciones';
 import { WIKI_RUNAS_ES } from './wiki';
 import { aperturasAbiertas, aperturasCerradas } from './aperturas';
 import { cierre, situacion } from './conectores';
@@ -16,6 +17,7 @@ export const paqueteEs: PaqueteContenido = {
   fragmentos: { amor, trabajo, dinero, general },
   aperturasAbiertas,
   aperturasCerradas,
+  aperturasIntencion,
   situacion,
   cierre,
   consejos,

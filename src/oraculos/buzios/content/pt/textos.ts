@@ -11,8 +11,10 @@ export const TEXTOS_PT: TextosBuzios = {
   elMomento: 'O momento',
   enAmor: 'No amor',
   enTrabajo: 'No trabalho',
-  enDinero: 'Na vida financeira',
+  enDinero: 'No financeiro',
   aFavor: 'A favor (ire)',
   comoDesafio: 'Como desafio (osogbo)',
   proximamente: 'Conteúdo em breve',
+  primeraTirada: 'Primeira tiragem…',
+  segundaTirada: 'Segunda tiragem…',
 };

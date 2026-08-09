@@ -1,4 +1,4 @@
-import type { Modo, Tema, Tono } from '@/pregunta/tipos';
+import type { Intencion, Modo, Tema, Tono } from '@/pregunta/tipos';
 
 // ─────────────────────────────────────────────────────────────────────────
 // Tejido del I Ching (español NEUTRO).
@@ -19,6 +19,12 @@ import type { Modo, Tema, Tono } from '@/pregunta/tipos';
 export interface BancoIching {
   /** Presenta el hexagrama. Admite {tema}, {hex} (nombre) y {num}. */
   aperturas: Record<Modo, Record<Tono, string[]>>;
+  /** Aperturas que retoman DE QUE trata la pregunta. Admiten {hex} y {num}. */
+  aperturasIntencion?: Partial<Record<Intencion, string[]>>;
+  /** Eco opcional: una frase cuando se menciona a otra persona. */
+  ecoTercero: string[];
+  /** Eco opcional por marca temporal fuerte. */
+  ecoTiempo: Record<'pasado' | 'futuro', string[]>;
   temas: Record<Tema, string[]>;
   /** Anuncia que hay líneas en movimiento. */
   transicionLineas: string[];
@@ -72,6 +78,55 @@ export const BANCO_ICHING_ES: BancoIching = {
         'Tanta energía merece una pausa. Se dibuja {hex}, el hexagrama {num}.',
       ],
     },
+  },
+  // Retoman de qué trata la pregunta. Este oráculo NUNCA usa IA, así que su
+  // motor es todo lo que la persona va a leer: conviene aprovechar cada dato
+  // del análisis en vez de descartarlo.
+  //
+  // Ninguna afirma ni niega lo consultado. El I Ching no predice: describe un
+  // momento y su movimiento, y eso es justo lo que estas aperturas encuadran.
+  aperturasIntencion: {
+    retorno: [
+      'Preguntas si vuelve. El I Ching no decide regresos; describe el momento, y hoy ese momento es {hex} ({num}).',
+      'Quieres saber si va a volver. Lo que responde es {hex}, el hexagrama {num}: mira qué sostiene la distancia.',
+    ],
+    sentimiento: [
+      'Preguntas qué siente esa persona, y su corazón es suyo. Lo que se traza es el momento del vínculo: {hex} ({num}).',
+      'Quieres saber si te quiere. Nadie responde por otro; el hexagrama {num}, {hex}, habla del lazo tal como está.',
+    ],
+    ruptura: [
+      'Estás pensando en cortar, y esa decisión es tuya. El momento se dibuja en {hex} ({num}).',
+      'Preguntas si dejarlo. Antes de decidir, mira lo que traza {hex}, el hexagrama {num}.',
+    ],
+    decision: [
+      'Preguntas qué te conviene. El I Ching no elige por ti, pero ordena el momento: {hex} ({num}).',
+      'Estás entre dos caminos. Lo que se dibuja es {hex}, el hexagrama {num}.',
+    ],
+    comienzo: [
+      'Preguntas si esto que empieza va a prosperar. El momento del comienzo es {hex} ({num}).',
+      'Quieres saber si sale bien. Lo que se traza sobre ese terreno es {hex}, el hexagrama {num}.',
+    ],
+    espera: [
+      'Preguntas cuándo. El I Ching no marca fechas; marca en qué punto está la cosa: {hex} ({num}).',
+      'Quieres saber cuánto falta. Lo que se dibuja es {hex}, el hexagrama {num}, y ahí se ve qué falta madurar.',
+    ],
+  },
+  // Una sola frase de eco, para reconocer lo que la persona contó. Antes se
+  // descartaban `mencionaTercero` y `tiempo`, que ya venían detectados.
+  ecoTercero: [
+    'En todo esto, esa persona pesa más de lo que parece.',
+    'El vínculo con quien mencionas atraviesa todo el hexagrama.',
+    'Ese alguien también forma parte del cuadro.',
+  ],
+  ecoTiempo: {
+    pasado: [
+      'Parte de esto mira hacia atrás, a algo que todavía no cerró.',
+      'Hay un antes que sigue operando en la escena.',
+    ],
+    futuro: [
+      'La pregunta empuja hacia adelante, y por ahí va el movimiento.',
+      'Todo esto se inclina hacia lo que aún no ocurre.',
+    ],
   },
   temas: {
     amor: ['sobre el amor', 'sobre ese vínculo', 'sobre lo que sientes'],

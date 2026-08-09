@@ -1,4 +1,4 @@
-import type { Modo, Tema, Tono } from '@/pregunta/tipos';
+import type { Intencion, Modo, Tema, Tono } from '@/pregunta/tipos';
 import type { Orientacion } from '../types';
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -20,6 +20,15 @@ import type { Orientacion } from '../types';
 export interface BancoBuzios {
   /** Presenta el odu. Admite {tema}, {odu} (nombre) y {num} (abiertos). */
   aperturas: Record<Modo, Record<Tono, string[]>>;
+  /**
+   * Aperturas que retoman DE QUÉ trata la pregunta. Admiten {odu} y {num}.
+   * Si no se reconoció intención, se usa la común.
+   */
+  aperturasIntencion?: Partial<Record<Intencion, string[]>>;
+  /** Eco opcional: una sola frase, cuando se menciona a otra persona. */
+  ecoTercero: string[];
+  /** Eco opcional por marca temporal fuerte. */
+  ecoTiempo: Record<'pasado' | 'futuro', string[]>;
   temas: Record<Tema, string[]>;
   /** Introduce el matiz de la segunda tirada. Admite {abiertos}. */
   orientaciones: Record<Orientacion, string[]>;
@@ -58,6 +67,53 @@ export const BANCO_BUZIOS_ES: BancoBuzios = {
         'Tanta energía merece una pausa. Con {num} cauríes abiertos habla {odu}.',
       ],
     },
+  },
+  // Retoman de qué trata la pregunta. Ninguna afirma ni niega lo consultado:
+  // reformulan y mueven la mirada a lo que el odu sí puede mostrar. Esta es una
+  // consulta simbólica, no una adivinación: nada acá promete un desenlace.
+  aperturasIntencion: {
+    retorno: [
+      'Preguntas si vuelve. Los cauríes no deciden regresos; con {num} abiertos habla {odu}, y muestra qué quedó abierto.',
+      'Quieres saber si va a volver. Con {num} abiertos responde {odu}: mira qué sostiene hoy la distancia.',
+    ],
+    sentimiento: [
+      'Preguntas qué siente esa persona, y eso solo lo sabe ella. Con {num} abiertos habla {odu} del vínculo tal como está.',
+      'Quieres saber si te quiere. Nadie responde por otro; con {num} abiertos, {odu} muestra qué circula entre los dos.',
+    ],
+    ruptura: [
+      'Estás pensando en cortar, y esa decisión es tuya. Con {num} abiertos habla {odu} de lo que pesa de cada lado.',
+      'Preguntas si dejarlo. Con {num} abiertos responde {odu}: mira qué se está sosteniendo.',
+    ],
+    decision: [
+      'Preguntas qué te conviene. Con {num} abiertos habla {odu}, y ordena lo que está en juego.',
+      'Estás entre dos caminos. Con {num} abiertos responde {odu}.',
+    ],
+    comienzo: [
+      'Preguntas si esto que empieza va a prosperar. Con {num} abiertos habla {odu} del terreno donde se planta.',
+      'Quieres saber si sale bien. Con {num} abiertos responde {odu}.',
+    ],
+    espera: [
+      'Preguntas cuándo. Los cauríes no marcan fechas; con {num} abiertos, {odu} muestra qué falta para que madure.',
+      'Quieres saber cuánto falta. Con {num} abiertos habla {odu} de lo que se está gestando.',
+    ],
+  },
+  // Una sola frase de eco, para que la lectura reconozca lo que la persona
+  // contó. Antes se descartaban `mencionaTercero` y `tiempo`, que ya venían
+  // detectados y no se usaban en ningún lado.
+  ecoTercero: [
+    'En todo esto, esa persona pesa más de lo que parece.',
+    'El vínculo con quien mencionas atraviesa toda la caída.',
+    'Ese alguien también forma parte del cuadro.',
+  ],
+  ecoTiempo: {
+    pasado: [
+      'Parte de esto mira hacia atrás, a algo que todavía no cerró.',
+      'Hay un antes que sigue operando en la escena.',
+    ],
+    futuro: [
+      'La pregunta empuja hacia adelante, y por ahí va la respuesta.',
+      'Todo esto se inclina hacia lo que aún no ocurre.',
+    ],
   },
   temas: {
     amor: ['sobre el amor', 'sobre ese vínculo', 'sobre lo que sientes'],

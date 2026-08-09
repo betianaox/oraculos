@@ -1,5 +1,5 @@
 import type { CodigoIdioma } from '@/i18n/idiomas';
-import type { Tema } from './tipos';
+import type { Intencion, Tema } from './tipos';
 
 // Bancos de palabras clave para la deteccion (tema, modo, tono, tiempo,
 // tercero), por idioma. La persona escribe en su idioma, asi que la deteccion
@@ -12,6 +12,8 @@ export interface BancoDeteccion {
   futuro: string[];
   pasado: string[];
   tercero: string[];
+  /** De que trata la pregunta. Ver Intencion en tipos.ts. */
+  intenciones: Partial<Record<Intencion, string[]>>;
 }
 
 const es: BancoDeteccion = {
@@ -70,6 +72,33 @@ const es: BancoDeteccion = {
     'mi companero', 'mi compañera', 'mi compañero', 'esa persona', 'esta persona',
     'esa chica', 'ese chico', 'alguien', 'con el', 'con ella',
   ],
+  intenciones: {
+    retorno: [
+      'vuelve', 'volvera', 'va a volver', 'regresa', 'regresara', 'me busca',
+      'me escribe', 'me llama', 'volver conmigo', 'volver a estar',
+    ],
+    sentimiento: [
+      'me quiere', 'me ama', 'siente por mi', 'sus sentimientos', 'le importo',
+      'piensa en mi', 'me extraña', 'me extrana', 'siente algo',
+    ],
+    ruptura: [
+      // Las dos formas: conjugada ("lo dejo") y en infinitivo ("si dejarlo"),
+      // que es como suele escribirse cuando todavía se está dudando.
+      'lo dejo', 'la dejo', 'dejarlo', 'dejarla', 'si dejar', 'debo dejar',
+      'terminar', 'separarme', 'separarnos', 'cortar', 'renuncio', 'renunciar',
+      'dejar el trabajo', 'me voy de', 'seguir con el', 'seguir con ella',
+      'vale la pena seguir',
+    ],
+    decision: [
+      'conviene', 'deberia', 'debo', 'que hago', 'tengo que', 'es buena idea',
+      'acepto', 'me conviene',
+    ],
+    comienzo: [
+      'empezar', 'arrancar', 'nuevo trabajo', 'nuevo proyecto', 'va a funcionar',
+      'prosperar', 'sale bien', 'me va a ir',
+    ],
+    espera: ['cuando', 'cuanto falta', 'va a pasar', 'se va a dar', 'llegara'],
+  },
 };
 
 const en: BancoDeteccion = {
@@ -129,6 +158,26 @@ const en: BancoDeteccion = {
     'this person', 'that guy', 'that girl', 'someone', 'with him', 'with her',
     ' he ', ' she ', ' him ', ' her ',
   ],
+  intenciones: {
+    retorno: [
+      'come back', 'comes back', 'text me', 'call me', 'reach out',
+      'get back together', 'will he return', 'will she return',
+    ],
+    sentimiento: [
+      'love me', 'loves me', 'feels for me', 'his feelings', 'her feelings',
+      'care about me', 'think about me', 'miss me',
+    ],
+    ruptura: [
+      'break up', 'leave him', 'leave her', 'end it', 'quit', 'resign',
+      'walk away', 'leave my job',
+    ],
+    decision: ['should i', 'is it worth', 'good idea', 'what do i do', 'accept the'],
+    comienzo: [
+      'new job', 'new project', 'will it work', 'go well', 'succeed',
+      'fresh start',
+    ],
+    espera: ['when will', 'how long', 'is it going to happen', 'will it come'],
+  },
 };
 
 const pt: BancoDeteccion = {
@@ -184,6 +233,23 @@ const pt: BancoDeteccion = {
     'meu colega', 'minha colega', 'essa pessoa', 'aquela pessoa', 'alguém',
     'com ele', 'com ela', ' ele ', ' ela ',
   ],
+  intenciones: {
+    retorno: [
+      'volta', 'voltara', 'vai voltar', 'me procura', 'me escreve', 'me liga',
+      'voltar comigo',
+    ],
+    sentimiento: [
+      'me ama', 'gosta de mim', 'sente por mim', 'sentimentos dele',
+      'sentimentos dela', 'pensa em mim', 'sente minha falta',
+    ],
+    ruptura: [
+      'terminar', 'me separar', 'largar', 'pedir demissao', 'pedir demissão',
+      'sair do trabalho',
+    ],
+    decision: ['vale a pena', 'devo', 'o que faco', 'o que faço', 'tenho que', 'e boa ideia'],
+    comienzo: ['comecar', 'começar', 'novo trabalho', 'novo projeto', 'vai dar certo', 'prosperar'],
+    espera: ['quando', 'quanto falta', 'vai acontecer', 'vai chegar'],
+  },
 };
 
 const it: BancoDeteccion = {
@@ -239,6 +305,8 @@ const it: BancoDeteccion = {
     'mia amica', 'mio collega', 'mia collega', 'quella persona', 'questa persona',
     'qualcuno', 'con lui', 'con lei', ' lui ', ' lei ',
   ],
+  // Sin patrones: estos idiomas no se ofrecen (ver i18n/idiomas.ts).
+  intenciones: {},
 };
 
 const fr: BancoDeteccion = {
@@ -291,6 +359,8 @@ const fr: BancoDeteccion = {
     'ma soeur', 'mon ami', 'mon amie', 'mon collegue', 'cette personne',
     'quelquun', "quelqu'un", 'avec lui', 'avec elle', ' il ', ' elle ',
   ],
+  // Sin patrones: estos idiomas no se ofrecen (ver i18n/idiomas.ts).
+  intenciones: {},
 };
 
 // Los bancos italiano y frances siguen definidos mas arriba, listos para

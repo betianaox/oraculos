@@ -14,4 +14,6 @@ export const TEXTOS_ES: TextosBuzios = {
   aFavor: 'A favor (ire)',
   comoDesafio: 'Como desafío (osogbo)',
   proximamente: 'Contenido próximamente',
+  primeraTirada: 'Primera tirada…',
+  segundaTirada: 'Segunda tirada…',
 };

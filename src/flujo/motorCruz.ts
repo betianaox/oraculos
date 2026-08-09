@@ -1,5 +1,5 @@
 import type { PiezaTirada } from './pieza';
-import type { AnalisisPregunta, Modo, Tema, Tono } from '@/pregunta/tipos';
+import type { AnalisisPregunta, Intencion, Modo, Tema, Tono } from '@/pregunta/tipos';
 
 // ─────────────────────────────────────────────────────────────────────────
 // Motor COMPARTIDO de la cruz de 5. Lo usan Tarot, Ángeles y —cuando llegue—
@@ -33,6 +33,17 @@ export interface BancosCruz {
   aperturas: Record<Modo, Record<Tono, string[]>>;
   /** Cómo se nombra el asunto consultado: "sobre el trabajo", "sobre ese vínculo". */
   temas: Record<Tema, string[]>;
+  /**
+   * Aperturas que retoman DE QUÉ trata la pregunta, no sólo su tema.
+   *
+   * "Preguntas si va a volver" dice muchísimo más que "para lo que preguntas
+   * sobre el amor", y es lo único que acerca esta lectura a la que escribe la
+   * IA: hablarle a la persona de su pregunta y no del oráculo.
+   *
+   * Es opcional y parcial: si no se detectó intención, o no hay texto escrito
+   * para la que se detectó, se usa la apertura común. Nunca se queda sin nada.
+   */
+  aperturasIntencion?: Partial<Record<Intencion, string[]>>;
   /** Cierre de P1 con {frag1} y {frag2}: planta la situación y su centro. */
   situacion: string[];
   /** P2 con {frag1}{frag2}{frag3}: el tira y afloje, con el centro mandando. */
@@ -102,10 +113,18 @@ export function armarCruz(
   const [c1, c2, c3, c4, c5] = tirada;
 
   // ── P1: conecta con la pregunta y planta la situación ────────────────────
-  const apertura = elegir(porTono(b.aperturas[modo], tono)).replace(
-    '{tema}',
-    elegir(b.temas[tema]),
-  );
+  // Si se reconoció de qué trata la pregunta y hay texto escrito para eso, se
+  // prefiere: nombrar el asunto ("preguntas si va a volver") pega mucho más
+  // que nombrar el tema. Si no, la apertura común.
+  const porIntencion = analisis.intencion
+    ? b.aperturasIntencion?.[analisis.intencion]
+    : undefined;
+  const pool =
+    porIntencion && porIntencion.length > 0
+      ? porIntencion
+      : porTono(b.aperturas[modo], tono);
+
+  const apertura = elegir(pool).replace('{tema}', elegir(b.temas[tema]));
   const situacion = elegir(b.situacion)
     .replace('{frag1}', fragmento(c1))
     .replace('{frag2}', fragmento(c2));

@@ -1,6 +1,14 @@
 import type { CodigoIdioma } from '@/i18n/idiomas';
-import { obtenerDeteccion } from './bancos';
-import type { AnalisisPregunta, Modo, Senal, Tema, Tiempo, Tono } from './tipos';
+import { obtenerDeteccion, type BancoDeteccion } from './bancos';
+import type {
+  AnalisisPregunta,
+  Intencion,
+  Modo,
+  Senal,
+  Tema,
+  Tiempo,
+  Tono,
+} from './tipos';
 
 const DIACRITICOS = /[̀-ͯ]/g;
 
@@ -69,6 +77,7 @@ export function analizarPregunta(pregunta: string, idioma: CodigoIdioma): Analis
       : 'presente';
 
   const mencionaTercero = contieneAlguna(textoNormalizado, banco.tercero);
+  const intencion = detectarIntencion(textoNormalizado, banco);
 
   let senal: Senal;
   if (esInvalida(pregunta)) {
@@ -84,5 +93,44 @@ export function analizarPregunta(pregunta: string, idioma: CodigoIdioma): Analis
     senal = traeSenal ? 'rica' : 'flaca';
   }
 
-  return { senal, temaTexto, modo, tono, tiempo, mencionaTercero };
+  return { senal, temaTexto, modo, tono, tiempo, mencionaTercero, intencion };
+}
+
+/**
+ * De que trata la pregunta. Gana la intencion con mas coincidencias; si hay
+ * empate, la primera del orden de abajo.
+ *
+ * Ese orden no es casual: va de lo mas especifico a lo mas generico. 'espera'
+ * y 'decision' matchean con palabras muy comunes ("cuando", "debo") que
+ * aparecen tambien en preguntas sobre otra cosa, asi que se prueban al final
+ * para que no le ganen a una intencion mas concreta.
+ */
+const ORDEN: Intencion[] = [
+  'retorno',
+  'sentimiento',
+  'ruptura',
+  'comienzo',
+  'decision',
+  'espera',
+];
+
+function detectarIntencion(
+  textoNormalizado: string,
+  banco: BancoDeteccion,
+): Intencion | null {
+  let mejor: Intencion | null = null;
+  let mejorPuntaje = 0;
+
+  for (const intencion of ORDEN) {
+    const marcas = banco.intenciones[intencion];
+    if (!marcas) continue;
+    const puntaje = marcas.filter((m) =>
+      textoNormalizado.includes(normalizar(m).trim()),
+    ).length;
+    if (puntaje > mejorPuntaje) {
+      mejorPuntaje = puntaje;
+      mejor = intencion;
+    }
+  }
+  return mejor;
 }

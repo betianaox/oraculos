@@ -79,7 +79,16 @@ export function armarLectura(
 
   // P1: la apertura conecta con la pregunta y las dos primeras runas plantan
   // la situación. Sin nombrarlas.
-  const apertura = elegirAlAzar(aperturasDisponibles);
+  //
+  // Si se reconoció de qué trata la pregunta y hay texto escrito para eso, se
+  // prefiere: nombrar el asunto ("preguntas si va a volver") pega mucho más
+  // que nombrar el tema. Si no, la apertura común de siempre.
+  const porIntencion = analisis.intencion
+    ? contenido.aperturasIntencion?.[analisis.intencion]
+    : undefined;
+  const apertura = elegirAlAzar(
+    porIntencion && porIntencion.length > 0 ? porIntencion : aperturasDisponibles,
+  );
   const situacion = elegirAlAzar(contenido.situacion)
     .replace('{frag1}', frags[0])
     .replace('{frag2}', frags[1]);

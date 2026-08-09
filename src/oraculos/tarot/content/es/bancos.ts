@@ -32,7 +32,7 @@ export const BANCOS_TAROT_ES: BancosCruz = {
       ],
       preocupacion: [
         'Respira: nada de esto dicta un destino {tema}, es una mirada para tu desasosiego.',
-        'Sin prisa: lo que hoy te pesa {tema} queda acomodado para verlo mejor.',
+        'Sin prisa: queda acomodado, para verlo mejor, eso que hoy te pesa {tema}.',
       ],
       impulso: [
         'Frena un momento el impulso; hay una reflexión para hacer {tema}.',
@@ -46,6 +46,44 @@ export const BANCOS_TAROT_ES: BancosCruz = {
     dinero: ['sobre el dinero', 'sobre lo material', 'sobre tus cuentas'],
     general: ['sobre tu momento', 'sobre lo que estás viviendo', 'sobre esto que traes'],
   },
+  // Retoman de qué trata la pregunta. Cuando se reconoce, se usan en lugar de
+  // la apertura común: decirle a alguien "preguntas si va a volver" es hablarle
+  // de lo suyo; "para lo que preguntas sobre el amor" es hablarle del oráculo.
+  //
+  // Ninguna afirma ni niega lo que se pregunta: reformulan la pregunta y
+  // mueven la mirada hacia lo que la tirada sí puede mostrar.
+  aperturasIntencion: {
+    retorno: [
+      'Preguntas si vuelve, y eso no se decide en una carta: lo que sí se ve es el terreno donde caería esa vuelta.',
+      'Quieres saber si va a volver. La tirada no firma esa respuesta, pero muestra qué quedó abierto entre ustedes.',
+      'La pregunta es si regresa. Mira primero lo que sostiene hoy la distancia.',
+    ],
+    sentimiento: [
+      'Preguntas qué siente esa persona, y eso solo lo sabe ella. Lo que la tirada muestra es el vínculo tal como está.',
+      'Quieres saber si te quiere. Nadie puede responder por otro, pero acá aparece qué se juega entre los dos.',
+      'La pregunta apunta al corazón del otro. La cruz habla de lo que circula entre ustedes.',
+    ],
+    ruptura: [
+      'Estás pensando en cortar, y esa decisión es tuya. La tirada te acerca lo que hoy pesa de cada lado.',
+      'Preguntas si dejarlo. Antes de decidir, mira qué muestra la cruz sobre lo que se está sosteniendo.',
+      'La pregunta es si irte. Acá aparece lo que te retiene y lo que te empuja.',
+    ],
+    decision: [
+      'Preguntas qué te conviene. La tirada no elige por ti, pero ordena lo que está en juego.',
+      'Estás entre dos caminos. Mira lo que la cruz pone de cada lado antes de decidir.',
+      'La pregunta es qué hacer. Esto es lo que hay sobre la mesa.',
+    ],
+    comienzo: [
+      'Preguntas si esto que empieza va a prosperar. La cruz muestra con qué arranca.',
+      'Quieres saber si sale bien. Lo que aparece es el terreno donde se planta.',
+      'La pregunta mira a lo que está por empezar. Esto es lo que trae.',
+    ],
+    espera: [
+      'Preguntas cuándo. Los tiempos no se leen en las cartas, pero sí qué falta para que eso madure.',
+      'Quieres saber cuánto falta. La tirada no marca fechas; muestra qué se está cocinando.',
+      'La pregunta es por el momento. Mira qué tiene que acomodarse todavía.',
+    ],
+  },
   // OJO al escribir estas plantillas: los fragmentos vienen en dos formas
   // distintas —sintagma nominal ("una decisión que evitas") e infinitivo
   // ("revisar lo que esperas")—, así que el hueco tiene que aceptar las dos.
@@ -58,11 +96,15 @@ export const BANCOS_TAROT_ES: BancosCruz = {
     'Primero asoma esto: {frag1}. Pero el eje verdadero es otro: {frag2}.',
     'Lo que rodea el asunto es {frag1}, y en su centro late {frag2}.',
   ],
+  // OJO con los sujetos: acá no se nombran cartas, así que "uno", "otro" o
+  // "el primero" no se refieren a nada. Todo lo que se diga tiene que apoyarse
+  // en el fragmento mismo, no en una pieza que el texto nunca menciona.
   tension: [
     'Por un lado tira {frag1}; por el otro, {frag3}. Y en el medio manda {frag2}: ahí está el nudo de todo.',
     'Entre {frag1} y {frag3} se juega el equilibrio, pero lo que decide es {frag2}.',
     'Lo que asoma como {frag1} se ordena en torno a {frag2}, y el color final lo pone {frag3}.',
-    'Uno prepara el terreno: {frag1}. Otro concentra lo esencial: {frag2}. Y el saldo lo muestra {frag3}.',
+    'Hay algo que prepara el terreno, {frag1}, y algo que lo desordena, {frag3}; en el medio queda {frag2}.',
+    'Se cruzan dos cosas, {frag1} y {frag2}, y por encima de ambas pesa {frag3}.',
   ],
   cabeza: [
     'En la cabeza te da vueltas esto: {frag}.',
