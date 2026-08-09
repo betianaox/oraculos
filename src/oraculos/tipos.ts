@@ -3,6 +3,7 @@ import type { CodigoIdioma } from '@/i18n/idiomas';
 import type { Pieza, EspecieTirada, PiezaTirada } from '@/flujo/pieza';
 import type { ContenidoOraculo } from '@/flujo/contenido';
 import type { AnalisisPregunta, Tema } from '@/pregunta/tipos';
+import type { PiezaMaterial } from '@/ia/tipos';
 
 /**
  * Contrato de un ORACULO. Cada oraculo se describe a si mismo en su
@@ -14,6 +15,18 @@ import type { AnalisisPregunta, Tema } from '@/pregunta/tipos';
 export interface OraculoModulo {
   /** id estable, en minusculas, sin espacios. Ej: 'tarot'. */
   id: string;
+
+  /**
+   * Idiomas en los que el oraculo se OFRECE. Si falta, se ofrece en todos.
+   *
+   * Existe para el I Ching: su contenido (64 hexagramas, dictamenes y 384
+   * lineas cambiantes) es el 62% de todo el material de la app y por ahora
+   * solo esta en espanol. Mostrarlo en ingles o portugues significaria que la
+   * consulta entera sale en otro idioma, y eso es peor que no ofrecerlo: en la
+   * tienda se lee como una app a medio traducir. Cuando se traduzca, se agrega
+   * el idioma aca y aparece solo.
+   */
+  idiomas?: CodigoIdioma[];
 
   /**
    * Clave i18n del nombre visible (se muestra en Cinzel).
@@ -56,6 +69,19 @@ export interface OraculoModulo {
     analisis: AnalisisPregunta,
     idioma: CodigoIdioma
   ) => string[];
+
+  /**
+   * La misma tirada, pero en crudo: nombre, rol y significado de cada pieza,
+   * sin redactar. Es lo que se le manda a la IA para que escriba la lectura en
+   * lenguaje natural. Si falta, el oraculo simplemente no usa IA y responde
+   * siempre con `lectura`.
+   */
+  material?: (
+    tirada: PiezaTirada[],
+    tema: Tema,
+    analisis: AnalisisPregunta,
+    idioma: CodigoIdioma
+  ) => PiezaMaterial[];
 
   /**
    * Contenido del oraculo (Aprender + Consejo del dia) en el idioma dado. Si

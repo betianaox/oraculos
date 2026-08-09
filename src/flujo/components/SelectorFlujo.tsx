@@ -16,12 +16,16 @@ export function SelectorFlujo({
   onTirada,
   onLectura,
   lecturaDisabled = false,
+  interpretando = false,
 }: {
   actual: Paso;
   onTirada: () => void;
   onLectura: () => void;
   // Deshabilita el segmento de Lectura (ej: hasta que termine la animacion).
   lecturaDisabled?: boolean;
+  // La lectura se esta redactando todavia: el segmento muestra solo puntos, que
+  // dicen "esperá" sin necesitar traduccion y sin anunciar lo que pasa detras.
+  interpretando?: boolean;
 }) {
   const t = useT();
   return (
@@ -36,7 +40,7 @@ export function SelectorFlujo({
       <Segmento
         activo={actual === 'lectura'}
         icono="script-text-outline"
-        label={t('flujo.lectura')}
+        label={interpretando ? '...' : t('flujo.lectura')}
         onPress={onLectura}
         deshabilitado={lecturaDisabled}
       />

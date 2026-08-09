@@ -1,5 +1,12 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, LayoutChangeEvent, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import {
+  Animated,
+  LayoutChangeEvent,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -11,7 +18,7 @@ import { Header } from '@/shell/components/Header';
 import { colores } from '@/shell/theme/tokens';
 import { hexAlfa } from '@/shell/color';
 import { tirarCruz, type EspecieTirada, type Pieza, type PiezaTirada } from '../pieza';
-import { PARRAFOS_DEMO } from '../demo';
+import { useLectura } from '../useLectura';
 import { RATIO_PIEZA, CartaImagen } from '../components/CartaImagen';
 import { CartaAmpliable } from '../components/CartaAmpliable';
 import { BotonVoz } from '../components/BotonVoz';
@@ -28,6 +35,13 @@ const COSTO = 1;
 // Sorteo: cada cuanto titila, y cuando se revela cada pieza (una por una).
 const INTERVALO_SORTEO_MS = 90;
 const demoraRevelado = (i: number) => 1100 + i * 650;
+
+// Cuanto se le da a la IA para redactar, contado desde que se abre la pantalla.
+// Los botones esperan a que conteste, asi que este numero ES lo que la persona
+// puede llegar a esperar de mas: por eso 3 segundos y no mas. Parte de esos 3
+// se los come la animacion de entrada, que corre igual, asi que la espera real
+// que se percibe es menor.
+const VENTANA_IA_MS = 3000;
 
 const CRUZ_DEFECTO: EspecieTirada = { disposicion: 'cruz', tirar: tirarCruz };
 
@@ -47,21 +61,35 @@ export function TiradaScreen({ navigation, route }: Props) {
   const gastarGemas = useApp((s) => s.gastarGemas);
   const idioma = useApp((s) => s.idioma);
 
-  // Los parrafos de la lectura se arman aca (una vez) con el motor del oraculo,
-  // o el demo si no tiene. Asi la voz suena igual en Tirada y Lectura.
-  const parrafos = useMemo(() => {
-    const p = oraculo?.lectura?.(tirada, tema, analisis, idioma) ?? [];
-    return p.length > 0 ? p : PARRAFOS_DEMO;
-  }, [oraculo, tirada, tema, analisis, idioma]);
-  const textoVoz = parrafos.join('\n\n');
-
   const ratio = tirada[0]?.pieza.ratio ?? RATIO_PIEZA;
   const enFila = spec.disposicion === 'fila';
   const conSorteo = !!spec.sorteo;
 
-  // Los botones de Lectura y voz se habilitan recien cuando termina la
-  // animacion de entrada (si no, el texto queda disponible antes y se ve raro).
-  const [listo, setListo] = useState(false);
+  // Cuanto dura la animacion de entrada, que es cuando se habilitan los botones.
+  const duracionEntrada = conSorteo
+    ? demoraRevelado(tirada.length - 1) + 500
+    : PASO_MS * (tirada.length - 1) + 350;
+
+  // Los parrafos de la lectura se arman aca (una vez), asi la voz suena igual
+  // en Tirada y en Lectura (que los recibe por parametro de navegacion).
+  const { parrafos, fuente, pendiente } = useLectura({
+    oraculo,
+    tirada,
+    tema,
+    analisis,
+    idioma,
+    pregunta,
+    ventanaMs: VENTANA_IA_MS,
+  });
+  const textoVoz = parrafos.join('\n\n');
+
+  // Los botones de Lectura y voz esperan dos cosas: que termine la animacion de
+  // entrada (si no, el texto queda disponible antes y se ve raro) y que la IA
+  // haya contestado o se le haya acabado el tiempo. Lo segundo importa porque
+  // los parrafos viajan a Lectura POR VALOR: si se navega antes, la respuesta
+  // de la IA llega tarde y se pierde, aunque fuera buena.
+  const [animacionLista, setAnimacionLista] = useState(false);
+  const listo = animacionLista && !pendiente;
 
   // Estado del sorteo (titileo + revelado uno por uno).
   const [revelado, setRevelado] = useState<boolean[]>(() => tirada.map(() => !conSorteo));
@@ -74,10 +102,7 @@ export function TiradaScreen({ navigation, route }: Props) {
 
   // Habilita los botones cuando la entrada (sorteo o escalonado) termino.
   useEffect(() => {
-    const dur = conSorteo
-      ? demoraRevelado(tirada.length - 1) + 500
-      : PASO_MS * (tirada.length - 1) + 350;
-    const to = setTimeout(() => setListo(true), dur);
+    const to = setTimeout(() => setAnimacionLista(true), duracionEntrada);
     return () => clearTimeout(to);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -209,11 +234,15 @@ export function TiradaScreen({ navigation, route }: Props) {
       </View>
 
       <View style={[estilos.pie, { paddingBottom: insets.bottom + RESPIRO }]}>
+        {/* Solo en desarrollo: que motor redacto lo que se esta leyendo. Sirve
+            para comparar la voz de la IA con la de las plantillas. */}
+        {__DEV__ && <Text style={estilos.sello}>motor: {fuente}</Text>}
         <SelectorFlujo
           actual="tirada"
           onTirada={() => {}}
           onLectura={() => navigation.navigate('Lectura', { oraculoId, pregunta, parrafos })}
           lecturaDisabled={!listo}
+          interpretando={animacionLista && pendiente}
         />
         <BotonVoz texto={textoVoz} rutas={RUTAS_LECTURA} disabled={!listo} />
       </View>
@@ -249,5 +278,16 @@ const estilos = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 18,
+  },
+  // Absoluto a proposito: el sello de desarrollo no debe correr ni un pixel
+  // los botones reales, para que lo que se ve en dev sea lo que se ve en prod.
+  sello: {
+    position: 'absolute',
+    top: -16,
+    left: 14,
+    fontSize: 10,
+    letterSpacing: 0.5,
+    color: colores.cromo,
+    opacity: 0.6,
   },
 });
