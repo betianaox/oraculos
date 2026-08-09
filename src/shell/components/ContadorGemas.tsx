@@ -11,7 +11,15 @@ export function ContadorGemas() {
   return (
     <View style={estilos.pastilla}>
       <Ionicons name="diamond-outline" size={16} color={colores.gema} />
-      <Text style={estilos.numero}>{gemas}</Text>
+      {/* Sin escalado tipografico: la pastilla vive en la banda del header,
+          que tiene alto fijo y comparte fila con el boton de accion. Con la
+          fuente del sistema en grande el numero se desbordaba del espacio.
+          Es un numero de una o dos cifras al lado de su icono, asi que no se
+          pierde legibilidad; el resto de la app si acompaña el ajuste del
+          dispositivo. */}
+      <Text style={estilos.numero} allowFontScaling={false}>
+        {gemas}
+      </Text>
     </View>
   );
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '@/navigation/tipos';
@@ -25,7 +25,6 @@ export function OraculoScreen({ route, navigation }: Props) {
   const { oraculoId, seccion } = route.params;
   const t = useT();
   const oraculo = oraculoPorId(oraculoId);
-  const [enviado, setEnviado] = useState<DatosPregunta | null>(null);
 
   const gemas = useApp((s) => s.gemas);
   const sumarGemas = useApp((s) => s.sumarGemas);
@@ -46,9 +45,10 @@ export function OraculoScreen({ route, navigation }: Props) {
       navigation.navigate('TiradaIching', { oraculoId, pregunta: datos.pregunta, tema: datos.tema, analisis: datos.analisis });
     } else if (oraculo?.id === 'buzios') {
       navigation.navigate('TiradaBuzios', { oraculoId, pregunta: datos.pregunta, tema: datos.tema, analisis: datos.analisis });
-    } else {
-      setEnviado(datos);
     }
+    // No hay rama final: los seis oraculos tienen mazo o tirada propia. Antes
+    // habia una pantalla de volcado con el analisis de la pregunta, que era
+    // andamiaje de desarrollo y ya no se alcanzaba nunca.
   };
 
   // Al consultar: si hay al menos una gema, va a la tirada; si no, se ofrece el
@@ -75,33 +75,15 @@ export function OraculoScreen({ route, navigation }: Props) {
 
       <View style={estilos.cuerpo}>
         {esPregunta && oraculo ? (
-          enviado ? (
-            <View style={estilos.centro}>
-              <View style={[estilos.sello, { borderColor: hexAlfa(acento, 0.5) }]}>
-                <Text style={estilos.seccion}>{nombre}</Text>
-              </View>
-              <Text style={estilos.nota}>Próxima etapa: tirada propia del oráculo</Text>
-              <Text style={estilos.dato}>"{enviado.pregunta}"</Text>
-              <Text style={estilos.dato}>
-                tema: {enviado.tema} · señal: {enviado.analisis.senal} · modo: {enviado.analisis.modo}
-              </Text>
-              <Text style={estilos.dato}>
-                tono: {enviado.analisis.tono} · tiempo: {enviado.analisis.tiempo} · tercero:{' '}
-                {enviado.analisis.mencionaTercero ? 'sí' : 'no'}
-              </Text>
-              <Pressable onPress={() => setEnviado(null)} style={estilos.reiniciar}>
-                <Text style={estilos.reiniciarTexto}>Nueva pregunta</Text>
-              </Pressable>
-            </View>
-          ) : (
-            <PantallaPregunta oraculo={oraculo} onEnviar={consultar} />
-          )
+          <PantallaPregunta oraculo={oraculo} onEnviar={consultar} />
         ) : (
+          // Red por si se llega con una seccion que no es la pregunta. Hoy no
+          // pasa —el footer manda cada seccion a su pantalla propia— pero deja
+          // algo con sentido en vez de una pantalla en blanco.
           <View style={estilos.centro}>
             <View style={[estilos.sello, { borderColor: hexAlfa(acento, 0.5) }]}>
               <Text style={estilos.seccion}>{t(`secciones.${seccion}`)}</Text>
             </View>
-            <Text style={estilos.nota}>Etapa 1 · placeholder</Text>
           </View>
         )}
       </View>
@@ -109,8 +91,8 @@ export function OraculoScreen({ route, navigation }: Props) {
       <ModalRecompensa
         visible={mostrarVideo}
         onClose={() => setMostrarVideo(false)}
-        titulo="Te quedaste sin gemas"
-        recompensa="Recibir 1 gema"
+        titulo={t('pregunta.sinGemasTitulo')}
+        recompensa={t('pregunta.verVideo')}
         onReward={() => {
           sumarGemas(1);
           const datos = pendiente;
@@ -149,29 +131,5 @@ const estilos = StyleSheet.create({
     fontSize: 22,
     letterSpacing: 1,
     fontFamily: fuente('subtituloMedium'),
-  },
-  nota: {
-    color: colores.textoTenue,
-    fontSize: 13,
-    fontFamily: fuente('ui'),
-  },
-  dato: {
-    color: colores.textoSuave,
-    fontSize: 14,
-    textAlign: 'center',
-    fontFamily: fuente('ui'),
-  },
-  reiniciar: {
-    marginTop: espaciado.lg,
-    paddingHorizontal: espaciado.xl,
-    paddingVertical: espaciado.md,
-    borderRadius: radios.md,
-    borderWidth: 1,
-    borderColor: hexAlfa('#9ad8ff', 0.5),
-  },
-  reiniciarTexto: {
-    color: colores.texto,
-    fontSize: 15,
-    fontFamily: fuente('uiMedium'),
   },
 });

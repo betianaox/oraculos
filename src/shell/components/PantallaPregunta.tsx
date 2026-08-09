@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import {
   Image,
+  Keyboard,
   Modal,
   Pressable,
   ScrollView,
@@ -23,6 +24,16 @@ import { ModalRecompensa } from './ModalRecompensa';
 
 const TEMAS: Tema[] = ['general', 'amor', 'trabajo', 'dinero'];
 const COSTO = 1;
+
+// Aire entre el final del input y el borde del teclado.
+//
+// Es generoso a proposito. El alto del teclado viene en coordenadas de
+// PANTALLA, mientras que el area visible se mide sobre el scroll: con
+// edge-to-edge esos dos sistemas no coinciden del todo (la barra de navegacion
+// entra en el medio), asi que la cuenta se queda un poco corta y el input
+// terminaba tapado apenas. Este margen absorbe esa diferencia y ademas deja
+// que se vea algo debajo del cursor.
+const RESPIRO_INPUT = 56;
 
 export interface DatosPregunta {
   pregunta: string;
@@ -54,6 +65,76 @@ export function PantallaPregunta({ oraculo, onEnviar }: Props) {
   const [temaManual, setTemaManual] = useState(false);
   const [sinGemas, setSinGemas] = useState(false);
   const [avisoCorta, setAvisoCorta] = useState(false);
+
+  // El teclado de Android tapa el input y no se ve lo que se escribe.
+  //
+  // Con edge-to-edge (el default de Expo en Android) la ventana NO se
+  // redimensiona al abrirse el teclado: se superpone. Asi que ni
+  // `adjustResize` ni `KeyboardAvoidingView` alcanzan. Hay que medir el
+  // teclado y reservarle ese espacio al final del scroll, para que el
+  // contenido pueda subir por encima de el.
+  const scrollRef = useRef<ScrollView>(null);
+  const [altoTeclado, setAltoTeclado] = useState(0);
+  // Medidas, en refs y no en estado: solo se consultan dentro del listener, y
+  // como estado dispararian renders de mas.
+  const altoVista = useRef(0);
+  const finDelInput = useRef(0);
+
+  useEffect(() => {
+    const alAbrir = Keyboard.addListener('keyboardDidShow', (e) => {
+      const teclado = e.endCoordinates.height;
+      const visible = altoVista.current - teclado;
+      // Cuanto hay que subir para que el input entero quede por encima del
+      // teclado, con un respiro. Se sube SOLO hasta ahi: el boton de consultar
+      // queda deliberadamente fuera de la vista, porque tenerlo a mano con el
+      // teclado abierto invita a tocarlo y se vuelve de la otra pantalla con el
+      // scroll corrido.
+      const subir = finDelInput.current + RESPIRO_INPUT - visible;
+
+      // Si ya se ve entero, no se mueve nada. En una pantalla alta —una tablet,
+      // por ejemplo— cualquier ajuste seria un salto gratuito.
+      if (subir <= 0) return;
+
+      setAltoTeclado(teclado);
+      // El scroll va DESPUES de que el padding nuevo entre en layout: en el
+      // mismo frame no hay a donde desplazarse todavia.
+      setTimeout(() => scrollRef.current?.scrollTo({ y: subir, animated: true }), 120);
+    });
+
+    const alCerrar = Keyboard.addListener('keyboardDidHide', () => {
+      setAltoTeclado(0);
+      // Se devuelve la vista a su lugar: si no, la pantalla queda corrida hacia
+      // arriba con el teclado ya cerrado.
+      scrollRef.current?.scrollTo({ y: 0, animated: true });
+    });
+
+    return () => {
+      alAbrir.remove();
+      alCerrar.remove();
+    };
+  }, []);
+
+  /**
+   * El enter baja el teclado en vez de meter un salto de linea.
+   *
+   * Una pregunta no necesita saltos, y el enter es el gesto natural para decir
+   * "ya esta". NO envia: enviar cuesta una gema, y un enter sin querer no
+   * puede gastarla. Bajar el teclado no cuesta nada y se deshace tocando la
+   * caja otra vez.
+   *
+   * Se hace mirando el texto y no con onSubmitEditing porque la caja es
+   * multilinea, y ahi ese evento no es parejo entre dispositivos: en Android
+   * el enter mete el salto igual. Asi el salto se saca siempre, venga como
+   * venga (incluido pegar un texto con saltos adentro).
+   */
+  const alEscribir = useCallback((texto: string) => {
+    if (texto.includes('\n')) {
+      setPregunta(texto.replace(/\n+/g, ' ').replace(/\s+$/, ''));
+      Keyboard.dismiss();
+      return;
+    }
+    setPregunta(texto);
+  }, []);
 
   const analisis = useMemo(() => analizarPregunta(pregunta, idioma), [pregunta, idioma]);
   const valida = analisis.senal !== 'invalida';
@@ -93,9 +174,13 @@ export function PantallaPregunta({ oraculo, onEnviar }: Props) {
 
   return (
     <ScrollView
-      contentContainerStyle={estilos.scroll}
+      ref={scrollRef}
+      contentContainerStyle={[estilos.scroll, { paddingBottom: espaciado.xl + altoTeclado }]}
       keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
+      onLayout={(e) => {
+        altoVista.current = e.nativeEvent.layout.height;
+      }}
     >
       {oraculo.icono ? (
         <Image source={oraculo.icono} style={estilos.icono} resizeMode="contain" />
@@ -130,12 +215,22 @@ export function PantallaPregunta({ oraculo, onEnviar }: Props) {
 
       {/* Input */}
       <TextInput
+        // Donde termina el input dentro del contenido: es la referencia para
+        // saber cuanto subir cuando aparece el teclado.
+        onLayout={(e) => {
+          const { y, height } = e.nativeEvent.layout;
+          finDelInput.current = y + height;
+        }}
         style={[estilos.input, { borderColor: hexAlfa(acento, 0.3) }]}
         placeholder={t('pregunta.placeholder')}
         placeholderTextColor={colores.textoTenue}
         value={pregunta}
-        onChangeText={setPregunta}
+        onChangeText={alEscribir}
         multiline
+        // En una caja multilinea el retorno mete un salto por defecto. Con esto
+        // cierra el teclado en los dispositivos donde funciona; donde no, lo
+        // resuelve `alEscribir`.
+        submitBehavior="blurAndSubmit"
         textAlignVertical="top"
       />
 

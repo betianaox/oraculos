@@ -29,7 +29,16 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Aprender'>;
 const COLUMNAS = 3;
 const PADDING = 20;
 const GAP = 12;
-const PREVIEW = 2; // piezas visibles por seccion antes de desbloquear
+/**
+ * Piezas visibles de cada seccion antes de desbloquear.
+ *
+ * Van tres y no una seccion entera libre: el bloque importante de los tarots
+ * son los Arcanos Mayores, y regalarlo completo seria regalar la puerta de
+ * entrada. Con tres por bloque la persona igual ve de que calidad es el
+ * contenido en TODOS los bloques, que es lo que hace falta para querer abrir
+ * el resto.
+ */
+const PREVIEW = 3;
 
 /** Lo que se pide desbloquear: un bloque (seccionId) o la wiki entera (null). */
 type Pedido = { seccionId: string | null; titulo: string };
@@ -111,8 +120,8 @@ export function AprenderScreen({ navigation, route }: Props) {
                   <BannerVideo
                     texto={
                       porBloques
-                        ? `Mira un video para desbloquear ${seccion.titulo}`
-                        : 'Mira un video para desbloquear'
+                        ? t('aprender.abrirBloque', { seccion: seccion.titulo })
+                        : t('aprender.abrirTodo')
                     }
                     onPress={() =>
                       pedirVideo({
@@ -164,8 +173,12 @@ export function AprenderScreen({ navigation, route }: Props) {
       <ModalRecompensa
         visible={!!pedido}
         onClose={() => setPedido(null)}
-        titulo={pedido ? `Desbloquear ${pedido.titulo}` : 'Desbloquear'}
-        recompensa="Ver el video"
+        titulo={
+          pedido
+            ? t('aprender.modalAbrir', { seccion: pedido.titulo })
+            : t('aprender.modalAbrirTodo')
+        }
+        recompensa={t('aprender.verElVideo')}
         onReward={() => {
           const p = pedidoRef.current;
           if (!p) return;

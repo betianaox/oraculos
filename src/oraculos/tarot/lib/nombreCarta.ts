@@ -14,6 +14,6 @@ export function nombreDeCarta(
   if (meta.arcano === 'mayor') {
     return nombres.mayores[meta.numero] ?? `Arcano ${meta.numero}`;
   }
-  // Menor: "Sota de Copas", "Diez de Oros", etc.
-  return `${nombres.rangos[meta.rango!]} de ${nombres.palos[meta.palo!]}`;
+  // Menor: "Sota de Copas", "Page of Cups"... El conector lo pone el idioma.
+  return nombres.menor(nombres.rangos[meta.rango!], nombres.palos[meta.palo!]);
 }

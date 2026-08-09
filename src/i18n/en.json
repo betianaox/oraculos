@@ -18,7 +18,12 @@
   },
   "pregunta": {
     "titulo": "What would you like to ask about?",
-    "chips": { "general": "General", "amor": "Love", "trabajo": "Work", "dinero": "Money" },
+    "chips": {
+      "general": "General",
+      "amor": "Love",
+      "trabajo": "Work",
+      "dinero": "Money"
+    },
     "placeholder": "Write your question...",
     "consultar": "Ask",
     "hintCorta": "Write a slightly longer question so it can be read.",
@@ -45,7 +50,13 @@
     "seccionCartas": "Cards",
     "carta": "Card",
     "proximamente": "Content coming soon",
-    "consejoGenerico": "Trust the sign of this moment and let it guide you today."
+    "consejoGenerico": "Trust the sign of this moment and let it guide you today.",
+    "abrirBloque": "Watch a video to open {seccion} for today",
+    "abrirTodo": "Watch a video to open the library for today",
+    "modalAbrir": "Open {seccion} for today",
+    "modalAbrirTodo": "Open for today",
+    "verElVideo": "Watch the video",
+    "abiertoHoy": "Open today"
   },
   "consejo": {
     "titulo": "Advice of the day",
@@ -81,5 +92,30 @@
       "nombre": "I Ching",
       "subtitulo": "The book of changes"
     }
+  },
+  "quiz": {
+    "titulo": "Challenge",
+    "empezar": "Start",
+    "record": "Your record",
+    "racha": "Streak",
+    "nuevoRecord": "New record!",
+    "jugarDeNuevo": "Play again",
+    "sinContenido": "There is no Challenge content for this oracle yet.",
+    "pregImagen": "What is it called?",
+    "pregClave": "What does it relate to?",
+    "pregNombre": "Which one does this idea belong to?"
+  },
+  "recompensa": {
+    "titulo": "Watch a video",
+    "verVideo": "Watch video",
+    "instruccion": "Watch the full video to get your reward.",
+    "sinVideo": "No video is available right now. Try again in a little while.",
+    "preparando": "Getting the video ready…",
+    "ahoraNo": "Not now",
+    "dev": "Development mode: no real ad, the reward is granted anyway."
+  },
+  "buzios": {
+    "aFavor": "in favour",
+    "desafio": "challenge"
   }
 }

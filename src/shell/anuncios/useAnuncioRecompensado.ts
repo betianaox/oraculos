@@ -20,6 +20,13 @@ export function useAnuncioRecompensado() {
     adsDisponible ? 'cargando' : 'sinAnuncio'
   );
 
+  // En desarrollo el SDK nativo suele no estar (Expo Go) o no traer relleno, y
+  // sin anuncio no hay gemas: la app queda trabada y no se puede probar nada
+  // de lo que viene despues. Cuando eso pasa, y SOLO en dev, la recompensa se
+  // otorga igual. `__DEV__` es constante de compilacion, asi que este camino ni
+  // siquiera existe en el build de release.
+  const simulado = __DEV__ && (!adsDisponible || estado === 'sinAnuncio');
+
   useEffect(() => {
     if (!ads) return;
 
@@ -70,6 +77,14 @@ export function useAnuncioRecompensado() {
   }, []);
 
   const mostrar = useCallback((onRecompensa: () => void) => {
+    if (simulado) {
+      console.warn('[ads] DEV: no hay anuncio real, se otorga la recompensa igual');
+      // Un respiro antes de dar la recompensa, para que el cierre del modal se
+      // vea y el efecto no aparezca de golpe, como con el anuncio de verdad.
+      setTimeout(onRecompensa, 400);
+      return;
+    }
+
     const anuncio = anuncioRef.current;
     if (!ads || !anuncio) return;
     const { AdEventType, RewardedAdEventType } = ads;
@@ -88,7 +103,7 @@ export function useAnuncioRecompensado() {
     });
 
     anuncio.show();
-  }, []);
+  }, [simulado]);
 
-  return { estado, listo: estado === 'listo', mostrar, recargar };
+  return { estado, listo: estado === 'listo' || simulado, simulado, mostrar, recargar };
 }

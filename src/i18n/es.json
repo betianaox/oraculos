@@ -18,7 +18,12 @@
   },
   "pregunta": {
     "titulo": "¿Sobre qué quieres preguntar?",
-    "chips": { "general": "General", "amor": "Amor", "trabajo": "Trabajo", "dinero": "Dinero" },
+    "chips": {
+      "general": "General",
+      "amor": "Amor",
+      "trabajo": "Trabajo",
+      "dinero": "Dinero"
+    },
     "placeholder": "Escribe tu pregunta...",
     "consultar": "Consultar",
     "hintCorta": "Escribe una pregunta un poco más larga para poder leerla.",
@@ -45,7 +50,13 @@
     "seccionCartas": "Cartas",
     "carta": "Carta",
     "proximamente": "Contenido próximamente",
-    "consejoGenerico": "Confía en la señal de este momento y deja que te acompañe hoy."
+    "consejoGenerico": "Confía en la señal de este momento y deja que te acompañe hoy.",
+    "abrirBloque": "Mira un video y abre {seccion} por hoy",
+    "abrirTodo": "Mira un video y abre la biblioteca por hoy",
+    "modalAbrir": "Abrir {seccion} por hoy",
+    "modalAbrirTodo": "Abrir por hoy",
+    "verElVideo": "Ver el video",
+    "abiertoHoy": "Abierto hoy"
   },
   "consejo": {
     "titulo": "Consejo del día",
@@ -81,5 +92,30 @@
       "nombre": "I Ching",
       "subtitulo": "El libro de los cambios"
     }
+  },
+  "quiz": {
+    "titulo": "Reto",
+    "empezar": "Empezar",
+    "record": "Tu récord",
+    "racha": "Racha",
+    "nuevoRecord": "¡Nuevo récord!",
+    "jugarDeNuevo": "Jugar de nuevo",
+    "sinContenido": "Todavía no hay contenido para el Reto en este oráculo.",
+    "pregImagen": "¿Cómo se llama?",
+    "pregClave": "¿Con qué se relaciona?",
+    "pregNombre": "¿A cuál pertenece esta idea?"
+  },
+  "recompensa": {
+    "titulo": "Mira un video",
+    "verVideo": "Ver video",
+    "instruccion": "Mira el video completo para recibir la recompensa.",
+    "sinVideo": "No hay ningún video disponible en este momento. Prueba de nuevo en un rato.",
+    "preparando": "Preparando el video…",
+    "ahoraNo": "Ahora no",
+    "dev": "Modo desarrollo: no hay anuncio real, la recompensa se otorga igual."
+  },
+  "buzios": {
+    "aFavor": "a favor",
+    "desafio": "desafío"
   }
 }

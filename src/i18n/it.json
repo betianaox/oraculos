@@ -81,5 +81,17 @@
       "nombre": "I Ching",
       "subtitulo": "Il libro dei mutamenti"
     }
+  },
+  "quiz": {
+    "titulo": "Sfida",
+    "empezar": "Inizia",
+    "record": "Il tuo record",
+    "racha": "Serie",
+    "nuevoRecord": "Nuovo record!",
+    "jugarDeNuevo": "Gioca ancora",
+    "sinContenido": "Non c'è ancora contenuto per la Sfida in questo oracolo.",
+    "pregImagen": "Come si chiama?",
+    "pregClave": "A cosa si collega?",
+    "pregNombre": "A quale appartiene questa idea?"
   }
 }

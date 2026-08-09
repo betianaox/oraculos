@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useT } from '@/i18n';
 import { colores, espaciado, radios } from '../theme/tokens';
 import { fuente } from '../theme/fuentes';
 import { hexAlfa } from '../color';
@@ -20,16 +21,18 @@ export function ModalRecompensa({
   visible,
   onClose,
   onReward,
-  titulo = 'Mirá un video',
-  recompensa = 'Ver video',
+  titulo,
+  recompensa,
 }: {
   visible: boolean;
   onClose: () => void;
   onReward: () => void;
+  /** Si no se pasa, se usa el texto generico traducido. */
   titulo?: string;
   recompensa?: string;
 }) {
-  const { estado, listo, mostrar, recargar } = useAnuncioRecompensado();
+  const t = useT();
+  const { estado, listo, simulado, mostrar, recargar } = useAnuncioRecompensado();
 
   // Si se abre el modal justo cuando no hay anuncio (fallo de red, sin relleno),
   // se reintenta la carga: si no, quedaria trabado hasta salir de la pantalla.
@@ -65,11 +68,13 @@ export function ModalRecompensa({
       <View style={estilos.fondo}>
         <View style={estilos.tarjeta}>
           <MaterialCommunityIcons name="eye-outline" size={54} color="#e9c46a" />
-          <Text style={estilos.titulo}>{titulo}</Text>
+          <Text style={estilos.titulo}>{titulo ?? t('recompensa.titulo')}</Text>
           <Text style={estilos.nota}>
-            {estado === 'sinAnuncio'
-              ? 'No hay ningún video disponible en este momento. Probá de nuevo en un rato.'
-              : 'Mirá el video completo para recibir la recompensa.'}
+            {simulado
+              ? t('recompensa.dev')
+              : estado === 'sinAnuncio'
+                ? t('recompensa.sinVideo')
+                : t('recompensa.instruccion')}
           </Text>
 
           <Pressable
@@ -83,12 +88,14 @@ export function ModalRecompensa({
           >
             <MaterialCommunityIcons name="play-circle-outline" size={18} color={colores.fondo} />
             <Text style={estilos.botonTexto}>
-              {estado === 'cargando' ? 'Preparando el video…' : recompensa}
+              {estado === 'cargando'
+                ? t('recompensa.preparando')
+                : (recompensa ?? t('recompensa.verVideo'))}
             </Text>
           </Pressable>
 
           <Pressable onPress={onClose} hitSlop={10} style={estilos.cerrar}>
-            <Text style={estilos.cerrarTexto}>Ahora no</Text>
+            <Text style={estilos.cerrarTexto}>{t('recompensa.ahoraNo')}</Text>
           </Pressable>
         </View>
       </View>

@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import type { OraculoModulo } from '@/oraculos/tipos';
 import { calcularLayout } from '../layout';
-import { INICIO, LISTA_LOOP, aLogico, recentrar } from '../carrusel';
+import { useCarrusel } from '../carrusel';
 import { Domo } from './Domo';
 
 interface Props {
@@ -24,15 +24,19 @@ export function CarruselDomos({ scrollX, onSelect, onIndexChange }: Props) {
   const { width } = useWindowDimensions();
   const { itemWidth, spacing, stride, side } = calcularLayout(width);
   const lista = useRef<FlatList<OraculoModulo>>(null);
+  const { listaLoop, inicio, aLogico, recentrar } = useCarrusel();
   // Indice (en la lista repetida) del domo centrado: solo ese anima particulas.
-  const [centrado, setCentrado] = useState(INICIO);
+  const [centrado, setCentrado] = useState(inicio);
 
-  // Arranca en la copia del medio, con Tarot centrado.
+  // Arranca en la copia del medio, con Tarot centrado. Tambien vuelve ahi si
+  // cambia la cantidad de oraculos (al cambiar el idioma): el indice viejo
+  // podria apuntar a una posicion que ya no existe.
   useEffect(() => {
-    const offset = INICIO * stride;
+    const offset = inicio * stride;
     lista.current?.scrollToOffset({ offset, animated: false });
     scrollX.setValue(offset);
-  }, [stride, scrollX]);
+    setCentrado(inicio);
+  }, [stride, scrollX, inicio]);
 
   const onScroll = useRef(
     Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], { useNativeDriver: true })
@@ -56,13 +60,13 @@ export function CarruselDomos({ scrollX, onSelect, onIndexChange }: Props) {
     <View>
       <Animated.FlatList
         ref={lista as never}
-        data={LISTA_LOOP}
+        data={listaLoop}
         keyExtractor={(o, i) => `${(o as OraculoModulo).id}-${i}`}
         horizontal
         showsHorizontalScrollIndicator={false}
         snapToInterval={stride}
         decelerationRate="fast"
-        initialNumToRender={LISTA_LOOP.length}
+        initialNumToRender={listaLoop.length}
         contentContainerStyle={{ paddingHorizontal: side - spacing / 2 }}
         scrollEventThrottle={16}
         onScroll={onScroll}

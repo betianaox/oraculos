@@ -3,7 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Defs, LinearGradient as SvgLinearGradient, Path, Stop } from 'react-native-svg';
 import { useT } from '@/i18n';
-import { LISTA_LOOP } from '../carrusel';
+import { useCarrusel } from '../carrusel';
 import { colores, espaciado } from '../theme/tokens';
 import { fuente } from '../theme/fuentes';
 
@@ -62,6 +62,7 @@ export function Footer({ onSelect, scrollX, stride }: Props) {
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const t = useT();
+  const { listaLoop } = useCarrusel();
 
   const altoTotal = HOMBRO + CUERPO + insets.bottom;
   const { arriba, relleno, plataformaLeft, plataformaRight } = armarPaths(width, altoTotal);
@@ -82,7 +83,7 @@ export function Footer({ onSelect, scrollX, stride }: Props) {
 
       {/* Fondo del footer teñido con el acento del oraculo centrado (el borde
           celeste no se tiñe). Se cruzan por opacidad segun el scroll del carrusel. */}
-      {LISTA_LOOP.map((oraculo, i) => {
+      {listaLoop.map((oraculo, i) => {
         const opacidad = scrollX.interpolate({
           inputRange: [(i - 1) * stride, i * stride, (i + 1) * stride],
           outputRange: [0, 1, 0],

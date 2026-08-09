@@ -18,7 +18,12 @@
   },
   "pregunta": {
     "titulo": "Sobre o que você quer perguntar?",
-    "chips": { "general": "Geral", "amor": "Amor", "trabajo": "Trabalho", "dinero": "Dinheiro" },
+    "chips": {
+      "general": "Geral",
+      "amor": "Amor",
+      "trabajo": "Trabalho",
+      "dinero": "Dinheiro"
+    },
     "placeholder": "Escreva sua pergunta...",
     "consultar": "Consultar",
     "hintCorta": "Escreva uma pergunta um pouco mais longa para poder lê-la.",
@@ -45,7 +50,13 @@
     "seccionCartas": "Cartas",
     "carta": "Carta",
     "proximamente": "Conteúdo em breve",
-    "consejoGenerico": "Confie no sinal deste momento e deixe que ele o acompanhe hoje."
+    "consejoGenerico": "Confie no sinal deste momento e deixe que ele o acompanhe hoje.",
+    "abrirBloque": "Assista a um vídeo e abra {seccion} por hoje",
+    "abrirTodo": "Assista a um vídeo e abra a biblioteca por hoje",
+    "modalAbrir": "Abrir {seccion} por hoje",
+    "modalAbrirTodo": "Abrir por hoje",
+    "verElVideo": "Ver o vídeo",
+    "abiertoHoy": "Aberto hoje"
   },
   "consejo": {
     "titulo": "Conselho do dia",
@@ -81,5 +92,30 @@
       "nombre": "I Ching",
       "subtitulo": "O livro das mutações"
     }
+  },
+  "quiz": {
+    "titulo": "Desafio",
+    "empezar": "Começar",
+    "record": "Seu recorde",
+    "racha": "Sequência",
+    "nuevoRecord": "Novo recorde!",
+    "jugarDeNuevo": "Jogar de novo",
+    "sinContenido": "Ainda não há conteúdo de Desafio neste oráculo.",
+    "pregImagen": "Como se chama?",
+    "pregClave": "Com o que se relaciona?",
+    "pregNombre": "A qual pertence esta ideia?"
+  },
+  "recompensa": {
+    "titulo": "Assista a um vídeo",
+    "verVideo": "Ver vídeo",
+    "instruccion": "Assista ao vídeo completo para receber a recompensa.",
+    "sinVideo": "Não há nenhum vídeo disponível agora. Tente de novo daqui a pouco.",
+    "preparando": "Preparando o vídeo…",
+    "ahoraNo": "Agora não",
+    "dev": "Modo de desenvolvimento: não há anúncio real, a recompensa é dada mesmo assim."
+  },
+  "buzios": {
+    "aFavor": "a favor",
+    "desafio": "desafio"
   }
 }

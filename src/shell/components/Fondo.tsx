@@ -1,6 +1,6 @@
 import { Animated, Image, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { LISTA_LOOP } from '../carrusel';
+import { useCarrusel } from '../carrusel';
 import { colores } from '../theme/tokens';
 import { hexAlfa } from '../color';
 
@@ -18,12 +18,14 @@ interface Props {
  * degrade neutro derivado de su color de acento.
  */
 export function Fondo({ scrollX, stride }: Props) {
+  const { listaLoop } = useCarrusel();
+
   return (
     <View style={StyleSheet.absoluteFill} pointerEvents="none">
       {/* Base oscura constante, debajo de todo. */}
       <View style={[StyleSheet.absoluteFill, { backgroundColor: colores.fondo }]} />
 
-      {LISTA_LOOP.map((oraculo, i) => {
+      {listaLoop.map((oraculo, i) => {
         const opacidad = scrollX.interpolate({
           inputRange: [(i - 1) * stride, i * stride, (i + 1) * stride],
           outputRange: [0, 1, 0],

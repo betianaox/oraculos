@@ -34,6 +34,17 @@ export interface SeccionCartas {
   grupo?: string;
 }
 
+/**
+ * Lo que el Reto necesita de una pieza para armar preguntas. Se declara aparte
+ * y no se deduce de la `Ficha`, porque los bloques de la ficha se rotulan con
+ * titulos traducidos ("Palabras clave" / "Keywords" / "Parole chiave") y
+ * buscarlos por titulo se romperia en el primer idioma nuevo.
+ */
+export interface DatosQuiz {
+  /** Palabras clave cortas de la pieza. Son las opciones de las preguntas. */
+  claves: string[];
+}
+
 export interface ContenidoOraculo {
   /** Dorso de la pieza (para el Consejo del dia). */
   reverso: number;
@@ -45,6 +56,21 @@ export interface ContenidoOraculo {
   nombre: (pieza: Pieza) => string;
   /** Ficha de detalle, o null/undefined si todavia no hay contenido escrito. */
   ficha?: (pieza: Pieza) => Ficha | null;
+  /**
+   * Datos para el Reto. Si falta, el oraculo no tiene quiz: no se inventan
+   * preguntas con lo que haya.
+   */
+  quiz?: (pieza: Pieza) => DatosQuiz | null;
+  /**
+   * El arte de las piezas deja ver CUAL es, sin saber nada del oraculo: el
+   * numeral romano de un arcano mayor, las siete espadas de un Siete de
+   * Espadas, la cantidad de cauries abiertos de un odu.
+   *
+   * Cuando es asi, la pregunta "que pieza es esta?" mide contar, no saber, y se
+   * desactiva. El resto de los moldes siguen igual: mostrar la pieza mientras
+   * se pregunta por su significado no regala nada.
+   */
+  quizArteDelata?: boolean;
   /** Consejo del dia para una pieza (la posicion importa en runas). */
   consejo: (pieza: Pieza, posicion: Posicion) => string;
   /** Rotulo para cuando falta la ficha ("Contenido proximamente"). */

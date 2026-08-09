@@ -1,9 +1,10 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Animated, StyleSheet, useWindowDimensions, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '@/navigation/tipos';
-import { ORACULOS } from '@/oraculos/registry';
 import { useT } from '@/i18n';
+import { useApp } from '@/store/useApp';
+import { useCarrusel } from '@/shell/carrusel';
 import { Header } from '@/shell/components/Header';
 import { Footer, type SeccionFooter } from '@/shell/components/Footer';
 import { CarruselDomos } from '@/shell/components/CarruselDomos';
@@ -24,9 +25,19 @@ export function InicioScreen({ navigation }: Props) {
   const scrollX = useRef(new Animated.Value(0)).current;
   const [activo, setActivo] = useState(0);
   const t = useT();
+  const idioma = useApp((s) => s.idioma);
+  const { listaLoop } = useCarrusel();
+
+  // Al cambiar el idioma cambia la lista de oraculos (el I Ching solo esta en
+  // espanol). El carrusel vuelve solo al primero; aca se acompaña ese reinicio
+  // para que el footer no quede apuntando al oraculo que estaba antes.
+  useEffect(() => {
+    setActivo(0);
+  }, [idioma]);
 
   const abrirSeccion = (seccion: SeccionFooter) => {
-    const oraculo = ORACULOS[activo];
+    const oraculo = listaLoop[activo];
+    if (!oraculo) return;
     // Aprender y Consejo tienen pantalla propia si el oraculo tiene contenido.
     if (seccion === 'wiki' && oraculo.contenido) {
       navigation.navigate('Aprender', { oraculoId: oraculo.id });
@@ -34,6 +45,11 @@ export function InicioScreen({ navigation }: Props) {
     }
     if (seccion === 'consejo' && oraculo.contenido) {
       navigation.navigate('ConsejoDelDia', { oraculoId: oraculo.id });
+      return;
+    }
+    // El Reto deriva sus preguntas de la wiki, asi que necesita `contenido`.
+    if (seccion === 'quiz' && oraculo.contenido) {
+      navigation.navigate('Reto', { oraculoId: oraculo.id });
       return;
     }
     navigation.navigate('Oraculo', { oraculoId: oraculo.id, seccion });

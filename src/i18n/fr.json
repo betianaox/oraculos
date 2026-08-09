@@ -81,5 +81,17 @@
       "nombre": "I Ching",
       "subtitulo": "Le livre des mutations"
     }
+  },
+  "quiz": {
+    "titulo": "Défi",
+    "empezar": "Commencer",
+    "record": "Ton record",
+    "racha": "Série",
+    "nuevoRecord": "Nouveau record !",
+    "jugarDeNuevo": "Rejouer",
+    "sinContenido": "Il n'y a pas encore de contenu pour le Défi dans cet oracle.",
+    "pregImagen": "Comment s'appelle-t-elle ?",
+    "pregClave": "À quoi est-elle liée ?",
+    "pregNombre": "À laquelle appartient cette idée ?"
   }
 }
