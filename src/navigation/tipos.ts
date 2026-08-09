@@ -21,4 +21,6 @@ export type RootStackParamList = {
   AprenderDetalle: { oraculoId: string; piezaId: string };
   // Consejo del dia COMPARTIDO.
   ConsejoDelDia: { oraculoId: string };
+  // Reto COMPARTIDO: preguntas derivadas de la wiki del oraculo.
+  Reto: { oraculoId: string };
 };
