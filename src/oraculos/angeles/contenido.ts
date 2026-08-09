@@ -4,17 +4,17 @@ import type { Pieza } from '@/flujo/pieza';
 import { traducir } from '@/i18n';
 import { MAZO_ANGELES } from './mazo';
 import { REVERSO_ANGELES } from './imagenes';
-import { WIKI_ANGELES_ES, ETIQUETAS_ANGELES_ES, SECCIONES_ANGELES_ES } from './content/wiki';
+import { paqueteAngeles } from './content/paquete';
 
 /**
- * Contenido de Angeles. Registro mistico (distinto del didactico del Tarot).
- * Se llena carta por carta en content/wiki.ts; las que todavia no tienen ficha
- * caen a "proximamente" y a un consejo generico, sin tocar las pantallas.
+ * Contenido de Angeles armado en el idioma activo. Registro mistico (distinto
+ * del didactico del Tarot). Se llena carta por carta en content/<idioma>/wiki.ts;
+ * las que todavia no tienen ficha caen a "proximamente" y a un consejo
+ * generico, sin tocar las pantallas. Lo que no este traducido cae a español
+ * (ver content/paquete.ts).
  */
 export function crearContenidoAngeles(idioma: CodigoIdioma): ContenidoOraculo {
-  // Español base; el resto de los idiomas cae a español hasta traducirse.
-  const wiki = WIKI_ANGELES_ES;
-  const et = ETIQUETAS_ANGELES_ES;
+  const { wiki, etiquetas: et, secciones: SECCIONES_ANGELES_ES } = paqueteAngeles(idioma);
 
   const nombre = (p: Pieza) =>
     wiki[p.numero]?.nombre ?? `${traducir('aprender.carta', idioma)} ${p.numero}`;
@@ -64,6 +64,11 @@ export function crearContenidoAngeles(idioma: CodigoIdioma): ContenidoOraculo {
     secciones,
     nombre,
     ficha,
+    // Para el Reto: las claves del angel derecho.
+    quiz: (p) => {
+      const f = wiki[p.numero];
+      return f ? { claves: f.claves.derecho } : null;
+    },
     consejo: () => traducir('aprender.consejoGenerico', idioma),
     proximamente: traducir('aprender.proximamente', idioma),
   };

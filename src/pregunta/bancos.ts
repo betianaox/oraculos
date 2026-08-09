@@ -293,7 +293,9 @@ const fr: BancoDeteccion = {
   ],
 };
 
-const BANCOS: Record<CodigoIdioma, BancoDeteccion> = { es, en, pt, it, fr };
+// Los bancos italiano y frances siguen definidos mas arriba, listos para
+// cuando esos idiomas vuelvan a ofrecerse (ver i18n/idiomas.ts).
+const BANCOS: Record<CodigoIdioma, BancoDeteccion> = { es, en, pt };
 
 export function obtenerDeteccion(idioma: CodigoIdioma): BancoDeteccion {
   return BANCOS[idioma] ?? es;

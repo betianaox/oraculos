@@ -1,5 +1,5 @@
 // Significado numerologico (1..9) que el folleto asigna a los arcanos. Reescrito.
-export const NUMEROLOGIA: Record<number, string> = {
+export const NUMEROLOGIA_ES: Record<number, string> = {
   1: 'El conocimiento de la vida. El principio. El padre.',
   2: 'La dualidad: causa y efecto, lo masculino y lo femenino, el bien y el mal. La madre.',
   3: 'La triplicidad. El hijo.',

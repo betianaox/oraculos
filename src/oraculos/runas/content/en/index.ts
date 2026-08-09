@@ -1,6 +1,7 @@
 import type { PaqueteContenido } from '../paquete';
+import { WIKI_RUNAS_EN } from './wiki';
 import { aperturasAbiertas, aperturasCerradas } from './aperturas';
-import { conectores } from './conectores';
+import { cierre, situacion } from './conectores';
 import { consejoDelDia } from './consejoDelDia';
 import { consejos } from './consejos';
 import { ecoTercero, ecoTiempo } from './eco';
@@ -11,13 +12,14 @@ import { trabajo } from './fragmentos/trabajo';
 
 // English content pack.
 export const paqueteEn: PaqueteContenido = {
-  verbosIndividual: ['brings', 'offers', 'points to', 'adds', 'reflects', 'shows'],
   fragmentos: { amor, trabajo, dinero, general },
   aperturasAbiertas,
   aperturasCerradas,
-  conectores,
+  situacion,
+  cierre,
   consejos,
   ecoTercero,
   ecoTiempo,
   consejoDelDia,
+  wiki: WIKI_RUNAS_EN,
 };

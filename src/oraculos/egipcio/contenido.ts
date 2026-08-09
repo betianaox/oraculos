@@ -1,18 +1,20 @@
 import type { CodigoIdioma } from '@/i18n/idiomas';
 import type { ContenidoOraculo, Ficha } from '@/flujo/contenido';
 import type { Pieza } from '@/flujo/pieza';
-import { CARTAS_ES } from './content/es/cartas';
+import { paqueteEgipcio } from './content/paquete';
 import type { Carta } from './content/types';
-import { NUMEROLOGIA } from './content/es/numerologia';
 import { MAZO_EGIPCIO } from './mazo';
 import { DORSO_EGIPCIO } from './imagenes';
 
-function cartaDeId(id: string): Carta | undefined {
-  return CARTAS_ES[Number(id.replace('carta', ''))];
-}
+/**
+ * Contenido del Tarot Egipcio (Aprender + Consejo del dia) armado en el idioma
+ * activo. Lo que no este traducido cae a español (ver content/paquete.ts).
+ */
+export function crearContenidoEgipcio(idioma: CodigoIdioma): ContenidoOraculo {
+  const { cartas, numerologia, textos } = paqueteEgipcio(idioma);
 
-/** Contenido del Tarot Egipcio (Aprender + Consejo del dia). Por ahora en español. */
-export function crearContenidoEgipcio(_idioma: CodigoIdioma): ContenidoOraculo {
+  const cartaDeId = (id: string): Carta | undefined => cartas[Number(id.replace('carta', ''))];
+
   const nombre = (p: Pieza) => {
     const c = cartaDeId(p.id);
     return c ? `${c.numero}. ${c.nombre}` : p.id;
@@ -22,22 +24,22 @@ export function crearContenidoEgipcio(_idioma: CodigoIdioma): ContenidoOraculo {
     const c = cartaDeId(p.id);
     if (!c) return null;
     const correspondencias = [
-      `Número ${c.numerologia}: ${NUMEROLOGIA[c.numerologia]}`,
+      textos.numeroNumerologia(c.numerologia, numerologia[c.numerologia]),
       c.astro,
-      c.hebrea ? `Letra hebrea ${c.hebrea}` : undefined,
+      c.hebrea ? textos.letraHebrea(c.hebrea) : undefined,
     ]
       .filter(Boolean)
       .join('\n');
     return {
       datos: [
-        { etiqueta: 'Arcano', valor: c.arcano === 'mayor' ? 'Mayor' : 'Menor' },
-        { etiqueta: 'N°', valor: String(c.numero) },
+        { etiqueta: textos.arcano, valor: c.arcano === 'mayor' ? textos.mayor : textos.menor },
+        { etiqueta: textos.numeroCorto, valor: String(c.numero) },
       ],
       bloques: [
-        ...(c.esencia ? [{ titulo: 'Esencia', texto: c.esencia }] : []),
-        { titulo: 'Derecha', texto: c.derecho },
-        { titulo: 'Invertida', texto: c.invertido },
-        { titulo: 'Correspondencias', texto: correspondencias },
+        ...(c.esencia ? [{ titulo: textos.esencia, texto: c.esencia }] : []),
+        { titulo: textos.derecha, texto: c.derecho },
+        { titulo: textos.invertida, texto: c.invertido },
+        { titulo: textos.correspondencias, texto: correspondencias },
       ],
       voz: [c.nombre, c.derecho].join('\n\n'),
     };
@@ -61,13 +63,13 @@ export function crearContenidoEgipcio(_idioma: CodigoIdioma): ContenidoOraculo {
     .filter((piezas) => piezas.length > 0)
     .map((piezas) => ({
       id: `menores-${piezas[0].numero}`,
-      grupo: 'Arcanos menores',
-      titulo: `${piezas[0].numero} a ${piezas[piezas.length - 1].numero}`,
+      grupo: textos.arcanosMenores,
+      titulo: textos.serie(piezas[0].numero, piezas[piezas.length - 1].numero),
       piezas,
     }));
 
   const secciones = [
-    { id: 'mayores', titulo: 'Arcanos mayores', piezas: mayores },
+    { id: 'mayores', titulo: textos.arcanosMayores, piezas: mayores },
     ...seriesMenores,
   ];
 
@@ -76,8 +78,13 @@ export function crearContenidoEgipcio(_idioma: CodigoIdioma): ContenidoOraculo {
     secciones,
     nombre,
     ficha,
+    // Para el Reto: las claves de la carta derecha.
+    quiz: (p) => {
+      const c = cartaDeId(p.id);
+      return c ? { claves: c.claves } : null;
+    },
     consejo,
-    proximamente: 'Contenido próximamente',
+    proximamente: textos.proximamente,
     // Elegir 1 de 3 dadas vuelta y voltear (como el Tarot).
     consejoModo: 'elegir',
     invierte: false,

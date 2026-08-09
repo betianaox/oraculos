@@ -15,8 +15,6 @@ const VOZ: Record<CodigoIdioma, string> = {
   es: 'es-ES',
   en: 'en-US',
   pt: 'pt-BR',
-  it: 'it-IT',
-  fr: 'fr-FR',
 };
 
 interface VozState {

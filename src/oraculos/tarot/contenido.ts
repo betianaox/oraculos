@@ -62,11 +62,22 @@ export function crearContenidoTarot(idioma: CodigoIdioma): ContenidoOraculo {
     };
   };
 
+  // Para el Reto: las palabras clave de la carta derecha. Las invertidas se
+  // dejan afuera a proposito, para no preguntar por dos caras de lo mismo.
+  const quiz = (p: Pieza) => {
+    const f = wiki[p.id as CartaId];
+    return f ? { claves: f.palabrasClave.normal } : null;
+  };
+
   return {
     reverso: DORSO,
     secciones,
     nombre,
     ficha,
+    quiz,
+    // Los mayores llevan el numeral romano pintado y los menores muestran
+    // tantos simbolos como su numero: la carta se identifica sola.
+    quizArteDelata: true,
     consejo: (p) => consejos[p.id as CartaId] ?? consejoGenerico,
     proximamente: tt.wiki.proximamente,
   };

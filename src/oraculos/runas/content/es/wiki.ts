@@ -1,4 +1,4 @@
-import type { RunaId } from './types';
+import type { RunaId } from '../types';
 
 // Contenido de la Wiki: una ficha de aprendizaje por runa (palabras clave,
 // significado derecho/invertido y simbolismo tradicional). A diferencia de
@@ -18,7 +18,7 @@ export interface FichaWikiRuna {
   simbolismo: string;
 }
 
-export const WIKI_RUNAS: Record<RunaId, FichaWikiRuna> = {
+export const WIKI_RUNAS_ES: Record<RunaId, FichaWikiRuna> = {
   fehu: {
     palabrasClave: {
       normal: ['prosperidad', 'recursos', 'base sólida', 'abundancia'],

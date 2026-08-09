@@ -1,13 +1,16 @@
 /**
- * Idiomas soportados. Con estos cinco cubrimos gran parte de America y Europa.
- * El orden es el que se muestra en Ajustes.
+ * Idiomas que la app OFRECE. El orden es el que se muestra en Ajustes.
+ *
+ * Solo se listan los que tienen contenido de verdad. Italiano y frances
+ * estuvieron aca un tiempo, pero elegirlos dejaba la app entera en español
+ * (los oraculos caen a español cuando falta traduccion), que es peor que no
+ * ofrecerlos: se lee como una app rota, no como una app en varios idiomas.
+ * Cuando se traduzcan, se agregan aca y vuelven a aparecer.
  */
 export const IDIOMAS = [
   { codigo: 'es', etiqueta: 'Espanol' },
   { codigo: 'en', etiqueta: 'English' },
   { codigo: 'pt', etiqueta: 'Portugues' },
-  { codigo: 'it', etiqueta: 'Italiano' },
-  { codigo: 'fr', etiqueta: 'Francais' },
 ] as const;
 
 export type CodigoIdioma = (typeof IDIOMAS)[number]['codigo'];

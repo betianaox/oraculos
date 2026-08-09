@@ -1,0 +1,60 @@
+// Traducido al portugués de Brasil desde el original en español con scripts/traducir.js.
+import type { NombresPack } from '../types';
+
+// Nombres de las cartas en español. Los Mayores son nombres canónicos; los
+// Menores se arman con rango + palo (ver lib/nombreCarta.ts).
+export const NOMBRES_PT: NombresPack = {
+  mayores: {
+    0: 'O Louco',
+    1: 'O Mago',
+    2: 'A Sacerdotisa',
+    3: 'A Imperatriz',
+    4: 'O Imperador',
+    5: 'O Hierofante',
+    6: 'Os Enamorados',
+    7: 'O Carro',
+    8: 'A Força',
+    9: 'O Eremita',
+    10: 'A Roda da Fortuna',
+    11: 'A Justiça',
+    12: 'O Pendurado',
+    13: 'A Morte',
+    14: 'A Temperança',
+    15: 'O Diabo',
+    16: 'A Torre',
+    17: 'A Estrela',
+    18: 'A Lua',
+    19: 'O Sol',
+    20: 'O Julgamento',
+    21: 'O Mundo',
+  },
+  palos: {
+    bastos: 'Paus',
+    copas: 'Copas',
+    espadas: 'Espadas',
+    oros: 'Ouros',
+  },
+  rangos: {
+    as: 'Ás',
+    dos: 'Dois',
+    tres: 'Três',
+    cuatro: 'Quatro',
+    cinco: 'Cinco',
+    seis: 'Seis',
+    siete: 'Sete',
+    ocho: 'Oito',
+    nueve: 'Nove',
+    diez: 'Dez',
+    sota: 'Valete',
+    caballo: 'Cavaleiro',
+    reina: 'Rainha',
+    rey: 'Rei',
+  },
+  elementos: {
+    fuego: 'Fogo',
+    agua: 'Água',
+    aire: 'Ar',
+    tierra: 'Terra',
+  },
+  menor: (rango, palo) => `${rango} de ${palo}`,
+};

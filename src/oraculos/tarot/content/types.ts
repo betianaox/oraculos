@@ -151,4 +151,12 @@ export interface NombresPack {
   palos: Record<Palo, string>;
   rangos: Record<RangoMenor, string>;
   elementos: Record<Elemento, string>;
+  /**
+   * Cómo se arma el nombre de un Menor a partir del rango y el palo.
+   *
+   * Va acá y no en el código porque cambia con el idioma: "Sota de Copas"
+   * pero "Page of Cups". Antes el "de" estaba escrito a mano en
+   * lib/nombreCarta.ts y en inglés habría salido "Page de Cups".
+   */
+  menor: (rango: string, palo: string) => string;
 }

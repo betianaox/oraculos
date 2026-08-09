@@ -39,3 +39,6 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# Memoria del traductor: evita repagar la cuota al retomar una corrida.
+.traduccion-cache.json

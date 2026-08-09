@@ -55,4 +55,5 @@ export const NOMBRES_ES: NombresPack = {
     aire: 'Aire',
     tierra: 'Tierra',
   },
+  menor: (rango, palo) => `${rango} de ${palo}`,
 };

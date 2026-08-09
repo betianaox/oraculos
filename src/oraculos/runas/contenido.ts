@@ -5,19 +5,21 @@ import type { Pieza, Posicion } from '@/flujo/pieza';
 import { obtenerContenido } from './content';
 import { obtenerTextos } from './content/textos';
 import { nombres } from './content/nombres';
-import { WIKI_RUNAS } from './content/wiki';
 import type { RunaId } from './content/types';
 import { MAZO_RUNAS } from './mazo';
 
 /** Contenido de Runas (Aprender + Consejo del dia) en el idioma activo. */
 export function crearContenidoRunas(idioma: CodigoIdioma): ContenidoOraculo {
   const tt = obtenerTextos(idioma);
-  const consejos = obtenerContenido(idioma).consejoDelDia;
+  const paquete = obtenerContenido(idioma);
+  const consejos = paquete.consejoDelDia;
+  // La wiki sale del paquete del idioma activo, igual que el resto.
+  const wiki = paquete.wiki;
 
   const nombre = (p: Pieza) => nombres[p.id as RunaId];
 
   const ficha = (p: Pieza): Ficha => {
-    const f = WIKI_RUNAS[p.id as RunaId];
+    const f = wiki[p.id as RunaId];
     return {
       datos: [],
       bloques: [
@@ -51,6 +53,11 @@ export function crearContenidoRunas(idioma: CodigoIdioma): ContenidoOraculo {
     secciones: [{ id: 'runas', titulo: traducir('oraculos.runas.nombre', idioma), piezas: MAZO_RUNAS }],
     nombre,
     ficha,
+    // Para el Reto: las palabras clave de la runa derecha.
+    quiz: (p) => {
+      const f = wiki[p.id as RunaId];
+      return f ? { claves: f.palabrasClave.normal } : null;
+    },
     consejo,
     proximamente: tt.wiki.proximamente,
     // Elegir 1 de 3 dadas vuelta y voltear (como las cartas). Cada runa muestra

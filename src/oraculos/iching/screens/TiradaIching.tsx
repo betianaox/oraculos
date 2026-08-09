@@ -22,6 +22,7 @@ import { lecturaIching } from '../lectura';
 import { numeroDeLineas } from '../secuencia';
 import { CartaHexagrama } from '../components/HexagramaLineas';
 import { HEXAGRAMAS_ES } from '../content/es/hexagramas';
+import { paqueteIching } from '../content/paquete';
 
 const CARA = require('../../../../assets/oraculos/iching/monedas/cara.webp');
 const CRUZ = require('../../../../assets/oraculos/iching/monedas/cruz.webp');
@@ -39,7 +40,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'TiradaIching'>;
 const monedaAlAzar = (): CaraMoneda => (Math.random() < 0.5 ? 'cara' : 'cruz');
 
 export function TiradaIchingScreen({ navigation, route }: Props) {
-  const { oraculoId, pregunta, tema } = route.params;
+  const { oraculoId, pregunta, tema, analisis } = route.params;
   const t = useT();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
@@ -48,8 +49,16 @@ export function TiradaIchingScreen({ navigation, route }: Props) {
   const nombre = oraculo ? t(oraculo.nombreKey) : oraculoId;
   const gastarGemas = useApp((s) => s.gastarGemas);
 
+  // El I Ching solo se ofrece en español, pero se pide por el mismo selector
+  // que el resto para no dejar textos sueltos en el codigo.
+  const idioma = useApp((s) => s.idioma);
+  const { textos: textosIching } = paqueteIching(idioma);
+
   const tirada = useMemo(() => tirarHexagrama(), []);
-  const parrafos = useMemo(() => lecturaIching(tirada, tema), [tirada, tema]);
+  const parrafos = useMemo(
+    () => lecturaIching(tirada, tema, analisis),
+    [tirada, tema, analisis],
+  );
   const textoVoz = parrafos.join('\n\n');
 
   const [reveladas, setReveladas] = useState(0); // lineas reveladas (0..6, de abajo)
@@ -190,14 +199,14 @@ export function TiradaIchingScreen({ navigation, route }: Props) {
               <Text style={estilos.nombreHex}>
                 {hexPrim ? `${hexPrim.numero}. ${hexPrim.nombre}` : `Hexagrama ${numPrim}`}
               </Text>
-              {tirada.resultante ? (
-                <Text style={estilos.subrotulo}>con líneas cambiantes</Text>
-              ) : (
-                <Text style={estilos.subrotulo}>sin líneas cambiantes</Text>
-              )}
+              <Text style={estilos.subrotulo}>
+                {tirada.resultante
+                  ? textosIching.conLineasCambiantes
+                  : textosIching.sinLineasCambiantes}
+              </Text>
             </>
           ) : (
-            <Text style={estilos.subrotulo}>Lanzando las monedas…</Text>
+            <Text style={estilos.subrotulo}>{textosIching.lanzandoMonedas}</Text>
           )}
         </View>
       </View>

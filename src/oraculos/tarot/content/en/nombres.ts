@@ -1,0 +1,60 @@
+// Traducido al inglés desde el original en español con scripts/traducir.js.
+import type { NombresPack } from '../types';
+
+// Nombres de las cartas en español. Los Mayores son nombres canónicos; los
+// Menores se arman con rango + palo (ver lib/nombreCarta.ts).
+export const NOMBRES_EN: NombresPack = {
+  mayores: {
+    0: 'The Fool',
+    1: 'The Magician',
+    2: 'The High Priestess',
+    3: 'The Empress',
+    4: 'The Emperor',
+    5: 'The Hierophant',
+    6: 'The Lovers',
+    7: 'The Chariot',
+    8: 'Strength',
+    9: 'The Hermit',
+    10: 'Wheel of Fortune',
+    11: 'Justice',
+    12: 'The Hanged Man',
+    13: 'Death',
+    14: 'Temperance',
+    15: 'The Devil',
+    16: 'The Tower',
+    17: 'The Star',
+    18: 'The Moon',
+    19: 'The Sun',
+    20: 'Judgement',
+    21: 'The World',
+  },
+  palos: {
+    bastos: 'Wands',
+    copas: 'Cups',
+    espadas: 'Swords',
+    oros: 'Pentacles',
+  },
+  rangos: {
+    as: 'Ace',
+    dos: 'Two',
+    tres: 'Three',
+    cuatro: 'Four',
+    cinco: 'Five',
+    seis: 'Six',
+    siete: 'Seven',
+    ocho: 'Eight',
+    nueve: 'Nine',
+    diez: 'Ten',
+    sota: 'Page',
+    caballo: 'Knight',
+    reina: 'Queen',
+    rey: 'King',
+  },
+  elementos: {
+    fuego: 'Fire',
+    agua: 'Water',
+    aire: 'Air',
+    tierra: 'Earth',
+  },
+  menor: (rango, palo) => `${rango} of ${palo}`,
+};

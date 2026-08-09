@@ -1,6 +1,7 @@
 import type { PaqueteContenido } from '../paquete';
+import { WIKI_RUNAS_ES } from './wiki';
 import { aperturasAbiertas, aperturasCerradas } from './aperturas';
-import { conectores } from './conectores';
+import { cierre, situacion } from './conectores';
 import { consejoDelDia } from './consejoDelDia';
 import { consejos } from './consejos';
 import { ecoTercero, ecoTiempo } from './eco';
@@ -12,13 +13,14 @@ import { trabajo } from './fragmentos/trabajo';
 // Paquete de contenido en español. Es el idioma de referencia y el fallback
 // del resto mientras no estén traducidos.
 export const paqueteEs: PaqueteContenido = {
-  verbosIndividual: ['trae', 'aporta', 'señala', 'suma', 'indica', 'muestra'],
   fragmentos: { amor, trabajo, dinero, general },
   aperturasAbiertas,
   aperturasCerradas,
-  conectores,
+  situacion,
+  cierre,
   consejos,
   ecoTercero,
   ecoTiempo,
   consejoDelDia,
+  wiki: WIKI_RUNAS_ES,
 };

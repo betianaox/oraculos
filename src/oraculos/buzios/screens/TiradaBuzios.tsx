@@ -95,7 +95,7 @@ function repartirPosiciones(): Pos[] {
 }
 
 export function TiradaBuziosScreen({ navigation, route }: Props) {
-  const { oraculoId, pregunta, tema } = route.params;
+  const { oraculoId, pregunta, tema, analisis } = route.params;
   const t = useT();
   const insets = useSafeAreaInsets();
   const oraculo = oraculoPorId(oraculoId);
@@ -104,7 +104,10 @@ export function TiradaBuziosScreen({ navigation, route }: Props) {
   const gastarGemas = useApp((s) => s.gastarGemas);
 
   const caida = useMemo(() => tirarBuzios(), []);
-  const parrafos = useMemo(() => lecturaBuzios(caida, tema), [caida, tema]);
+  const parrafos = useMemo(
+    () => lecturaBuzios(caida, tema, analisis),
+    [caida, tema, analisis],
+  );
   const pos1 = useMemo(() => repartirPosiciones(), []);
   const pos2 = useMemo(() => repartirPosiciones(), []);
 
@@ -179,7 +182,9 @@ export function TiradaBuziosScreen({ navigation, route }: Props) {
         ? `${caida.abiertos1} abiertos · ${oduNombre}`
         : fase === 'dos'
           ? 'Segunda tirada…'
-          : `${oduNombre} · ${caida.orientacion === 'favorable' ? 'a favor' : 'desafío'}`;
+          : `${oduNombre} · ${
+              caida.orientacion === 'favorable' ? t('buzios.aFavor') : t('buzios.desafio')
+            }`;
 
   const onArea = (e: LayoutChangeEvent) => {
     const { width: w, height: h } = e.nativeEvent.layout;

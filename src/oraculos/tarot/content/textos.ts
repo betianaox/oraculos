@@ -320,7 +320,7 @@ const it: Textos = {
 };
 
 // fr cae a espanol hasta que se traduzca (mismo criterio que el contenido).
-const textos: Partial<Record<IdiomaConcreto, Textos>> = { es, en, pt, it };
+const textos: Partial<Record<IdiomaConcreto, Textos>> = { es, en, pt };
 
 export function obtenerTextos(idioma: IdiomaConcreto): Textos {
   return textos[idioma] ?? es;

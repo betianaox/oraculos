@@ -1,9 +1,16 @@
 import type { Odu, BaseOdus } from '../types';
 
-// BORRADOR para revisar. Consulta simbolica de los 16 odus del dilogun, en
-// redaccion propia y tono reflexivo (como el I Ching). NO es el jogo de buzios.
-// El contenido lo revisa y corrige quien tiene el saber de la casa.
-// Español neutro, sin voseo. El numero es la cantidad de cauries abiertos.
+// Consulta SIMBOLICA de los 16 odus del dilogun, en redaccion propia y tono
+// reflexivo (como el I Ching). Español neutro, sin voseo. El numero es la
+// cantidad de cauries abiertos.
+//
+// QUE ES Y QUE NO ES: esto NO reproduce el jogo de buzios, que es un ritual
+// sagrado del Candomble que realizan personas iniciadas. Es una lectura propia
+// de los significados que circulan publicamente, escrita SIN la formacion de
+// alguien de la casa. Por eso el tono acompaña y no dicta, no invoca a nadie,
+// no prescribe ofrendas ni rituales, y no habla en nombre de ninguna tradicion.
+//
+// Si alguna vez se suma alguien con ese saber, este es el archivo a revisar.
 
 const odu1: Odu = {
   numero: 1,
