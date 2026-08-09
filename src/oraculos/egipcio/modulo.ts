@@ -1,6 +1,6 @@
 import type { OraculoModulo } from '../tipos';
 import { MAZO_EGIPCIO } from './mazo';
-import { lecturaEgipcio } from './lectura';
+import { lecturaEgipcio, materialEgipcio } from './lectura';
 import { crearContenidoEgipcio } from './contenido';
 
 const egipcio: OraculoModulo = {
@@ -13,6 +13,8 @@ const egipcio: OraculoModulo = {
   mazo: MAZO_EGIPCIO,
   // Tira en cruz de 5 (default del flujo) y arma su lectura con el motor propio.
   lectura: lecturaEgipcio,
+  // Y el mismo contenido en crudo, por si la IA puede redactarla mejor.
+  material: materialEgipcio,
   contenido: crearContenidoEgipcio,
 };
 

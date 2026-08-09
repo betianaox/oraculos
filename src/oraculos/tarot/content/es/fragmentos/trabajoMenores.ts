@@ -178,7 +178,7 @@ export const FRAGMENTOS_TRABAJO_MENORES_ES: FragmentosDeTema = {
     normal: [
       'ilusión por un trabajo que llena',
       'un comienzo laboral con entusiasmo',
-      'encontrarle sentido a lo que hacés',
+      'encontrarle sentido a lo que haces',
     ],
     invertida: [
       'desgano con el trabajo',

@@ -25,7 +25,7 @@ export const FRAGMENTOS_AMOR_ES: FragmentosDeTema = {
     invertida: [
       'una seducción que manipula más que enamora',
       'palabras de amor que prometen de más',
-      'no animarse a mostrar lo que sentís',
+      'no animarse a mostrar lo que sientes',
     ],
   },
   'mayor-02': {
@@ -79,7 +79,7 @@ export const FRAGMENTOS_AMOR_ES: FragmentosDeTema = {
   'mayor-06': {
     normal: [
       'una unión que integra cuerpo y corazón',
-      'elegir a alguien desde lo que de verdad valorás',
+      'elegir a alguien desde lo que de verdad valoras',
       'la armonía de un amor correspondido',
     ],
     invertida: [
@@ -114,7 +114,7 @@ export const FRAGMENTOS_AMOR_ES: FragmentosDeTema = {
   },
   'mayor-09': {
     normal: [
-      'un tiempo a solas para entender qué querés en el amor',
+      'un tiempo a solas para entender qué quieres en el amor',
       'buscar hacia adentro antes de un vínculo',
       'una relación que pide espacio y silencio',
     ],
@@ -265,7 +265,7 @@ export const FRAGMENTOS_AMOR_ES: FragmentosDeTema = {
     invertida: [
       'un amor casi logrado al que le falta un paso',
       'un compromiso que no termina de cerrar',
-      'algo del vínculo que aún no integrás',
+      'algo del vínculo que aún no integras',
     ],
   },
 };

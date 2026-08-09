@@ -1,15 +1,30 @@
-// Plantillas que arman UNA sola oración combinando las 3 runas de la
-// tirada, en el orden en que salieron (sin roles fijos de pasado/presente/
-// futuro). Son genéricas: sirven para cualquier tema, porque el contenido
-// específico ya viene puesto en los fragmentos.
+// Tejido entre las runas y la persona.
 //
-// Placeholders: {runa1} {runa2} {runa3} = nombres de runa (ver nombres.ts)
-//               {frag1} {frag2} {frag3} = fragmentos de content/fragmentos/<tema>.ts
-export const conectores: string[] = [
-  '{runa1} trae {frag1}, {runa2} suma {frag2}, y {runa3} cierra la escena con {frag3}.',
-  'Entre {runa1} y {runa2} aparece {frag1} junto con {frag2}, mientras {runa3} agrega {frag3}.',
-  '{runa1} señala {frag1}, a eso se le suma, de la mano de {runa2}, {frag2}, y {runa3} termina de mostrar {frag3}.',
-  'La combinación de {runa1}, {runa2} y {runa3} habla de {frag1}, de {frag2} y, sobre todo, de {frag3}.',
-  'Primero aparece {frag1} de la mano de {runa1}, después {frag2} gracias a {runa2}, y todo se completa con {frag3} que trae {runa3}.',
-  '{runa1} aporta {frag1}, y esa energía se entrelaza con {frag2} de {runa2} y con {frag3} de {runa3}.',
+// Acá NO se nombran las runas: la persona las ve en pantalla, y lo que espera
+// leer es qué dicen sobre lo que preguntó, no la definición de cada una.
+//
+// Placeholders: {frag1} {frag2} {frag3} = fragmentos de fragmentos/<tema>.ts
+//
+// OJO: los fragmentos son cláusulas cortas de forma variable. Las plantillas
+// usan dos puntos o coma para aceptarlas todas sin romperse.
+
+/** Cierre del primer párrafo: la situación, con las dos primeras runas. */
+export const situacion: string[] = [
+  'De fondo se mueve algo: {frag1}. Y junto a eso, {frag2}.',
+  'Lo que rodea el asunto: {frag1}. Sosteniéndolo, {frag2}.',
+  'Primero asoma esto: {frag1}. Y detrás, {frag2}.',
+  'Hay dos cosas en juego: {frag1}, y también {frag2}.',
+  'Lo que se ve de entrada: {frag1}. Lo que late debajo: {frag2}.',
+];
+
+/**
+ * Segundo párrafo: la tercera runa, la única que mira hacia adelante. Matiz
+ * anticipatorio pero en clave de tendencia, nunca como un hecho consumado.
+ */
+export const cierre: string[] = [
+  'Y hacia adelante se perfila esto: {frag3}.',
+  'Lo que viene apunta en esta dirección: {frag3}.',
+  'Si nada se fuerza, lo próximo se insinúa así: {frag3}.',
+  'En el horizonte cercano ya se asoma {frag3}.',
+  'Todo apunta a que lo siguiente traiga {frag3}.',
 ];

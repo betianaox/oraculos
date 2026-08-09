@@ -1,11 +1,13 @@
 import type { PiezaTirada } from '@/flujo/pieza';
 import type { AnalisisPregunta, Tema } from '@/pregunta/tipos';
 import type { CodigoIdioma } from '@/i18n/idiomas';
+import type { PiezaMaterial } from '@/ia/tipos';
 import { armarCruz, type FuentesCruz } from '@/flujo/motorCruz';
-import { WIKI_ANGELES_ES } from './content/wiki';
-import { BANCOS_ANGELES_ES } from './content/bancos';
-import { combinacionPresente } from './content/combinaciones';
-import { FRAGMENTOS_ANGELES_ES } from './content/fragmentos';
+import { materialCruz } from '@/flujo/materialCruz';
+import { WIKI_ANGELES_ES } from './content/es/wiki';
+import { BANCOS_ANGELES_ES } from './content/es/bancos';
+import { combinacionPresente } from './content/es/combinaciones';
+import { FRAGMENTOS_ANGELES_ES } from './content/es/fragmentos';
 
 function mezclar<T>(lista: readonly T[]): T[] {
   const copia = [...lista];
@@ -45,6 +47,27 @@ function fragmentoAngel(p: PiezaTirada, tema: Tema): string {
 }
 
 /**
+ * Cómo nombrar y cómo resolver el texto de cada ángel. Lo comparten el motor
+ * propio y el material que se le manda a la IA, así las dos lecturas salen del
+ * mismo contenido.
+ */
+function fuentesAngeles(tema: Tema): FuentesCruz {
+  // Conviene el nombre corto: los ángeles negativos y algunos coros traen un
+  // epíteto tras la coma ("Rimmon, el Ángel del Rayo...") que pesa dentro de la
+  // frase. El nombre completo vive en la Wiki.
+  const nombre = (p: PiezaTirada) => {
+    const completo = WIKI_ANGELES_ES[p.pieza.numero]?.nombre ?? `Carta ${p.pieza.numero}`;
+    return completo.split(',')[0];
+  };
+
+  return {
+    nombre,
+    fragmento: (p) => fragmentoAngel(p, tema),
+    bancos: BANCOS_ANGELES_ES,
+  };
+}
+
+/**
  * Motor de lectura de Ángeles: de las 5 cartas de la cruz + el análisis a los
  * tres párrafos, con el armador compartido (flujo/motorCruz) y registro
  * místico. Suma, como gracia propia del oráculo, la nota de una combinación si
@@ -57,21 +80,7 @@ export function lecturaAngeles(
   analisis: AnalisisPregunta,
   _idioma: CodigoIdioma,
 ): string[] {
-  // En la lectura conviene el nombre corto: los ángeles negativos y algunos
-  // coros traen un epíteto tras la coma ("Rimmon, el Ángel del Rayo...") que
-  // pesa dentro de la frase. El nombre completo vive en la Wiki.
-  const nombre = (p: PiezaTirada) => {
-    const completo = WIKI_ANGELES_ES[p.pieza.numero]?.nombre ?? `Carta ${p.pieza.numero}`;
-    return completo.split(',')[0];
-  };
-
-  const fuentes: FuentesCruz = {
-    nombre,
-    fragmento: (p) => fragmentoAngel(p, tema),
-    bancos: BANCOS_ANGELES_ES,
-  };
-
-  const parrafos = armarCruz(tirada, analisis, fuentes);
+  const parrafos = armarCruz(tirada, tema, analisis, fuentesAngeles(tema));
   if (parrafos.length === 0) return parrafos;
 
   // Gracia propia de Ángeles: si hay una combinación declarada entre las cartas,
@@ -81,4 +90,14 @@ export function lecturaAngeles(
     parrafos[parrafos.length - 1] = `${parrafos[parrafos.length - 1]} Una señal especial: ${nota}`;
   }
   return parrafos;
+}
+
+/** Las mismas 5 cartas, sin redactar, para que la IA escriba la lectura. */
+export function materialAngeles(
+  tirada: PiezaTirada[],
+  tema: Tema,
+  _analisis: AnalisisPregunta,
+  _idioma: CodigoIdioma,
+): PiezaMaterial[] {
+  return materialCruz(tirada, fuentesAngeles(tema));
 }

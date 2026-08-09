@@ -1,13 +1,31 @@
-// Modelli che costruiscono UNA frase combinando le tre rune, nell'ordine in
-// cui sono uscite. Generici: il significato specifico è già nei frammenti.
+// Il tessuto tra le rune e la persona.
 //
-// Segnaposto: {runa1} {runa2} {runa3} = nomi delle rune (vedi nombres.ts)
-//             {frag1} {frag2} {frag3} = frammenti di content/it/fragmentos/<tema>.ts
-export const conectores: string[] = [
-  "{runa1} porta {frag1}, {runa2} aggiunge {frag2}, e {runa3} chiude la scena con {frag3}.",
-  "Tra {runa1} e {runa2}, {frag1} compare insieme a {frag2}, mentre {runa3} aggiunge {frag3}.",
-  "{runa1} indica {frag1}, a questo si somma, tramite {runa2}, {frag2}, e {runa3} finisce col mostrare {frag3}.",
-  "La combinazione di {runa1}, {runa2} e {runa3} parla di {frag1}, di {frag2} e, soprattutto, di {frag3}.",
-  "Prima arriva {frag1} tramite {runa1}, poi {frag2} grazie a {runa2}, e tutto si completa con {frag3}, che {runa3} porta.",
-  "{runa1} contribuisce con {frag1}, e quell'energia si intreccia con {frag2} di {runa2} e con {frag3} di {runa3}.",
+// Qui le rune NON vengono nominate: la persona le vede sullo schermo, e quello
+// che si aspetta di leggere è cosa dicono sulla sua domanda, non la
+// definizione di ciascuna.
+//
+// Placeholders: {frag1} {frag2} {frag3} = frammenti di fragmentos/<tema>.ts
+//
+// ATTENZIONE: i frammenti sono frasi brevi di forma variabile. Questi modelli
+// usano i due punti o la virgola per accoglierle tutte senza rompersi.
+
+/** Chiude il primo paragrafo: la situazione, con le prime due rune. */
+export const situacion: string[] = [
+  'Sotto si muove qualcosa: {frag1}. E accanto a questo, {frag2}.',
+  'Ciò che circonda la questione: {frag1}. A sostenere tutto, {frag2}.',
+  'Per prima cosa affiora questo: {frag1}. E dietro, {frag2}.',
+  'Ci sono due cose in gioco: {frag1}, e anche {frag2}.',
+  'Quello che si vede subito: {frag1}. Quello che pulsa sotto: {frag2}.',
+];
+
+/**
+ * Secondo paragrafo: la terza runa, l'unica che guarda avanti. Con una sfumatura
+ * di anticipazione, sempre come tendenza, mai come fatto compiuto.
+ */
+export const cierre: string[] = [
+  'E più avanti si delinea questo: {frag3}.',
+  'Ciò che arriva punta in questa direzione: {frag3}.',
+  'Se nulla viene forzato, il prossimo passo si intuisce così: {frag3}.',
+  "All'orizzonte vicino si intravede già {frag3}.",
+  'Tutto lascia pensare che quello che viene porti {frag3}.',
 ];

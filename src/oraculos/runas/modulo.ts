@@ -1,7 +1,7 @@
 import type { OraculoModulo } from '../tipos';
 import { MAZO_RUNAS } from './mazo';
 import { TIRADA_RUNAS } from './tirada';
-import { lecturaRunas } from './lectura';
+import { lecturaRunas, materialRunas } from './lectura';
 import { crearContenidoRunas } from './contenido';
 
 const runas: OraculoModulo = {
@@ -14,6 +14,8 @@ const runas: OraculoModulo = {
   mazo: MAZO_RUNAS,
   tirada: TIRADA_RUNAS,
   lectura: lecturaRunas,
+  // Y el mismo contenido en crudo, por si la IA puede redactarla mejor.
+  material: materialRunas,
   contenido: crearContenidoRunas,
 };
 

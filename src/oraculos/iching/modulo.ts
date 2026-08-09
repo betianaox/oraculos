@@ -4,6 +4,9 @@ import { crearContenidoIChing } from './contenido';
 
 const iching: OraculoModulo = {
   id: 'iching',
+  // Solo espanol: su contenido todavia no esta traducido y una consulta en
+  // otro idioma saldria entera en espanol. Ver `idiomas` en OraculoModulo.
+  idiomas: ['es'],
   nombreKey: 'oraculos.iching.nombre',
   acento: '#CB9A3C', // dorado ambar
   domo: require('../../../assets/oraculos/iching/domo.webp'),

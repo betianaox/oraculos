@@ -38,7 +38,7 @@ export const FRAGMENTOS_AMOR_MENORES_ES: FragmentosDeTema = {
     invertida: [
       'una respuesta amorosa que tarda',
       'expectativas de pareja que no se cumplen',
-      'revisar lo que esperás del otro',
+      'revisar lo que esperas del otro',
     ],
   },
   'bastos-cuatro': {
@@ -81,7 +81,7 @@ export const FRAGMENTOS_AMOR_MENORES_ES: FragmentosDeTema = {
     normal: [
       'defender la relación de lo que la amenaza',
       'sostener el vínculo con coraje',
-      'plantarse por lo que sentís',
+      'plantarse por lo que sientes',
     ],
     invertida: [
       'el cansancio de defender solo la pareja',
@@ -592,7 +592,7 @@ export const FRAGMENTOS_AMOR_MENORES_ES: FragmentosDeTema = {
     ],
     invertida: [
       'impaciencia con el ritmo del vínculo',
-      'sentir que invertís donde no rinde',
+      'sentir que inviertes donde no rinde',
       'una relación más pobre de lo esperado',
     ],
   },

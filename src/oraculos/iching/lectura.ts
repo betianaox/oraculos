@@ -1,61 +1,110 @@
-import type { Tema } from '@/pregunta/tipos';
+import type { AnalisisPregunta, Modo, Tema, Tono } from '@/pregunta/tipos';
 import { HEXAGRAMAS_ES } from './content/es/hexagramas';
+import { BANCO_ICHING_ES, ORDINALES } from './content/es/bancos';
 import { numeroDeLineas } from './secuencia';
 import type { TiradaIching } from './tirada';
 
 /**
- * Arma los parrafos de la lectura a partir de la tirada. Es deterministica: sale
- * del contenido escrito, sin nada generado. Estructura tradicional:
+ * Arma los parrafos de la lectura a partir de la tirada.
+ *
+ * El NUCLEO es determinista y asi debe ser: sale un hexagrama y ese hexagrama
+ * dice lo que dice. El dictamen, el significado por tema y los textos de las
+ * lineas son contenido canonico y no se tocan ni se parafrasean: no agregamos
+ * interpretacion propia sobre un corpus con siglos de comentario encima.
+ *
+ * Lo que si varia es el envoltorio —como se presenta y como se conecta con lo
+ * que la persona pregunto—, para que no suene a ficha de enciclopedia.
+ *
+ * Estructura tradicional, que se respeta:
  *   hexagrama principal -> lineas en movimiento -> hexagrama resultante.
- * Si el hexagrama todavia no tiene texto (33..64), cae a un fallback honesto.
  */
-export function lecturaIching(tirada: TiradaIching, tema: Tema): string[] {
+export function lecturaIching(
+  tirada: TiradaIching,
+  tema: Tema,
+  analisis: AnalisisPregunta,
+): string[] {
+  const b = BANCO_ICHING_ES;
+  const { modo, tono } = analisis;
   const parrafos: string[] = [];
 
   const numPrim = numeroDeLineas(tirada.lineas);
   const hexPrim = HEXAGRAMAS_ES[numPrim];
 
-  if (hexPrim) {
-    parrafos.push(`Tu consulta responde con el hexagrama ${hexPrim.numero}, ${hexPrim.nombre}.`);
-    parrafos.push(hexPrim.dictamen);
-    parrafos.push(hexPrim.significado[tema]);
-  } else {
-    parrafos.push(
-      `Tu consulta responde con el hexagrama ${numPrim}. El texto completo de este ` +
-        `hexagrama todavía está en preparación.`
-    );
+  // Hoy los 64 estan escritos, asi que esto no deberia pasar nunca. Es una red
+  // por si un error de contenido deja un hueco: mejor decirlo con honestidad
+  // que tirar la pantalla entera.
+  if (!hexPrim) {
+    return [
+      `Tu consulta responde con el hexagrama ${numPrim}, cuyo texto todavia no ` +
+        `esta disponible.`,
+    ];
   }
+
+  // Sin ficha del hexagrama: se presenta dentro de una frase que ya esta
+  // hablando de la consulta.
+  parrafos.push(
+    elegir(porTono(b.aperturas[modo], tono))
+      .replace('{tema}', elegir(b.temas[tema]))
+      .replace('{hex}', hexPrim.nombre)
+      .replace('{num}', String(hexPrim.numero)),
+  );
+
+  parrafos.push(hexPrim.dictamen);
+  parrafos.push(hexPrim.significado[tema]);
 
   const posicionesCambio = tirada.cambiantes
     .map((c, i) => (c ? i : -1))
     .filter((i) => i >= 0);
 
-  if (hexPrim && posicionesCambio.length > 0) {
-    parrafos.push('Hay líneas en movimiento, que señalan lo que está cambiando:');
-    for (const i of posicionesCambio) {
-      // i es 0-based abajo->arriba; lineasCambiantes está en orden de posición.
-      const linea = hexPrim.lineasCambiantes[i];
-      parrafos.push(`Línea ${i + 1}. ${linea.texto}`);
-    }
+  if (posicionesCambio.length > 0) {
+    parrafos.push(elegir(b.transicionLineas));
+    // Las plantillas rotan para que varias lineas seguidas no arranquen igual.
+    const formas = mezclar(b.lineaSuelta);
+    posicionesCambio.forEach((i, orden) => {
+      // i es 0-based abajo->arriba; lineasCambiantes esta en orden de posicion.
+      parrafos.push(
+        formas[orden % formas.length]
+          .replace('{pos}', ORDINALES[i])
+          .replace('{texto}', hexPrim.lineasCambiantes[i].texto),
+      );
+    });
   }
 
   if (tirada.resultante) {
     const numRes = numeroDeLineas(tirada.resultante);
     const hexRes = HEXAGRAMAS_ES[numRes];
     if (hexRes) {
-      parrafos.push(`La situación evoluciona hacia el hexagrama ${hexRes.numero}, ${hexRes.nombre}.`);
-      parrafos.push(hexRes.significado[tema]);
-    } else {
       parrafos.push(
-        `La situación evoluciona hacia el hexagrama ${numRes} (texto en preparación).`
+        elegir(b.haciaResultante)
+          .replace('{hex}', hexRes.nombre)
+          .replace('{num}', String(hexRes.numero)),
       );
+      parrafos.push(hexRes.significado[tema]);
     }
   } else {
-    parrafos.push(
-      'No hay líneas en movimiento: la situación es estable por ahora, sin una ' +
-        'transformación marcada a la vista.'
-    );
+    parrafos.push(elegir(b.sinCambios));
   }
 
+  parrafos.push(elegir(porTono(b.cierres[modo], tono)));
+
   return parrafos;
+}
+
+function elegir<T>(lista: readonly T[]): T {
+  return lista[Math.floor(Math.random() * lista.length)];
+}
+
+function mezclar<T>(lista: readonly T[]): T[] {
+  const copia = [...lista];
+  for (let i = copia.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copia[i], copia[j]] = [copia[j], copia[i]];
+  }
+  return copia;
+}
+
+// Sub-pool del tono pedido; si esta vacio cae a 'neutro', que siempre existe.
+function porTono(pool: Record<Tono, string[]>, tono: Tono): string[] {
+  const del = pool[tono];
+  return del && del.length > 0 ? del : pool.neutro;
 }

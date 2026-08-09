@@ -1,16 +1,31 @@
-// Templates that build ONE combined sentence from the three runes, in the
-// order they came out (no fixed past/present/future roles). Generic across
-// topics: the specific meaning already lives in the fragments.
+// The weave between the runes and the person.
 //
-// Placeholders: {runa1} {runa2} {runa3} = rune names (see nombres.ts)
-//               {frag1} {frag2} {frag3} = fragments from content/en/fragmentos/<tema>.ts
+// Runes are NOT named here: the person can see them on screen, and what they
+// expect to read is what those runes say about their question, not a
+// definition of each one.
 //
-// Fragments are noun phrases, so the verbs (brings/adds/points to) live here.
-export const conectores: string[] = [
-  '{runa1} brings {frag1}, {runa2} adds {frag2}, and {runa3} closes the scene with {frag3}.',
-  'Between {runa1} and {runa2}, {frag1} appears alongside {frag2}, while {runa3} adds {frag3}.',
-  '{runa1} points to {frag1}, to that, through {runa2}, {frag2} is added, and {runa3} finishes by showing {frag3}.',
-  'The combination of {runa1}, {runa2}, and {runa3} speaks of {frag1}, of {frag2}, and above all of {frag3}.',
-  'First comes {frag1} through {runa1}, then {frag2} thanks to {runa2}, and it all rounds out with {frag3}, which {runa3} brings.',
-  '{runa1} contributes {frag1}, and that energy interweaves with {frag2} from {runa2} and {frag3} from {runa3}.',
+// Placeholders: {frag1} {frag2} {frag3} = fragments from fragmentos/<tema>.ts
+//
+// NOTE: fragments are short clauses of varying shape. These templates lean on
+// colons and commas so any of them fits without breaking the sentence.
+
+/** Closes the first paragraph: the situation, from the first two runes. */
+export const situacion: string[] = [
+  'Something is moving underneath: {frag1}. And alongside it, {frag2}.',
+  'What surrounds the matter: {frag1}. Holding it up, {frag2}.',
+  'This shows up first: {frag1}. And behind it, {frag2}.',
+  'Two things are at play: {frag1}, and also {frag2}.',
+  'What shows on the surface: {frag1}. What beats underneath: {frag2}.',
+];
+
+/**
+ * Second paragraph: the third rune, the only one that looks ahead. A hint of
+ * anticipation, always as a tendency, never as something already settled.
+ */
+export const cierre: string[] = [
+  'And looking ahead, this takes shape: {frag3}.',
+  'What is coming points in this direction: {frag3}.',
+  'If nothing is forced, what follows hints at this: {frag3}.',
+  'On the near horizon there is already a sign of {frag3}.',
+  'Everything suggests that what comes next brings {frag3}.',
 ];

@@ -1,7 +1,7 @@
 import type { OraculoModulo } from '../tipos';
 import { MAZO_ANGELES } from './mazo';
 import { crearContenidoAngeles } from './contenido';
-import { lecturaAngeles } from './lectura';
+import { lecturaAngeles, materialAngeles } from './lectura';
 
 const angeles: OraculoModulo = {
   id: 'angeles',
@@ -13,6 +13,8 @@ const angeles: OraculoModulo = {
   mazo: MAZO_ANGELES,
   // Tira en cruz de 5 (default del flujo) y arma su lectura mística propia.
   lectura: lecturaAngeles,
+  // Y el mismo contenido en crudo, por si la IA puede redactarla mejor.
+  material: materialAngeles,
   contenido: crearContenidoAngeles,
 };
 

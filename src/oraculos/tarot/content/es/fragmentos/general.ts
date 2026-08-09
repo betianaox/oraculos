@@ -24,7 +24,7 @@ export const FRAGMENTOS_GENERAL_ES: FragmentosDeTema = {
   'mayor-01': {
     normal: [
       'la voluntad y las herramientas justas para volver acto la idea',
-      'el poder de usar lo que sabés en vez de solo tenerlo',
+      'el poder de usar lo que sabes en vez de solo tenerlo',
       'un foco capaz de concentrar todo en un propósito',
     ],
     invertida: [
@@ -83,7 +83,7 @@ export const FRAGMENTOS_GENERAL_ES: FragmentosDeTema = {
   },
   'mayor-06': {
     normal: [
-      'una elección hecha desde lo que de verdad valorás',
+      'una elección hecha desde lo que de verdad valoras',
       'la unión que se vuelve armónica al elegir con el corazón',
       'un vínculo que integra lo que parecía separado',
     ],
@@ -270,7 +270,7 @@ export const FRAGMENTOS_GENERAL_ES: FragmentosDeTema = {
     invertida: [
       'un cierre cercano pero todavía incompleto',
       'una meta a la que le falta un último paso',
-      'algo que no terminás de integrar',
+      'algo que no terminas de integrar',
     ],
   },
 };

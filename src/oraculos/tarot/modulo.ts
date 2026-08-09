@@ -1,7 +1,7 @@
 import type { OraculoModulo } from '../tipos';
 import { MAZO_TAROT } from './mazo';
 import { crearContenidoTarot } from './contenido';
-import { lecturaTarot } from './lectura';
+import { lecturaTarot, materialTarot } from './lectura';
 
 const tarot: OraculoModulo = {
   id: 'tarot',
@@ -13,6 +13,8 @@ const tarot: OraculoModulo = {
   mazo: MAZO_TAROT,
   // Tira en cruz de 5 (default del flujo) y arma su lectura con el motor propio.
   lectura: lecturaTarot,
+  // Y el mismo contenido en crudo, por si la IA puede redactarla mejor.
+  material: materialTarot,
   contenido: crearContenidoTarot,
 };
 

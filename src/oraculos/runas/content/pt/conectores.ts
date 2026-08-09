@@ -1,13 +1,30 @@
-// Modelos que montam UMA oração combinando as três runas, na ordem em que
-// saíram. Genéricos: o significado específico já vem nos fragmentos.
+// O tecido entre as runas e a pessoa.
 //
-// Marcadores: {runa1} {runa2} {runa3} = nomes das runas (ver nombres.ts)
-//             {frag1} {frag2} {frag3} = fragmentos de content/pt/fragmentos/<tema>.ts
-export const conectores: string[] = [
-  '{runa1} traz {frag1}, {runa2} soma {frag2}, e {runa3} fecha a cena com {frag3}.',
-  'Entre {runa1} e {runa2}, {frag1} aparece junto com {frag2}, enquanto {runa3} acrescenta {frag3}.',
-  '{runa1} aponta para {frag1}, a isso se soma, por meio de {runa2}, {frag2}, e {runa3} termina mostrando {frag3}.',
-  'A combinação de {runa1}, {runa2} e {runa3} fala de {frag1}, de {frag2} e, sobretudo, de {frag3}.',
-  'Primeiro vem {frag1} por meio de {runa1}, depois {frag2} graças a {runa2}, e tudo se completa com {frag3}, que {runa3} traz.',
-  '{runa1} contribui com {frag1}, e essa energia se entrelaça com {frag2} de {runa2} e com {frag3} de {runa3}.',
+// Aqui as runas NÃO são nomeadas: a pessoa as vê na tela, e o que espera ler é
+// o que elas dizem sobre a sua pergunta, não a definição de cada uma.
+//
+// Placeholders: {frag1} {frag2} {frag3} = fragmentos de fragmentos/<tema>.ts
+//
+// ATENÇÃO: os fragmentos são orações curtas de forma variável. Estes modelos
+// usam dois-pontos ou vírgula para aceitar todas sem quebrar a frase.
+
+/** Fecha o primeiro parágrafo: a situação, com as duas primeiras runas. */
+export const situacion: string[] = [
+  'No fundo algo se move: {frag1}. E junto disso, {frag2}.',
+  'O que cerca o assunto: {frag1}. Sustentando tudo, {frag2}.',
+  'Primeiro aparece isto: {frag1}. E atrás, {frag2}.',
+  'Há duas coisas em jogo: {frag1}, e também {frag2}.',
+  'O que se vê de cara: {frag1}. O que pulsa embaixo: {frag2}.',
+];
+
+/**
+ * Segundo parágrafo: a terceira runa, a única que olha para frente. Com um
+ * matiz antecipatório, sempre como tendência, nunca como fato consumado.
+ */
+export const cierre: string[] = [
+  'E adiante se desenha isto: {frag3}.',
+  'O que vem aponta nesta direção: {frag3}.',
+  'Se nada for forçado, o próximo se insinua assim: {frag3}.',
+  'No horizonte próximo já se anuncia {frag3}.',
+  'Tudo indica que o que vem a seguir traga {frag3}.',
 ];

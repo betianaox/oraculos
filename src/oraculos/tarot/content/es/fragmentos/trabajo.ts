@@ -83,7 +83,7 @@ export const FRAGMENTOS_TRABAJO_ES: FragmentosDeTema = {
       'elegir el trabajo alineado con tus valores',
     ],
     invertida: [
-      'una decisión laboral que evitás',
+      'una decisión laboral que evitas',
       'un socio que desequilibra',
       'dudas entre dos caminos',
     ],

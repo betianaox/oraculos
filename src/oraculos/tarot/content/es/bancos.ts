@@ -1,99 +1,119 @@
 import type { BancosCruz } from '@/flujo/motorCruz';
 
-// Banco conectivo de Tarot para la cruz de 5 (español). Es el "tejido" entre las
-// cartas: aperturas, verbos, conectores, frases para la cabeza y el paso, y
-// consejos. Voz reflexiva y didáctica, nunca adivinatoria: acompaña, no dicta.
-// Otros idiomas caen a español hasta traducirse.
+// Banco conectivo de Tarot para la cruz de 5 (español NEUTRO). Es el "tejido"
+// entre las cartas: aperturas, situación, tensión, cabeza, paso y consejos.
+// Voz reflexiva y didáctica, nunca adivinatoria: acompaña, no dicta. El español
+// es neutro a propósito (nada de voseo) para que la app sirva a todo el mercado
+// hispanohablante. Otros idiomas caen a español hasta traducirse.
+//
+// Acá NO se nombran cartas. La persona las tiene delante; lo que espera leer es
+// qué dicen sobre lo que preguntó, no una definición de cada una.
 export const BANCOS_TAROT_ES: BancosCruz = {
   aperturas: {
     cerrada: {
       neutro: [
-        'Para lo que preguntás, la cruz ordena así el panorama.',
-        'Ante tu pregunta, las cartas trazan este recorrido.',
-        'Esto es lo que la tirada tiene para mostrarte.',
+        'Para lo que preguntas {tema}, el panorama se ordena así.',
+        'Ante tu pregunta {tema}, se dibuja este recorrido.',
+        'Esto es lo que hay para mostrarte {tema}.',
       ],
       preocupacion: [
-        'Entiendo la inquietud; mirá con calma lo que la cruz acomoda.',
-        'No estás sin señales: la tirada pone las piezas de este modo.',
+        'Entiendo la inquietud {tema}; mira con calma lo que se acomoda.',
+        'No estás sin señales {tema}: las piezas se ordenan de este modo.',
       ],
       impulso: [
-        'Con esas ganas de avanzar, la cruz te pide primero ver el conjunto.',
-        'Antes de lanzarte, esto es lo que las cartas ponen sobre la mesa.',
+        'Con esas ganas de avanzar {tema}, conviene primero ver el conjunto.',
+        'Antes de lanzarte, esto es lo que queda sobre la mesa {tema}.',
       ],
     },
     abierta: {
       neutro: [
-        'Para lo que querés ver, la cruz abre este espejo.',
-        'La tirada te invita a mirar la situación desde estas cinco caras.',
+        'Para lo que quieres ver {tema}, se abre este espejo.',
+        'Aquí hay cinco caras para mirar {tema}.',
       ],
       preocupacion: [
-        'Respirá: la cruz no dicta un destino, ofrece una mirada para tu desasosiego.',
-        'Sin prisa, la tirada acomoda lo que hoy te pesa para verlo mejor.',
+        'Respira: nada de esto dicta un destino {tema}, es una mirada para tu desasosiego.',
+        'Sin prisa: lo que hoy te pesa {tema} queda acomodado para verlo mejor.',
       ],
       impulso: [
-        'Frená un momento el impulso; la tirada propone esta reflexión.',
-        'Tanta energía merece una pausa: mirá lo que la cruz ilumina.',
+        'Frena un momento el impulso; hay una reflexión para hacer {tema}.',
+        'Tanta energía merece una pausa: mira lo que se ilumina {tema}.',
       ],
     },
   },
-  centro: [
-    'en el corazón de la tirada',
-    'en el centro de la cruz, sosteniendo todo',
-    'en el eje, como el asunto principal',
-    'en el medio, marcando el pulso de la cuestión',
+  temas: {
+    amor: ['sobre el amor', 'sobre ese vínculo', 'sobre lo que sientes'],
+    trabajo: ['sobre el trabajo', 'sobre tu camino laboral', 'sobre lo que te ocupa en lo laboral'],
+    dinero: ['sobre el dinero', 'sobre lo material', 'sobre tus cuentas'],
+    general: ['sobre tu momento', 'sobre lo que estás viviendo', 'sobre esto que traes'],
+  },
+  // OJO al escribir estas plantillas: los fragmentos vienen en dos formas
+  // distintas —sintagma nominal ("una decisión que evitas") e infinitivo
+  // ("revisar lo que esperas")—, así que el hueco tiene que aceptar las dos.
+  // Funcionan: después de dos puntos o coma, tras "es", "se apoya en",
+  // "pasa por". NO funciona meterlo detrás de un verbo que pida objeto
+  // directo ("se abre {frag}" se rompe con los infinitivos).
+  situacion: [
+    'De fondo se mueve algo: {frag1}. Y en el centro, {frag2}.',
+    'Alrededor de la escena: {frag1}. Sosteniéndolo todo, {frag2}.',
+    'Primero asoma esto: {frag1}. Pero el eje verdadero es otro: {frag2}.',
+    'Lo que rodea el asunto es {frag1}, y en su centro late {frag2}.',
   ],
-  verbos: ['habla de', 'trae', 'señala', 'pone sobre la mesa', 'apunta a', 'deja ver'],
-  conectores: [
-    'Leídas juntas, {frag2} se vuelve el eje; a su alrededor, {frag1} tira por un lado y {frag3} por el otro, hasta buscar un equilibrio.',
-    'En el cruce, {frag1} prepara el terreno, {frag2} concentra lo esencial y {frag3} muestra hacia dónde se inclina la balanza.',
-    'Lo que asoma como {frag1} se ordena en torno a {frag2}, y {frag3} le da su color final.',
-    'Con {frag1} de un lado y {frag3} del otro, lo que de verdad manda es {frag2}: ahí está el nudo de todo.',
+  tension: [
+    'Por un lado tira {frag1}; por el otro, {frag3}. Y en el medio manda {frag2}: ahí está el nudo de todo.',
+    'Entre {frag1} y {frag3} se juega el equilibrio, pero lo que decide es {frag2}.',
+    'Lo que asoma como {frag1} se ordena en torno a {frag2}, y el color final lo pone {frag3}.',
+    'Uno prepara el terreno: {frag1}. Otro concentra lo esencial: {frag2}. Y el saldo lo muestra {frag3}.',
   ],
   cabeza: [
-    'En tu cabeza pesa {nombre}: {frag}.',
-    'Lo que hoy te ocupa la mente lo dice {nombre}, {frag}.',
-    'Arriba, {nombre} muestra eso que das vueltas: {frag}.',
-    'En el plano de lo que se piensa —tuyo o de la persona por la que preguntás— aparece {nombre}: {frag}.',
+    'En la cabeza te da vueltas esto: {frag}.',
+    'Lo que hoy te ocupa la mente es {frag}.',
+    'Arriba de todo pesa {frag}.',
+    'En el plano de lo que se piensa —tuyo o de la persona por la que preguntas— aparece {frag}.',
   ],
+  // La única pieza que se lee mirando hacia adelante. Matiz anticipatorio, pero
+  // siempre en clave de tendencia: "se perfila", "todo apunta a". Nunca un
+  // hecho consumado ni una promesa, que es donde un oráculo se vuelve
+  // irresponsable.
   paso: [
-    'El paso siguiente lo marca {nombre}: {frag}.',
-    'Hacia adelante, {nombre} abre {frag}.',
-    'Como próximo movimiento, {nombre} señala {frag}.',
-    'Lo que viene se apoya en {nombre}: {frag}.',
+    'Y hacia adelante se perfila esto: {frag}.',
+    'Lo que viene apunta en esta dirección: {frag}.',
+    'Si nada se fuerza, lo próximo se insinúa así: {frag}.',
+    'En el horizonte cercano ya se asoma {frag}.',
+    'Todo apunta a que lo siguiente traiga {frag}.',
   ],
   consejos: {
     cerrada: {
       neutro: [
-        'Con eso a la vista, decidí sin apurar el resultado.',
-        'Dejá que estas señales acomoden tu próxima elección.',
+        'Con eso a la vista, decide sin apurar el resultado.',
+        'Deja que estas señales acomoden tu próxima elección.',
       ],
       preocupacion: [
         'No cargues el final antes de tiempo: un paso a la vez alcanza.',
-        'Lo que temés no está escrito; usá esta mirada para soltar un poco.',
+        'Lo que temes no está escrito; usa esta mirada para soltar un poco.',
       ],
       impulso: [
-        'Buena energía, pero medí el salto con lo que mostró el centro.',
-        'Avanzá, sí, pero sin saltearte lo que la cruz te pide mirar.',
+        'Buena energía, pero mide el salto con lo que mostró el centro.',
+        'Avanza, sí, pero sin saltarte lo que se te pide mirar.',
       ],
     },
     abierta: {
       neutro: [
-        'Quedate con lo que más te resonó y dejalo trabajar unos días.',
+        'Quédate con lo que más te resonó y déjalo trabajar unos días.',
         'No hace falta resolver todo hoy; alcanza con ver más claro.',
       ],
       preocupacion: [
-        'Sé amable con vos: entender ya es empezar a sanar.',
+        'Sé amable contigo: entender ya es empezar a sanar.',
         'Date permiso para no tener todas las respuestas todavía.',
       ],
       impulso: [
-        'Antes de actuar, dejá que esta reflexión decante.',
-        'Tu empuje es valioso; orientalo con lo que acabás de ver.',
+        'Antes de actuar, deja que esta reflexión decante.',
+        'Tu empuje es valioso; oriéntalo con lo que acabas de ver.',
       ],
     },
   },
   ecoTercero: [
     'En todo esto, la otra persona pesa más de lo que parece.',
-    'El vínculo con quien mencionás tiñe cada carta de la cruz.',
+    'El vínculo con quien mencionas tiñe cada rincón de la lectura.',
     'Esa persona también forma parte del cuadro.',
   ],
   ecoTiempo: {
@@ -102,7 +122,7 @@ export const BANCOS_TAROT_ES: BancosCruz = {
       'Hay un antes que sigue operando en la escena.',
     ],
     futuro: [
-      'La pregunta empuja hacia adelante, y la cruz responde en esa dirección.',
+      'La pregunta empuja hacia adelante, y la respuesta va en esa dirección.',
       'Todo esto se inclina hacia lo que aún no pasó.',
     ],
   },

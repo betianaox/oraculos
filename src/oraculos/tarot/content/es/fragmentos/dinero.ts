@@ -83,7 +83,7 @@ export const FRAGMENTOS_DINERO_ES: FragmentosDeTema = {
       'elegir según tus valores, no solo el rédito',
     ],
     invertida: [
-      'una decisión de dinero que evitás',
+      'una decisión de dinero que evitas',
       'un socio que desequilibra las cuentas',
       'dudas entre dos opciones',
     ],
