@@ -23,13 +23,15 @@ import { fuente } from '@/shell/theme/fuentes';
 import { RATIO_PIEZA, CartaImagen } from '../components/CartaImagen';
 import { CartaAmpliable } from '../components/CartaAmpliable';
 import { tresAlAzar, type Pieza, type Posicion } from '../pieza';
-import { consejoDeHoy, guardarConsejo } from '../consejo';
+import { consejoDeHoy, guardarConsejo, sortearVariante } from '../consejo';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ConsejoDelDia'>;
 
 interface Elegida {
   pieza: Pieza;
   posicion: Posicion;
+  /** Sorteo del día: mantiene el texto igual al volver a entrar. */
+  variante: number;
 }
 
 export function ConsejoDelDiaScreen({ navigation, route }: Props) {
@@ -59,14 +61,17 @@ export function ConsejoDelDiaScreen({ navigation, route }: Props) {
     consejoDeHoy(oraculoId).then((guardado) => {
       if (guardado) {
         const pieza = mazo.find((p) => p.id === guardado.piezaId);
-        if (pieza) setElegida({ pieza, posicion: guardado.posicion });
+        if (pieza) {
+          setElegida({ pieza, posicion: guardado.posicion, variante: guardado.variante });
+        }
         flip.setValue(1);
         opacidadConsejo.setValue(1);
       } else if (modo === 'directo') {
         const pieza = mazo[Math.floor(Math.random() * mazo.length)];
         const posicion = posicionDe(pieza);
-        setElegida({ pieza, posicion });
-        guardarConsejo(oraculoId, pieza.id, posicion);
+        const variante = sortearVariante();
+        setElegida({ pieza, posicion, variante });
+        guardarConsejo(oraculoId, pieza.id, posicion, variante);
         flip.setValue(1);
         opacidadConsejo.setValue(1);
       } else {
@@ -79,8 +84,9 @@ export function ConsejoDelDiaScreen({ navigation, route }: Props) {
 
   const elegir = (pieza: Pieza) => {
     const posicion = posicionDe(pieza);
-    setElegida({ pieza, posicion });
-    guardarConsejo(oraculoId, pieza.id, posicion);
+    const variante = sortearVariante();
+    setElegida({ pieza, posicion, variante });
+    guardarConsejo(oraculoId, pieza.id, posicion, variante);
     flip.setValue(0);
     opacidadConsejo.setValue(0);
     Animated.sequence([
@@ -163,7 +169,9 @@ export function ConsejoDelDiaScreen({ navigation, route }: Props) {
 
             <Animated.View style={[estilos.bloqueConsejo, { opacity: opacidadConsejo }]}>
               <Text style={estilos.nombre}>{contenido?.nombre(elegida.pieza)}</Text>
-              <Text style={estilos.consejo}>{contenido?.consejo(elegida.pieza, elegida.posicion)}</Text>
+              <Text style={estilos.consejo}>
+                {contenido?.consejo(elegida.pieza, elegida.posicion, elegida.variante)}
+              </Text>
               <Text style={estilos.vuelveManana}>{t('consejo.vuelveManana')}</Text>
             </Animated.View>
           </ScrollView>

@@ -14,7 +14,7 @@ import { paqueteAngeles } from './content/paquete';
  * (ver content/paquete.ts).
  */
 export function crearContenidoAngeles(idioma: CodigoIdioma): ContenidoOraculo {
-  const { wiki, etiquetas: et, secciones: SECCIONES_ANGELES_ES } = paqueteAngeles(idioma);
+  const { wiki, etiquetas: et, secciones: SECCIONES_ANGELES_ES, consejos } = paqueteAngeles(idioma);
 
   const nombre = (p: Pieza) =>
     wiki[p.numero]?.nombre ?? `${traducir('aprender.carta', idioma)} ${p.numero}`;
@@ -69,7 +69,10 @@ export function crearContenidoAngeles(idioma: CodigoIdioma): ContenidoOraculo {
       const f = wiki[p.numero];
       return f ? { claves: f.claves.derecho } : null;
     },
-    consejo: () => traducir('aprender.consejoGenerico', idioma),
+    // Un consejo por ángel. Antes esto era `() => consejoGenerico`: devolvía
+    // siempre el mismo texto sin mirar qué carta había salido, así que elegir
+    // entre los tres dorsos no cambiaba nada.
+    consejo: (p) => consejos[p.numero] ?? traducir('aprender.consejoGenerico', idioma),
     proximamente: traducir('aprender.proximamente', idioma),
   };
 }

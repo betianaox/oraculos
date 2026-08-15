@@ -9,6 +9,9 @@ import { TEXTOS_ES } from './es/textos';
 import { CARTAS_PT } from './pt/cartas';
 import { NUMEROLOGIA_PT } from './pt/numerologia';
 import { TEXTOS_PT } from './pt/textos';
+import { CONSEJOS_EGIPCIO_ES } from './es/consejos';
+import { CONSEJOS_EGIPCIO_EN } from './en/consejos';
+import { CONSEJOS_EGIPCIO_PT } from './pt/consejos';
 
 // ─────────────────────────────────────────────────────────────────────────
 // Contenido del Tarot Egipcio por idioma.
@@ -41,22 +44,27 @@ export interface PaqueteEgipcio {
   cartas: BaseCartas;
   numerologia: Record<number, string>;
   textos: TextosEgipcio;
+  /** Consejo del día por carta. Ver <idioma>/consejos.ts. */
+  consejos: Record<number, string>;
 }
 
 const es: PaqueteEgipcio = {
   cartas: CARTAS_ES,
   numerologia: NUMEROLOGIA_ES,
   textos: TEXTOS_ES,
+  consejos: CONSEJOS_EGIPCIO_ES,
 };
 const en: PaqueteEgipcio = {
   cartas: CARTAS_EN,
   numerologia: NUMEROLOGIA_EN,
   textos: TEXTOS_EN,
+  consejos: CONSEJOS_EGIPCIO_EN,
 };
 const pt: PaqueteEgipcio = {
   cartas: CARTAS_PT,
   numerologia: NUMEROLOGIA_PT,
   textos: TEXTOS_PT,
+  consejos: CONSEJOS_EGIPCIO_PT,
 };
 
 const PAQUETES: Partial<Record<CodigoIdioma, PaqueteEgipcio>> = { es, en, pt };

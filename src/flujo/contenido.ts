@@ -71,8 +71,18 @@ export interface ContenidoOraculo {
    * se pregunta por su significado no regala nada.
    */
   quizArteDelata?: boolean;
-  /** Consejo del dia para una pieza (la posicion importa en runas). */
-  consejo: (pieza: Pieza, posicion: Posicion) => string;
+  /**
+   * Consejo del dia para una pieza.
+   *
+   * `variante` es el sorteo del día (ver flujo/consejo.ts): los oráculos con
+   * varias redacciones por pieza lo usan como índice, siempre con módulo, para
+   * que el texto no cambie al volver a abrir la pantalla. Los que tienen una
+   * sola redacción por pieza lo ignoran.
+   *
+   * La `posicion` la fija la pantalla en 'normal': el consejo del día nunca sale
+   * invertido en ningún oráculo.
+   */
+  consejo: (pieza: Pieza, posicion: Posicion, variante: number) => string;
   /** Rotulo para cuando falta la ficha ("Contenido proximamente"). */
   proximamente: string;
   /**

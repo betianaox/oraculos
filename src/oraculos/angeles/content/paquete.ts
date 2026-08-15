@@ -15,6 +15,9 @@ import {
   SECCIONES_ANGELES_PT,
   WIKI_ANGELES_PT,
 } from './pt/wiki';
+import { CONSEJOS_ANGELES_ES } from './es/consejos';
+import { CONSEJOS_ANGELES_EN } from './en/consejos';
+import { CONSEJOS_ANGELES_PT } from './pt/consejos';
 
 // ─────────────────────────────────────────────────────────────────────────
 // Contenido de Angeles por idioma.
@@ -50,22 +53,27 @@ export interface PaqueteAngeles {
   wiki: Record<number, FichaAngel>;
   etiquetas: EtiquetasAngeles;
   secciones: SeccionAngeles[];
+  /** Consejo del día por carta. Ver <idioma>/consejos.ts. */
+  consejos: Record<number, string>;
 }
 
 const es: PaqueteAngeles = {
   wiki: WIKI_ANGELES_ES,
   etiquetas: ETIQUETAS_ANGELES_ES,
   secciones: SECCIONES_ANGELES_ES,
+  consejos: CONSEJOS_ANGELES_ES,
 };
 const en: PaqueteAngeles = {
   wiki: WIKI_ANGELES_EN,
   etiquetas: ETIQUETAS_ANGELES_EN,
   secciones: SECCIONES_ANGELES_EN,
+  consejos: CONSEJOS_ANGELES_EN,
 };
 const pt: PaqueteAngeles = {
   wiki: WIKI_ANGELES_PT,
   etiquetas: ETIQUETAS_ANGELES_PT,
   secciones: SECCIONES_ANGELES_PT,
+  consejos: CONSEJOS_ANGELES_PT,
 };
 
 const PAQUETES: Partial<Record<CodigoIdioma, PaqueteAngeles>> = { es, en, pt };
