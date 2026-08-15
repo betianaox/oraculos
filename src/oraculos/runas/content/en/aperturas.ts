@@ -83,7 +83,7 @@ export const aperturasAbiertas: Partial<Record<Tema, Record<Tono, string[]>>> = 
       "Let's look at what is really going on with this money matter.",
       "About what you're asking on the material side, this is what shows up.",
       'Something about money is easier to see today than on other days.',
-      'This is what comes up when you ask about your finances.',
+      'This is what comes up when you ask about the money side.',
       'What you carry about the bills has a shape too, and today it looks like this.',
     ],
     preocupacion: [
@@ -94,7 +94,7 @@ export const aperturasAbiertas: Partial<Record<Tema, Record<Tono, string[]>>> = 
     ],
     impulso: [
       'You come with real eagerness, and with money that shows too.',
-      "Let's go with that drive you bring to your finances.",
+      "Let's go with that drive you bring to the money side.",
       'With all that enthusiasm for what you are planning, there is something to see first.',
       'The energy you bring to your accounts says something of its own.',
     ],

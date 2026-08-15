@@ -19,7 +19,7 @@ export const dinero: FragmentosDeTema = {
     normal: [
       'a força para tomar uma decisão financeira que você vinha adiando',
       'o impulso para se animar a um investimento pensado com cuidado',
-      'a energia para organizar de uma vez as finanças',
+      'a energia para organizar de uma vez as contas',
     ],
     invertida: [
       'o desgaste de forçar um gasto que, no fundo, não convence',
@@ -67,7 +67,7 @@ export const dinero: FragmentosDeTema = {
     normal: [
       'uma ideia criativa para gerar uma renda extra',
       'uma forma diferente de resolver um problema financeiro',
-      'a inspiração para reorganizar as finanças de outro jeito',
+      'a ideia de lidar com a grana de outro jeito',
     ],
     invertida: [
       'a falta de vontade de organizar a questão do dinheiro',
@@ -216,7 +216,7 @@ export const dinero: FragmentosDeTema = {
     invertida: [
       'o medo de começar um plano financeiro novo',
       'um começo financeiro que se adia por insegurança',
-      'a vontade de organizar as finanças sem se animar ainda',
+      'a vontade de organizar as contas sem se animar ainda',
     ],
   },
   ehwaz: {

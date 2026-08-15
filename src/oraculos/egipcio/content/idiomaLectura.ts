@@ -11,6 +11,10 @@ import { FRAGMENTOS_EGIPCIO_EN } from './en';
 import { BANCOS_EGIPCIO_EN } from './en/bancos';
 import { CARTAS_EN } from './en/cartas';
 import { ENCUADRES_EN } from './en/encuadres';
+import { FRAGMENTOS_EGIPCIO_PT } from './pt';
+import { BANCOS_EGIPCIO_PT } from './pt/bancos';
+import { CARTAS_PT } from './pt/cartas';
+import { ENCUADRES_PT } from './pt/encuadres';
 
 // ─────────────────────────────────────────────────────────────────────────
 // De qué idioma sale el TEXTO DE LA LECTURA del Tarot Egipcio.
@@ -47,9 +51,15 @@ const en: PaqueteLecturaEgipcio = {
   encuadres: ENCUADRES_EN,
 };
 
-// Portugués todavía no: tiene fichas de carta (content/pt) pero no banco de
-// lectura, así que cae al paquete español entero.
-const PAQUETES: Partial<Record<CodigoIdioma, PaqueteLecturaEgipcio>> = { es, en };
+const pt: PaqueteLecturaEgipcio = {
+  fragmentos: FRAGMENTOS_EGIPCIO_PT,
+  bancos: BANCOS_EGIPCIO_PT,
+  cartas: CARTAS_PT,
+  encuadres: ENCUADRES_PT,
+};
+
+// Los tres idiomas que la app ofrece (ver i18n/idiomas.ts) leen en su lengua.
+const PAQUETES: Partial<Record<CodigoIdioma, PaqueteLecturaEgipcio>> = { es, en, pt };
 
 export function paqueteLecturaEgipcio(idioma: CodigoIdioma): PaqueteLecturaEgipcio {
   return PAQUETES[idioma] ?? es;
