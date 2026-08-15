@@ -11,6 +11,10 @@ import { BANCOS_ANGELES_EN } from './en/bancos';
 import { WIKI_ANGELES_EN } from './en/wiki';
 import { NOTAS_COMBINACIONES_ES, PREFIJO_COMBINACION_ES } from './es/combinaciones';
 import { NOTAS_COMBINACIONES_EN, PREFIJO_COMBINACION_EN } from './en/combinaciones';
+import { FRAGMENTOS_ANGELES_PT } from './pt/fragmentos';
+import { BANCOS_ANGELES_PT } from './pt/bancos';
+import { WIKI_ANGELES_PT } from './pt/wiki';
+import { NOTAS_COMBINACIONES_PT, PREFIJO_COMBINACION_PT } from './pt/combinaciones';
 
 // ─────────────────────────────────────────────────────────────────────────
 // De qué idioma sale el TEXTO DE LA LECTURA de Ángeles.
@@ -55,9 +59,16 @@ const en: PaqueteLecturaAngeles = {
   prefijoCombinacion: PREFIJO_COMBINACION_EN,
 };
 
-// Portugués todavía no: tiene Wiki (content/pt) pero no banco de lectura, así
-// que cae al paquete español entero.
-const PAQUETES: Partial<Record<CodigoIdioma, PaqueteLecturaAngeles>> = { es, en };
+const pt: PaqueteLecturaAngeles = {
+  fragmentos: FRAGMENTOS_ANGELES_PT,
+  bancos: BANCOS_ANGELES_PT,
+  wiki: WIKI_ANGELES_PT,
+  notasCombinacion: NOTAS_COMBINACIONES_PT,
+  prefijoCombinacion: PREFIJO_COMBINACION_PT,
+};
+
+// Los tres idiomas que la app ofrece (ver i18n/idiomas.ts) leen en su lengua.
+const PAQUETES: Partial<Record<CodigoIdioma, PaqueteLecturaAngeles>> = { es, en, pt };
 
 export function paqueteLecturaAngeles(idioma: CodigoIdioma): PaqueteLecturaAngeles {
   return PAQUETES[idioma] ?? es;
