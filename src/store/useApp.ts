@@ -1,12 +1,48 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { IDIOMA_POR_DEFECTO, type CodigoIdioma } from '@/i18n/idiomas';
+import { getLocales } from 'expo-localization';
+import {
+  IDIOMA_POR_DEFECTO,
+  esIdiomaSoportado,
+  type CodigoIdioma,
+} from '@/i18n/idiomas';
+
+/**
+ * Idioma con el que arranca la app la PRIMERA vez que se abre.
+ *
+ * Hasta ahora era español fijo para todo el mundo: alguien en Brasil o en
+ * Estados Unidos instalaba la app y la veía en español hasta que descubría
+ * Ajustes. `expo-localization` ya estaba instalado y declarado en app.json,
+ * pero no se usaba en ningún lado.
+ *
+ * Solo pesa en la primera apertura. Después manda lo que haya en disco, sea
+ * porque la persona eligió en Ajustes o porque esto ya resolvió una vez: el
+ * idioma del dispositivo no vuelve a opinar. Es a propósito — a quien eligió
+ * inglés en un teléfono en portugués no se le pisa la elección en cada arranque.
+ *
+ * Si el dispositivo está en un idioma que no ofrecemos, cae a español.
+ */
+function idiomaDelDispositivo(): CodigoIdioma {
+  try {
+    for (const local of getLocales()) {
+      const codigo = local.languageCode?.toLowerCase();
+      // languageCode viene sin región ('pt' y no 'pt-BR'), que es justo lo que
+      // usamos como código de idioma.
+      if (codigo && esIdiomaSoportado(codigo)) return codigo;
+    }
+  } catch {
+    // getLocales() no debería fallar, pero si el sistema devuelve algo raro
+    // preferimos arrancar en español antes que romper el arranque de la app.
+  }
+  return IDIOMA_POR_DEFECTO;
+}
 
 /**
  * Estado global de la app. Solo vive aca lo que es transversal de verdad:
  *   - gemas: se ven en el header en todas las pantallas. Cada tirada cuesta 1.
- *   - idioma: define en que idioma se leen la UI y los significados.
+ *   - idioma: define en que idioma se leen la UI y los significados. La primera
+ *     vez sale del dispositivo (ver idiomaDelDispositivo); despues, de disco.
  *   - wikiDesbloqueada: que partes de la wiki destrabo el usuario HOY. La clave
  *     es el oraculo ("tarot") cuando la wiki se destraba entera (oraculos de un
  *     solo bloque: runas, iching, buzios) o "oraculo:bloque" ("tarot:copas")
@@ -62,7 +98,10 @@ export const useApp = create<EstadoApp>()(
   persist(
     (set, get) => ({
       gemas: GEMAS_DIARIAS,
-      idioma: IDIOMA_POR_DEFECTO,
+      // Valor inicial, que solo se usa si no hay nada guardado (primera
+      // apertura). Lo que persist lea del disco lo pisa, así que la elección de
+      // la persona siempre gana. Ver idiomaDelDispositivo().
+      idioma: idiomaDelDispositivo(),
       hidratado: false,
       ultimoDia: '',
       wikiDesbloqueada: {},
