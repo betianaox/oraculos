@@ -4,7 +4,7 @@ import type { CodigoIdioma } from '@/i18n/idiomas';
 import type { PiezaMaterial } from '@/ia/tipos';
 import { armarCruz, type FuentesCruz } from '@/flujo/motorCruz';
 import { materialCruz } from '@/flujo/materialCruz';
-import { combinacionPresente } from './content/es/combinaciones';
+import { combinacionPresente } from './content/combinaciones';
 import { paqueteLecturaAngeles } from './content/idiomaLectura';
 
 // Cláusula corta para la carta en su posición. Escalera de fallback:
@@ -99,10 +99,15 @@ export function lecturaAngeles(
   if (parrafos.length === 0) return parrafos;
 
   // Gracia propia de Ángeles: si hay una combinación declarada entre las cartas,
-  // se suma como una señal al final del cierre.
-  const nota = combinacionPresente(tirada.map((t) => t.pieza.numero));
+  // se suma como una señal al final del cierre. El texto sale del paquete del
+  // idioma; antes estaba en español fijo y se pegaba igual a una lectura en
+  // inglés.
+  const clave = combinacionPresente(tirada.map((t) => t.pieza.numero));
+  const { notasCombinacion, prefijoCombinacion } = paqueteLecturaAngeles(idioma);
+  const nota = clave ? notasCombinacion[clave] : '';
   if (nota) {
-    parrafos[parrafos.length - 1] = `${parrafos[parrafos.length - 1]} Una señal especial: ${nota}`;
+    const ultimo = parrafos.length - 1;
+    parrafos[ultimo] = `${parrafos[ultimo]} ${prefijoCombinacion} ${nota}`;
   }
   return parrafos;
 }
