@@ -5,6 +5,8 @@ import { FUENTES_ES } from './es';
 import { BANCOS_TAROT_ES } from './es/bancos';
 import { FUENTES_EN } from './en';
 import { BANCOS_TAROT_EN } from './en/bancos';
+import { FUENTES_PT } from './pt';
+import { BANCOS_TAROT_PT } from './pt/bancos';
 
 // ─────────────────────────────────────────────────────────────────────────
 // De qué idioma sale el TEXTO DE LA LECTURA.
@@ -49,9 +51,13 @@ const en: PaqueteLectura = {
   bancos: BANCOS_TAROT_EN,
 };
 
-// Portugués todavía no: tiene traducidos los nombres y la Wiki (ver
-// idiomaCartas.ts) pero no el banco de lectura, así que cae a español entero.
-const PAQUETES: Partial<Record<CodigoIdioma, PaqueteLectura>> = { es, en };
+const pt: PaqueteLectura = {
+  fuentes: FUENTES_PT,
+  bancos: BANCOS_TAROT_PT,
+};
+
+// Los tres idiomas que la app ofrece (ver i18n/idiomas.ts) leen en su lengua.
+const PAQUETES: Partial<Record<CodigoIdioma, PaqueteLectura>> = { es, en, pt };
 
 export function paqueteLectura(idioma: CodigoIdioma): PaqueteLectura {
   return PAQUETES[idioma] ?? es;
