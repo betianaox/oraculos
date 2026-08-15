@@ -672,7 +672,7 @@ export const FRAGMENTOS_TRABAJO_MENORES_ES: FragmentosDeTema = {
     normal: [
       'maestría y éxito en el trabajo',
       'un liderazgo próspero y seguro',
-      'manejo experto de los recursos',
+      'manejar lo que hay con mano firme',
     ],
     invertida: [
       'codicia o apego al estatus',

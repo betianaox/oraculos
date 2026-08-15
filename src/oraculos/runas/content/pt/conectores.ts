@@ -8,14 +8,29 @@
 // ATENÇÃO: os fragmentos são orações curtas de forma variável. Estes modelos
 // usam dois-pontos ou vírgula para aceitar todas sem quebrar a frase.
 
-/** Fecha o primeiro parágrafo: a situação, com as duas primeiras runas. */
-export const situacion: string[] = [
-  'No fundo algo se move: {frag1}. E junto disso, {frag2}.',
-  'O que cerca o assunto: {frag1}. Sustentando tudo, {frag2}.',
-  'Primeiro aparece isto: {frag1}. E atrás, {frag2}.',
-  'Há duas coisas em jogo: {frag1}, e também {frag2}.',
-  'O que se vê de cara: {frag1}. O que pulsa embaixo: {frag2}.',
-];
+/**
+ * Fecha o primeiro parágrafo: a situação, com as duas primeiras runas.
+ *
+ * `una` é para quando uma das duas runas não tem nada NOVO a acrescentar (o
+ * pool dela já foi usado). Antes, nesse caso, o texto se repetia — daí as
+ * orações duplicadas que os testers relataram; agora se diz uma só vez.
+ */
+export const situacion = {
+  dos: [
+    'No fundo algo se move: {frag1}. E junto disso, {frag2}.',
+    'O que cerca o assunto: {frag1}. Sustentando tudo, {frag2}.',
+    'Primeiro aparece isto: {frag1}. E atrás, {frag2}.',
+    'Há duas coisas em jogo: {frag1}, e também {frag2}.',
+    'O que se vê de cara: {frag1}. O que pulsa embaixo: {frag2}.',
+    'De um lado aparece {frag1}, e bem no meio, {frag2}.',
+  ],
+  una: [
+    'No centro de tudo há algo claro: {frag}.',
+    'O que sustenta a cena é {frag}.',
+    'Bem no meio pulsa isto: {frag}.',
+    'Se for para ficar com uma coisa só, é esta: {frag}.',
+  ],
+};
 
 /**
  * Segundo parágrafo: a terceira runa, a única que olha para frente. Com um

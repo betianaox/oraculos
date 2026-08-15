@@ -7,7 +7,7 @@ export const dinero: FragmentosDeTema = {
     normal: [
       'a prosperidade que chega quando o dinheiro é administrado com cuidado',
       'uma entrada de dinheiro que convém aproveitar bem',
-      'os recursos que rendem mais quando são organizados com calma',
+      'o que você tem, que rende o dobro quando você organiza com calma',
     ],
     invertida: [
       'o medo de que não dê conta, para além de se realmente falta',
@@ -84,7 +84,7 @@ export const dinero: FragmentosDeTema = {
     invertida: [
       'um empréstimo dado sem condições claras',
       'o desgaste de emprestar dinheiro que não volta',
-      'uma dinâmica financeira em que sempre o mesmo lado põe',
+      'um arranjo em que a grana sai sempre do mesmo',
     ],
   },
   wunju: {
@@ -103,7 +103,7 @@ export const dinero: FragmentosDeTema = {
     normal: [
       'uma mudança financeira brusca que, embora incômoda, organiza algo importante',
       'um gasto inesperado que reorganiza as prioridades',
-      'uma ruptura financeira que abre caminho para uma gestão mais honesta',
+      'uma ruptura financeira que abre caminho para um jeito mais honesto de lidar',
     ],
     invertida: [
       'um imprevisto financeiro que chega sem muito aviso',
@@ -139,7 +139,7 @@ export const dinero: FragmentosDeTema = {
     normal: [
       'os resultados de um esforço de poupança sustentado ao longo do tempo',
       'uma meta financeira que enfim começa a ficar perto',
-      'o fruto de ter sido constante com a gestão do dinheiro',
+      'o fruto de ter sido constante com o dinheiro',
     ],
     invertida: [
       'a impaciência de ver crescer uma poupança que mal começou',
@@ -263,7 +263,7 @@ export const dinero: FragmentosDeTema = {
     ],
     invertida: [
       'a impaciência de querer resultados financeiros antes do tempo',
-      'a vontade de acelerar uma renda que ainda precisa do seu processo',
+      'a vontade de apressar uma entrada de grana que ainda não está',
       'a ansiedade de não saber esperar o momento certo para investir',
     ],
   },

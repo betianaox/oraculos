@@ -50,7 +50,7 @@ export const consejos: Partial<Record<Tema, Record<Modo, Record<Tono, string[]>>
     abierta: {
       neutro: [
         'El consejo es simple: presta atención a lo que ya sabes pero todavía no encaraste.',
-        'Soltar el control ayuda más que intentar manejarlo todo: deja que el proceso siga su ritmo.',
+        'Soltar el control ayuda más que intentar manejarlo todo: deja que esto siga su ritmo.',
         'El equilibrio entre esfuerzo y descanso importa, aunque la exigencia diga lo contrario.',
         'Antes de actuar, tómate un momento para pensar qué necesitas realmente del trabajo.',
       ],
@@ -79,7 +79,7 @@ export const consejos: Partial<Record<Tema, Record<Modo, Record<Tono, string[]>>
       ],
       impulso: [
         'Si la oportunidad es real, da el paso en vez de solo entusiasmarte.',
-        'Convierte las ganas en un paso concreto y verificable.',
+        'Convierte las ganas en algo concreto: una llamada, un mensaje, una fecha.',
         'Buen momento para avanzar, siempre con un plan detrás.',
       ],
     },
@@ -107,7 +107,7 @@ export const consejos: Partial<Record<Tema, Record<Modo, Record<Tono, string[]>>
       neutro: [
         'Vale la pena dar un paso concreto en vez de seguir dándole vueltas en la cabeza.',
         'Conversa eso que viene postergándose sobre el dinero — no se va a resolver solo.',
-        'Elige con cuidado en qué poner tus recursos ahora.',
+        'Elige con cuidado en qué poner la plata ahora.',
         'Mostrar tu situación real, sin tanto filtro, puede ser justo lo que hace falta ahora.',
       ],
       preocupacion: [
@@ -137,7 +137,7 @@ export const consejos: Partial<Record<Tema, Record<Modo, Record<Tono, string[]>>
       ],
       impulso: [
         'Dale lugar a ese impulso, pero apóyalo en un primer paso concreto.',
-        'Las ganas son buena señal, sostenlas sin apurar el proceso.',
+        'Las ganas son buena señal, sostenlas sin apurar lo que todavía madura.',
         'Usa la energía para empezar por algo pequeño y real.',
       ],
     },

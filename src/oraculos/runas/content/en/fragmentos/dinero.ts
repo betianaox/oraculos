@@ -8,7 +8,7 @@ export const dinero: FragmentosDeTema = {
     normal: [
       'the prosperity that comes when money is managed with care',
       'an inflow of money worth putting to good use',
-      'resources that yield more when arranged calmly',
+      'what you have, which goes twice as far once you sort it out calmly',
     ],
     invertida: [
       'the fear that it will not be enough, whether or not it truly is',
@@ -264,7 +264,7 @@ export const dinero: FragmentosDeTema = {
     ],
     invertida: [
       'the impatience of wanting financial results ahead of time',
-      'the urge to speed up an income that still needs its process',
+      'the urge to rush money coming in that is not there yet',
       'the anxiety of not knowing how to wait for the right moment to invest',
     ],
   },

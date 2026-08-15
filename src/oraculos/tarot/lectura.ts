@@ -5,11 +5,10 @@ import type { PiezaMaterial } from '@/ia/tipos';
 import { armarCruz, type FuentesCruz } from '@/flujo/motorCruz';
 import { materialCruz } from '@/flujo/materialCruz';
 import { paqueteCartas } from './content/idiomaCartas';
-import { FUENTES_ES } from './content/es';
+import { paqueteLectura } from './content/idiomaLectura';
 import { resolverTextoLectura } from './lib/resolverCarta';
 import { nombreDeCarta } from './lib/nombreCarta';
 import { CARTA_POR_ID } from './content/cartas/meta';
-import { BANCOS_TAROT_ES } from './content/es/bancos';
 import type { CartaId } from './content/types';
 
 /**
@@ -17,9 +16,15 @@ import type { CartaId } from './content/types';
  * caminos —el motor propio y el material que se le manda a la IA—, y esa es la
  * gracia: las dos lecturas salen del mismo contenido, así que dicen lo mismo
  * aunque suenen distinto.
+ *
+ * El `idioma` decide de qué paquete sale TODO: los nombres y la Wiki
+ * (idiomaCartas) y también los fragmentos y el tejido (idiomaLectura). Antes
+ * esto último estaba cableado a español y la lectura salía en español aunque la
+ * app estuviera en inglés.
  */
 function fuentesTarot(tema: Tema, idioma: CodigoIdioma): FuentesCruz {
   const { nombres, wiki } = paqueteCartas(idioma);
+  const { fuentes, bancos } = paqueteLectura(idioma);
 
   const nombre = (p: PiezaTirada) =>
     nombreDeCarta(
@@ -29,9 +34,9 @@ function fuentesTarot(tema: Tema, idioma: CodigoIdioma): FuentesCruz {
     );
 
   const fragmento = (p: PiezaTirada) =>
-    resolverTextoLectura(FUENTES_ES, p.pieza.id as CartaId, tema, p.posicion);
+    resolverTextoLectura(fuentes, p.pieza.id as CartaId, tema, p.posicion);
 
-  return { nombre, fragmento, bancos: BANCOS_TAROT_ES };
+  return { nombre, fragmento, bancos };
 }
 
 /**

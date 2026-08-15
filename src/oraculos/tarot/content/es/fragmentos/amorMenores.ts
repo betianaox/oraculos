@@ -418,11 +418,11 @@ export const FRAGMENTOS_AMOR_MENORES_ES: FragmentosDeTema = {
   'espadas-siete': {
     normal: [
       'una jugada a espaldas del otro',
-      'secretos o estrategias en la pareja',
+      'secretos o cálculos dentro de la pareja',
       'conseguir algo por vías indirectas',
     ],
     invertida: [
-      'un engaño que sale a la luz',
+      'algo tapado que termina saliendo',
       'una confesión al otro',
       'devolver la confianza traicionada',
     ],

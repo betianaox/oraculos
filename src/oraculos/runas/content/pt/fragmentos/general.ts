@@ -6,7 +6,7 @@ import type { FragmentosDeTema } from '../../types';
 export const general: FragmentosDeTema = {
   fehu: {
     normal: [
-      'os recursos que você já tem e talvez não esteja valorizando por completo',
+      'o que você já tem e talvez não esteja valorizando',
       'uma base sólida que se constrói cuidando do que já funciona',
       'a prosperidade que chega quando se organiza o que já está em andamento',
     ],
@@ -115,7 +115,7 @@ export const general: FragmentosDeTema = {
   naudiz: {
     normal: [
       'a paciência necessária num momento de carência',
-      'o esforço que se mantém mesmo faltando recursos',
+      'o esforço que se mantém mesmo tendo pouco',
       'a perseverança diante de um obstáculo concreto',
     ],
     invertida: [
@@ -145,7 +145,7 @@ export const general: FragmentosDeTema = {
     invertida: [
       'a impaciência de querer resultados antes do tempo',
       'a frustração de ainda não ver o que se semeou',
-      'um processo que se corta antes de dar frutos',
+      'algo que se corta pouco antes de dar frutos',
     ],
   },
   eihwaz: {
@@ -259,12 +259,12 @@ export const general: FragmentosDeTema = {
   ingwaz: {
     normal: [
       'algo que está se gestando e ainda precisa do seu tempo',
-      'um potencial que convém deixar amadurecer antes de agir',
+      'algo que promete e ainda pede tempo para amadurecer',
       'uma semente já plantada que vai dar frutos',
     ],
     invertida: [
       'a impaciência de querer forçar algo que não está pronto',
-      'a vontade de acelerar um processo que pede calma',
+      'a vontade de apressar algo que pede calma',
       'a ansiedade de não saber esperar o momento certo',
     ],
   },

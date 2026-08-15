@@ -13,7 +13,7 @@ export const consejos: Partial<Record<Tema, Record<Modo, Record<Tono, string[]>>
         'Antes de agir, reserve um momento para escutar o que você realmente sente.',
       ],
       preocupacion: [
-        'Você não precisa resolver tudo hoje, basta não se perder no processo.',
+        'Você não precisa resolver tudo hoje, basta não se perder no caminho.',
         'Trate isto com a mesma paciência que teria com alguém de quem você gosta.',
         'Alivie a cobrança consigo: sentir dúvida não é fazer algo errado.',
       ],
@@ -46,7 +46,7 @@ export const consejos: Partial<Record<Tema, Record<Modo, Record<Tono, string[]>>
     abierta: {
       neutro: [
         'O conselho é simples: preste atenção no que você já sabe mas ainda não encarou.',
-        'Soltar o controle ajuda mais do que tentar administrar tudo: deixe o processo seguir seu ritmo.',
+        'Soltar o controle ajuda mais do que tentar segurar tudo: deixe seguir no ritmo dele.',
         'O equilíbrio entre esforço e descanso importa, mesmo que a cobrança diga o contrário.',
         'Antes de agir, reserve um momento para pensar o que você realmente precisa do trabalho.',
       ],
@@ -103,7 +103,7 @@ export const consejos: Partial<Record<Tema, Record<Modo, Record<Tono, string[]>>
       neutro: [
         'Vale a pena dar um passo concreto em vez de ficar remoendo na cabeça.',
         'Converse sobre a questão de dinheiro que vem sendo adiada — não vai se resolver sozinha.',
-        'Escolha com cuidado onde colocar seus recursos agora.',
+        'Escolha com cuidado onde colocar a grana agora.',
         'Mostrar sua situação real, sem tanto filtro, pode ser justamente o que falta agora.',
       ],
       preocupacion: [
@@ -133,7 +133,7 @@ export const consejos: Partial<Record<Tema, Record<Modo, Record<Tono, string[]>>
       ],
       impulso: [
         'Dê espaço para esse impulso, mas apoie-o num primeiro passo concreto.',
-        'A vontade é bom sinal, sustente-a sem apressar o processo.',
+        'A vontade é bom sinal, sustente-a sem apressar o que ainda amadurece.',
         'Use a energia para começar por algo pequeno e real.',
       ],
     },

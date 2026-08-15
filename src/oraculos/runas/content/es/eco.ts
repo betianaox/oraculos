@@ -13,9 +13,9 @@ import type { Tiempo } from '../types';
 //    propio de runa.
 
 export const ecoTercero: string[] = [
-  'En esta consulta hay otra persona en juego.',
-  'La presencia de alguien más pesa en lo que preguntas.',
-  'Hay un vínculo con otra persona en el centro de esto.',
+  'Acá hay otra persona en juego, y pesa.',
+  'Lo que hace el otro también tira de este hilo.',
+  'Esa persona está en el centro de todo esto.',
 ];
 
 export const ecoTiempo: Record<Exclude<Tiempo, 'presente'>, string[]> = {
@@ -26,7 +26,7 @@ export const ecoTiempo: Record<Exclude<Tiempo, 'presente'>, string[]> = {
   ],
   futuro: [
     'La mirada está puesta en lo que todavía no llega.',
-    'Esto se proyecta hacia lo que viene.',
+    'Esto se inclina hacia lo que viene.',
     'La pregunta apunta a lo que está por delante.',
   ],
 };

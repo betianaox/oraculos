@@ -18,7 +18,7 @@ export const FRAGMENTOS_DINERO_ES: FragmentosDeTema = {
   },
   'mayor-01': {
     normal: [
-      'los recursos para hacer rendir el dinero',
+      'tener con qué hacer rendir la plata',
       'iniciativa para un negocio',
       'usar el ingenio para generar',
     ],
@@ -35,7 +35,7 @@ export const FRAGMENTOS_DINERO_ES: FragmentosDeTema = {
       'confiar en la intuición económica',
     ],
     invertida: [
-      'ignorar señales sobre las finanzas',
+      'ignorar señales sobre las cuentas',
       'algo oculto en las cuentas',
       'falta de claridad con el dinero',
     ],
@@ -49,12 +49,12 @@ export const FRAGMENTOS_DINERO_ES: FragmentosDeTema = {
     invertida: [
       'un proyecto económico que no rinde',
       'gastar en placeres sin medida',
-      'descuidar las propias finanzas',
+      'dejar las cuentas propias para después',
     ],
   },
   'mayor-04': {
     normal: [
-      'orden y control de las finanzas',
+      'orden y control sobre lo que entra y sale',
       'bases económicas sólidas',
       'administrar con mano firme',
     ],
@@ -72,7 +72,7 @@ export const FRAGMENTOS_DINERO_ES: FragmentosDeTema = {
     ],
     invertida: [
       'gastos atados a lo que se espera, no a lo que conviene',
-      'salir de lo convencional en las finanzas',
+      'salir de lo convencional con la plata',
       'reglas económicas que ya no sirven',
     ],
   },
@@ -92,7 +92,7 @@ export const FRAGMENTOS_DINERO_ES: FragmentosDeTema = {
     normal: [
       'avanzar con empuje hacia una meta económica',
       'disciplina financiera que rinde',
-      'conducir las finanzas con foco',
+      'llevar las cuentas con la mira puesta',
     ],
     invertida: [
       'gastos que tiran en direcciones opuestas',
@@ -150,14 +150,14 @@ export const FRAGMENTOS_DINERO_ES: FragmentosDeTema = {
   },
   'mayor-12': {
     normal: [
-      'una pausa que replantea las finanzas',
+      'una pausa que replantea todo el gasto',
       'esperar antes de una movida de dinero',
       'resignar algo material por otra ganancia',
     ],
     invertida: [
-      'finanzas estancadas',
+      'las cuentas frenadas, sin moverse',
       'un sacrificio económico sin retorno',
-      'aferrarse a una estrategia que no rinde',
+      'aferrarse a una manera de hacer las cosas que ya no rinde',
     ],
   },
   'mayor-13': {
@@ -199,7 +199,7 @@ export const FRAGMENTOS_DINERO_ES: FragmentosDeTema = {
   'mayor-16': {
     normal: [
       'una pérdida o un gasto súbito',
-      'el derrumbe de una estructura económica falsa',
+      'el derrumbe de algo que se sostenía con alfileres',
       'una crisis que obliga a rehacer las cuentas',
     ],
     invertida: [
@@ -212,7 +212,7 @@ export const FRAGMENTOS_DINERO_ES: FragmentosDeTema = {
     normal: [
       'esperanza de recuperación económica',
       'confiar en que lo material mejora',
-      'una renovación de las finanzas',
+      'un arranque nuevo con la plata',
     ],
     invertida: [
       'desánimo con el dinero',
@@ -235,7 +235,7 @@ export const FRAGMENTOS_DINERO_ES: FragmentosDeTema = {
   'mayor-19': {
     normal: [
       'prosperidad y éxito material',
-      'claridad en las finanzas',
+      'claridad con las cuentas',
       'un ingreso que brilla',
     ],
     invertida: [
@@ -247,7 +247,7 @@ export const FRAGMENTOS_DINERO_ES: FragmentosDeTema = {
   'mayor-20': {
     normal: [
       'un replanteo del rumbo económico',
-      'evaluar las finanzas con honestidad',
+      'mirar las cuentas de frente, sin maquillar',
       'una segunda oportunidad material',
     ],
     invertida: [
@@ -265,7 +265,7 @@ export const FRAGMENTOS_DINERO_ES: FragmentosDeTema = {
     invertida: [
       'una meta material casi alcanzada',
       'un logro económico al que le falta un paso',
-      'algo de las finanzas sin cerrar',
+      'algo de las cuentas sin cerrar',
     ],
   },
 };

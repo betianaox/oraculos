@@ -34,7 +34,7 @@ export const FRAGMENTOS_GENERAL_MENORES_ES: FragmentosDeTema = {
   'bastos-tres': {
     normal: [
       'un proyecto ya en marcha que empieza a rendir',
-      'expansión y confianza en lo puesto en camino',
+      'algo que se agranda, y la confianza de haberlo empezado bien',
       'mirar el horizonte esperando lo sembrado',
     ],
     invertida: [
@@ -420,7 +420,7 @@ export const FRAGMENTOS_GENERAL_MENORES_ES: FragmentosDeTema = {
   'espadas-siete': {
     normal: [
       'una jugada sigilosa',
-      'estrategia y astucia',
+      'cálculo y astucia',
       'conseguir algo por vías indirectas',
     ],
     invertida: [
@@ -631,7 +631,7 @@ export const FRAGMENTOS_GENERAL_MENORES_ES: FragmentosDeTema = {
     invertida: [
       'conflictos por dinero o herencias',
       'inestabilidad',
-      'apego al patrimonio que enreda los vínculos',
+      'apego a lo acumulado que enreda los vínculos',
     ],
   },
   'oros-sota': {

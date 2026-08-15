@@ -54,7 +54,7 @@ export const FRAGMENTOS_TRABAJO_ES: FragmentosDeTema = {
   },
   'mayor-04': {
     normal: [
-      'estructura y orden en el trabajo',
+      'orden y reglas claras en el trabajo',
       'asumir el mando o un rol de autoridad',
       'bases sólidas para un proyecto',
     ],
@@ -175,12 +175,12 @@ export const FRAGMENTOS_TRABAJO_ES: FragmentosDeTema = {
   'mayor-14': {
     normal: [
       'equilibrio entre las tareas',
-      'combinar recursos con mesura',
+      'estirar lo que hay con cabeza',
       'paciencia que ordena el trabajo',
     ],
     invertida: [
       'sobrecarga o desmesura laboral',
-      'impaciencia que arruina el proceso',
+      'impaciencia que arruina lo que venía bien',
       'falta de equilibrio entre áreas',
     ],
   },
@@ -192,14 +192,14 @@ export const FRAGMENTOS_TRABAJO_ES: FragmentosDeTema = {
     ],
     invertida: [
       'liberarse de un trabajo que oprime',
-      'ver una dinámica laboral tóxica',
+      'ver de frente un ambiente de trabajo que desgasta',
       'recuperar el control de la carrera',
     ],
   },
   'mayor-16': {
     normal: [
       'un cambio abrupto en el trabajo',
-      'el derrumbe de una estructura laboral falsa',
+      'el derrumbe de un puesto que se sostenía con alfileres',
       'una crisis que obliga a reconstruir',
     ],
     invertida: [

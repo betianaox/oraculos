@@ -1,11 +1,12 @@
 import type { PiezaTirada } from './pieza';
 import type { AnalisisPregunta, Intencion, Modo, Tema, Tono } from '@/pregunta/tipos';
+import { sinEcos, tomarNuevo } from './sinRepetir';
 
 // ─────────────────────────────────────────────────────────────────────────
-// Motor COMPARTIDO de la cruz de 5. Lo usan Tarot, Ángeles y —cuando llegue—
-// Egipcio: los tres tiran en cruz, pero cada uno trae su propia estructura de
-// definiciones (fragmentos, bancos). Este archivo solo sabe ARMAR los tres
-// párrafos; el contenido lo pone cada oráculo por medio de `FuentesCruz`.
+// Motor COMPARTIDO de la cruz de 5. Lo usan Tarot, Ángeles y Egipcio: los tres
+// tiran en cruz, pero cada uno trae su propia estructura de definiciones
+// (fragmentos, bancos). Este archivo solo sabe ARMAR los tres párrafos; el
+// contenido lo pone cada oráculo por medio de `FuentesCruz`.
 //
 // Disposición de la cruz (orden de reparto 1→2→3→4→5):
 //        [4]            4 = lo que la persona tiene en la cabeza
@@ -21,7 +22,38 @@ import type { AnalisisPregunta, Intencion, Modo, Tema, Tono } from '@/pregunta/t
 // significa tal cosa" convierte la lectura en un glosario; la persona ya ve
 // las cartas en pantalla. Lo que se le devuelve es qué dicen sobre SU caso.
 // Por eso los bancos trabajan con fragmentos y nunca con nombres.
+//
+// SEGUNDA REGLA: ninguna frase se repite dentro de una lectura. Antes esto se
+// dejaba librado al azar —las piezas 1 y 2 hablan en P1 y otra vez en P2, y se
+// confiaba en que el sorteo devolviera otra variante—, y fallaba seguido: si
+// una carta cae al último escalón de su fallback tiene UN solo texto posible, y
+// entonces la repetición es segura, no probable. Ahora el motor lleva registro
+// de lo ya dicho (`usados`) y, cuando una pieza no tiene nada nuevo que aportar,
+// se usa una plantilla más corta en vez de repetirla. Ver `Bloques`.
 // ─────────────────────────────────────────────────────────────────────────
+
+/**
+ * Plantillas para un lugar de la lectura que puede quedarse con menos piezas de
+ * las ideales. Cada oráculo escribe las tres formas y el motor elige según
+ * cuántos fragmentos NUEVOS consiguió: repetir un texto ya dicho nunca es una
+ * opción, así que cuando falta material se acorta la oración.
+ */
+export interface Bloques {
+  /** Con los tres fragmentos: {frag1} {frag2} {frag3}. */
+  tres: string[];
+  /** Con dos: {fragA} (el que haya) y {frag3}. */
+  dos: string[];
+  /** Con uno solo: {frag3}. */
+  una: string[];
+}
+
+/** Igual que `Bloques`, para la situación de P1, que como mucho usa dos. */
+export interface BloquesSituacion {
+  /** Con los dos: {frag1} {frag2}. */
+  dos: string[];
+  /** Con uno solo: {frag}. */
+  una: string[];
+}
 
 // Banco conectivo de un oráculo (el "tejido" entre las piezas). Cada campo trae
 // varias variantes para que dos lecturas no suenen iguales.
@@ -44,10 +76,10 @@ export interface BancosCruz {
    * para la que se detectó, se usa la apertura común. Nunca se queda sin nada.
    */
   aperturasIntencion?: Partial<Record<Intencion, string[]>>;
-  /** Cierre de P1 con {frag1} y {frag2}: planta la situación y su centro. */
-  situacion: string[];
-  /** P2 con {frag1}{frag2}{frag3}: el tira y afloje, con el centro mandando. */
-  tension: string[];
+  /** Cierre de P1: planta la situación y su centro. */
+  situacion: BloquesSituacion;
+  /** P2: el tira y afloje, con el centro mandando. */
+  tension: Bloques;
   /** Lo que ocupa la cabeza (pieza 4), con {frag}. */
   cabeza: string[];
   /** El paso siguiente (pieza 5), con {frag}. */
@@ -66,9 +98,10 @@ export interface BancosCruz {
 // `materialCruz` para armar lo que se le manda a la IA.
 export interface FuentesCruz {
   nombre: (p: PiezaTirada) => string;
-  // Devuelve una cláusula corta para la pieza en su posición. Se llama más de
-  // una vez por pieza: si hay varias variantes, conviene que rote, para que la
-  // misma carta no repita la misma frase dentro de la lectura.
+  // Devuelve una cláusula corta para la pieza en su posición. El motor la llama
+  // varias veces buscando variantes distintas, así que conviene que sortee
+  // entre todas las que tenga; si sólo tiene una, el motor se da cuenta y no la
+  // repite.
   fragmento: (p: PiezaTirada) => string;
   bancos: BancosCruz;
 }
@@ -112,6 +145,20 @@ export function armarCruz(
   const { fragmento } = fuentes;
   const [c1, c2, c3, c4, c5] = tirada;
 
+  // Todo lo que se diga en esta lectura pasa por acá. Una vez usado un texto,
+  // no vuelve.
+  const usados = new Set<string>();
+  const nuevo = (p: PiezaTirada) => tomarNuevo(() => fragmento(p), usados);
+
+  // Primera vuelta, en orden de importancia para la lectura: el centro manda,
+  // después los brazos, después cabeza y paso. Si dos piezas caen al mismo
+  // texto de fallback, la que pierde es la menos importante.
+  const f2 = nuevo(c2);
+  const f1 = nuevo(c1);
+  const f3 = nuevo(c3);
+  const f4 = nuevo(c4);
+  const f5 = nuevo(c5);
+
   // ── P1: conecta con la pregunta y planta la situación ────────────────────
   // Si se reconoció de qué trata la pregunta y hay texto escrito para eso, se
   // prefiere: nombrar el asunto ("preguntas si va a volver") pega mucho más
@@ -125,24 +172,48 @@ export function armarCruz(
       : porTono(b.aperturas[modo], tono);
 
   const apertura = elegir(pool).replace('{tema}', elegir(b.temas[tema]));
-  const situacion = elegir(b.situacion)
-    .replace('{frag1}', fragmento(c1))
-    .replace('{frag2}', fragmento(c2));
-  const p1 = `${apertura} ${situacion}`;
+
+  // Con los dos fragmentos se planta la escena entera; con uno, se dice sólo
+  // ese; con ninguno, P1 se queda en la apertura.
+  let situacion = '';
+  if (f1 && f2) {
+    situacion = elegir(b.situacion.dos).replace('{frag1}', f1).replace('{frag2}', f2);
+  } else if (f2 || f1) {
+    situacion = elegir(b.situacion.una).replace('{frag}', (f2 ?? f1) as string);
+  }
+  const p1 = [apertura, situacion].filter((x) => x.length > 0).join(' ');
 
   // ── P2: la tensión entre los extremos, con el centro mandando ────────────
-  const tension = elegir(b.tension)
-    .replace('{frag1}', fragmento(c1))
-    .replace('{frag2}', fragmento(c2))
-    .replace('{frag3}', fragmento(c3));
+  // Las piezas 1 y 2 ya hablaron en P1: acá vuelven, pero SÓLO si tienen otra
+  // variante para decir. Si no, la tensión se arma con lo que quede.
+  const f1b = f1 ? nuevo(c1) : null;
+  const f2b = f2 ? nuevo(c2) : null;
+  const suelto = f1b ?? f2b;
+
+  let tension = '';
+  if (f1b && f2b && f3) {
+    tension = elegir(b.tension.tres)
+      .replace('{frag1}', f1b)
+      .replace('{frag2}', f2b)
+      .replace('{frag3}', f3);
+  } else if (suelto && f3) {
+    tension = elegir(b.tension.dos).replace('{fragA}', suelto).replace('{frag3}', f3);
+  } else if (f3) {
+    tension = elegir(b.tension.una).replace('{frag3}', f3);
+  } else if (suelto) {
+    tension = elegir(b.tension.una).replace('{frag3}', suelto);
+  }
+
   const eco = elegirEco(analisis, b);
   const p2 = [tension, eco].filter((x) => x.length > 0).join(' ');
 
   // ── P3: la cabeza, el paso siguiente y el consejo ────────────────────────
-  const cabeza = elegir(b.cabeza).replace('{frag}', fragmento(c4));
-  const paso = elegir(b.paso).replace('{frag}', fragmento(c5));
+  // Si una de las dos piezas no tenía texto propio, se cae su oración y el
+  // párrafo sigue con las otras. El consejo siempre está.
+  const cabeza = f4 ? elegir(b.cabeza).replace('{frag}', f4) : '';
+  const paso = f5 ? elegir(b.paso).replace('{frag}', f5) : '';
   const consejo = elegir(porTono(b.consejos[modo], tono));
-  const p3 = `${cabeza} ${paso} ${consejo}`;
+  const p3 = [cabeza, paso, consejo].filter((x) => x.length > 0).join(' ');
 
-  return [p1, p2, p3];
+  return sinEcos([p1, p2, p3]);
 }
