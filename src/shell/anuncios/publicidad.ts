@@ -24,13 +24,20 @@ export const adsDisponible = modulo !== null;
 /**
  * Unidad de anuncio recompensado.
  *
- * Igual que en Runas y Tarot: usamos SIEMPRE el ID de test de Google, tambien
- * en builds de release, para poder probar en dispositivos reales sin arriesgar
- * la cuenta de AdMob por trafico invalido (tocar nuestros propios anuncios).
+ * Usamos SIEMPRE el ID de test de Google, tambien en builds de release, para
+ * poder probar en dispositivos reales sin arriesgar la cuenta de AdMob por
+ * trafico invalido (tocar nuestros propios anuncios).
  *
- * TODO (antes de publicar en Play): crear la unidad real de Oraculos y usarla
- * en produccion (condicionando por una variable de build), y darle a la app su
- * propio androidAppId de AdMob en app.json (hoy reusa el de Runas/Tarot).
+ * TODO (ANTES DE PUBLICAR EN PLAY), y son DOS cosas:
+ *
+ *   1. Crear la unidad recompensada real de Oraculos y usarla en produccion,
+ *      condicionada por una variable de build.
+ *   2. Darle a la app su propio androidAppId de AdMob en `app.json`: el que hay
+ *      hoy es EL DE TAROT.
+ *
+ * Ninguna de las dos avisa cuando falla. Publicado asi, el video se ve, la gema
+ * se suma y todo "anda" — pero son anuncios de prueba, o sea cero ingresos, y
+ * los eventos se le imputan a otra app.
  */
 export const AD_UNIT_ID_RECOMPENSADO = modulo?.TestIds.REWARDED ?? '';
 
