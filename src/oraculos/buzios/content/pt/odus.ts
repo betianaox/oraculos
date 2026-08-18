@@ -418,9 +418,9 @@ const odu16: Odu = {
   palabrasClave: ['plenitude', 'excesso', 'abundância', 'medida'],
   significado: {
     general:
-      'Todos os búzios falam: é o signo da plenitude e da abundância total, ' +
+      'Todos os buzios falam: é o signo da plenitude e da abundância total, ' +
       'mas também do excesso — de tudo demais. Traz a sabedoria completa do ' +
-      'búzio e, ao mesmo tempo, adverte que o excesso transborda. É tempo de medida em ' +
+      'buzio e, ao mesmo tempo, adverte que o excesso transborda. É tempo de medida em ' +
       'meio à abundância e de humildade diante do que se recebe.',
     amor:
       'Momento intenso e pleno, com risco de excesso ou descontrole. A medida e a ' +

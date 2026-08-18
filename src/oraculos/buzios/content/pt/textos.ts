@@ -5,7 +5,7 @@ import type { TextosBuzios } from '../paquete';
 // contenido.ts, donde no habia forma de traducirlos.
 export const TEXTOS_PT: TextosBuzios = {
   seccionOdus: 'Os odus',
-  cauries: 'Búzios',
+  cauries: 'Buzios',
   abiertos: (n) => `${n} abertos`,
   claves: 'Chaves',
   elMomento: 'O momento',
