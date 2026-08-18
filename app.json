@@ -49,6 +49,14 @@
         }
       ]
     ],
-    "extra": {}
+    "extra": {
+      "expo-navigation-bar": {
+        "enforceContrast": false,
+        "style": "light"
+      },
+      "eas": {
+        "projectId": "f88c2cfe-d469-49a7-a78e-b2eef5e7f0ac"
+      }
+    }
   }
 }
