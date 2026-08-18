@@ -28,16 +28,15 @@ export const adsDisponible = modulo !== null;
  * poder probar en dispositivos reales sin arriesgar la cuenta de AdMob por
  * trafico invalido (tocar nuestros propios anuncios).
  *
- * TODO (ANTES DE PUBLICAR EN PLAY), y son DOS cosas:
+ * TODO (ANTES DE PUBLICAR EN PLAY): crear la unidad recompensada real de
+ * Oraculos y usarla en produccion, condicionada por una variable de build.
  *
- *   1. Crear la unidad recompensada real de Oraculos y usarla en produccion,
- *      condicionada por una variable de build.
- *   2. Darle a la app su propio androidAppId de AdMob en `app.json`: el que hay
- *      hoy es EL DE TAROT.
+ * Es lo unico que falta de AdMob. El `androidAppId` del plugin en `app.json` YA
+ * ES EL DE ORACULOS y no hay que tocarlo — el comentario que estaba aca decia
+ * que se reusaba el de otra app, y era falso.
  *
- * Ninguna de las dos avisa cuando falla. Publicado asi, el video se ve, la gema
- * se suma y todo "anda" — pero son anuncios de prueba, o sea cero ingresos, y
- * los eventos se le imputan a otra app.
+ * Y no avisa cuando falla: publicado asi el video se ve, la gema se suma y todo
+ * "anda", pero son anuncios de prueba y no generan un peso.
  */
 export const AD_UNIT_ID_RECOMPENSADO = modulo?.TestIds.REWARDED ?? '';
 
