@@ -59,6 +59,7 @@ export function TiradaScreen({ navigation, route }: Props) {
   const [tirada] = useState<PiezaTirada[]>(() => spec.tirar(mazo));
   const [area, setArea] = useState<{ w: number; h: number } | null>(null);
   const gastarGemas = useApp((s) => s.gastarGemas);
+  const registrarPregunta = useApp((s) => s.registrarPregunta);
   const idioma = useApp((s) => s.idioma);
 
   const ratio = tirada[0]?.pieza.ratio ?? RATIO_PIEZA;
@@ -97,6 +98,9 @@ export function TiradaScreen({ navigation, route }: Props) {
 
   useEffect(() => {
     gastarGemas(COSTO);
+    // Una tirada ES una pregunta. Este contador solo sube y no lo mira nadie
+    // mas que la valoracion (ver `shell/review.ts`).
+    registrarPregunta();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

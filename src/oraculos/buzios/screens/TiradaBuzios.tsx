@@ -103,6 +103,7 @@ export function TiradaBuziosScreen({ navigation, route }: Props) {
   const acento = oraculo?.acento ?? colores.cromo;
   const nombre = oraculo ? t(oraculo.nombreKey) : oraculoId;
   const gastarGemas = useApp((s) => s.gastarGemas);
+  const registrarPregunta = useApp((s) => s.registrarPregunta);
 
   const caida = useMemo(() => tirarBuzios(), []);
   const parrafos = useMemo(
@@ -123,6 +124,9 @@ export function TiradaBuziosScreen({ navigation, route }: Props) {
 
   useEffect(() => {
     gastarGemas(COSTO);
+    // Una tirada ES una pregunta. Este contador solo sube y no lo mira nadie
+    // mas que la valoracion (ver `shell/review.ts`).
+    registrarPregunta();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

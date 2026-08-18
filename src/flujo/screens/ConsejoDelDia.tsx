@@ -121,7 +121,12 @@ export function ConsejoDelDiaScreen({ navigation, route }: Props) {
 
         {!cargando && modo === 'elegir' && !elegida && (
           <View style={estilos.centro}>
-            <Text style={estilos.prompt}>{t('consejo.elegir')}</Text>
+            <Text style={estilos.prompt}>
+              {/* Cada oraculo nombra su pieza: carta en los de mazo, runa en
+                  Runas. Con el articulo adentro, para que el genero lo ponga la
+                  traduccion y no la frase. */}
+              {t('consejo.elegir', { pieza: t(`oraculos.${oraculoId}.pieza`) })}
+            </Text>
             <View style={estilos.filaBacks}>
               {ofrecidas.map((pieza) => (
                 <Pressable key={pieza.id} onPress={() => elegir(pieza)}>

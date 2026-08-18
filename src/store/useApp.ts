@@ -66,6 +66,25 @@ interface EstadoApp {
    */
   mejorPuntaje: Record<string, number>;
 
+  /**
+   * Cuantas preguntas se hicieron EN TOTAL, desde siempre. Solo sube.
+   *
+   * No sirven las gemas para esto: se gastan y se rellenan solas cada dia, asi
+   * que el numero de gemas no dice nada sobre cuanto se uso la app. Esto es lo
+   * unico que lo dice, y existe para una sola cosa: saber cuando pedir la
+   * valoracion (ver `shell/review.ts`).
+   */
+  preguntas: number;
+  /** En que numero de preguntas se pidio la valoracion por ultima vez. */
+  ultimoPedidoReview: number;
+  /**
+   * Si ya se mostro el saludo de la primera vez.
+   *
+   * Se escribe al CERRARLO, no al abrirlo: si la app muere con el saludo
+   * abierto, la proxima vez se vuelve a ofrecer en lugar de perderse.
+   */
+  saludoVisto: boolean;
+
   setIdioma: (idioma: CodigoIdioma) => void;
   sumarGemas: (n: number) => void;
   gastarGemas: (n: number) => boolean;
@@ -78,6 +97,13 @@ interface EstadoApp {
   desbloquearWiki: (oraculoId: string, seccionId?: string) => void;
   /** Guarda la racha si supera la mejor. Devuelve true si hubo record nuevo. */
   registrarPuntaje: (oraculoId: string, puntaje: number) => boolean;
+  /** Suma una pregunta al total y devuelve el numero nuevo. */
+  registrarPregunta: () => number;
+  /** Anota que ya se pidio la valoracion en este numero de preguntas. */
+  marcarPedidoReview: (n: number) => void;
+  marcarSaludoVisto: () => void;
+  /** Solo para `__DEV__`: vuelve a mostrar el saludo de la primera vez. */
+  reiniciarSaludo: () => void;
 }
 
 /** Clave de desbloqueo de un bloque de la wiki. */
@@ -106,6 +132,9 @@ export const useApp = create<EstadoApp>()(
       ultimoDia: '',
       wikiDesbloqueada: {},
       mejorPuntaje: {},
+      preguntas: 0,
+      ultimoPedidoReview: 0,
+      saludoVisto: false,
 
       setIdioma: (idioma) => set({ idioma }),
       sumarGemas: (n) => set({ gemas: get().gemas + n }),
@@ -141,6 +170,14 @@ export const useApp = create<EstadoApp>()(
         set({ mejorPuntaje: { ...get().mejorPuntaje, [oraculoId]: puntaje } });
         return true;
       },
+      registrarPregunta: () => {
+        const n = get().preguntas + 1;
+        set({ preguntas: n });
+        return n;
+      },
+      marcarPedidoReview: (n) => set({ ultimoPedidoReview: n }),
+      marcarSaludoVisto: () => set({ saludoVisto: true }),
+      reiniciarSaludo: () => set({ saludoVisto: false }),
     }),
     {
       name: 'oraculos-app',
@@ -151,6 +188,9 @@ export const useApp = create<EstadoApp>()(
         ultimoDia: s.ultimoDia,
         wikiDesbloqueada: s.wikiDesbloqueada,
         mejorPuntaje: s.mejorPuntaje,
+        preguntas: s.preguntas,
+        ultimoPedidoReview: s.ultimoPedidoReview,
+        saludoVisto: s.saludoVisto,
       }),
       onRehydrateStorage: () => (state) => {
         // Al terminar de leer del disco: marca hidratado y rellena gemas del dia.

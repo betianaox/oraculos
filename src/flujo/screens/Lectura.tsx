@@ -12,6 +12,7 @@ import { fuente } from '@/shell/theme/fuentes';
 import { BotonVoz } from '../components/BotonVoz';
 import { SelectorFlujo } from '../components/SelectorFlujo';
 import { RUTAS_LECTURA } from '../voz';
+import { usePedirReview } from '@/shell/usePedirReview';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Lectura'>;
 
@@ -27,6 +28,7 @@ export function LecturaScreen({ navigation, route }: Props) {
   const oraculo = oraculoPorId(oraculoId);
   const acento = oraculo?.acento ?? colores.cromo;
   const nombre = oraculo ? t(oraculo.nombreKey) : oraculoId;
+  const pedirReview = usePedirReview();
 
   return (
     <View style={estilos.contenedor}>
@@ -39,7 +41,12 @@ export function LecturaScreen({ navigation, route }: Props) {
 
       <Header
         accion="cerrar"
-        onAccion={() => navigation.popTo('Oraculo', { oraculoId, seccion: 'pregunta' })}
+        onAccion={() => {
+          navigation.popTo('Oraculo', { oraculoId, seccion: 'pregunta' });
+          // AL SALIR, no al entrar: la persona ya leyo lo que vino a leer.
+          // Si toca el hito, aca no pisa nada (ver `usePedirReview`).
+          void pedirReview();
+        }}
         titulo={nombre}
       />
 

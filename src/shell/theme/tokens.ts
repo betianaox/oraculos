@@ -5,6 +5,29 @@
  * El color de cada seccion lo aporta el `acento` de cada oraculo (ver
  * src/oraculos/<x>/modulo.ts). La paleta visual "de verdad" la define Betiana
  * arriba de esta base; aca solo vive el esqueleto.
+ *
+ * ───────────────────────────────────────────────────────────────────────────
+ * ORACULOS ES OSCURO, Y ESO ESTA DECIDIDO. No es un pendiente.
+ * ───────────────────────────────────────────────────────────────────────────
+ * Vigia, la app hermana, sumo un tema claro y funciono. Aca se evaluo el
+ * 18/08/2026 y se descarto, con motivo:
+ *
+ * 1. EL LOOK NO VIVE EN ESTOS TOKENS. Hay 105 colores escritos a mano fuera de
+ *    este archivo, y sobre todo 28 MB de arte —un domo y un fondo por oraculo,
+ *    doce piezas— con la oscuridad pintada adentro. El Header y el Footer son
+ *    SVG con degradados metalicos y glow cian dibujados contra un campo oscuro.
+ *    Un tema claro no seria cambiar tokens: seria rehacer arte para seis
+ *    oraculos.
+ *
+ * 2. NO RESUELVE NINGUN PROBLEMA. En Vigia el tema claro atendia algo real: una
+ *    cancha a pleno sol al mediodia. Aca no existe ese caso. Es un quiosco de
+ *    domos iluminados en la oscuridad, y la oscuridad ES el producto — la
+ *    diferencia de fondo con Vigia es que aquella es una app de DATOS y esta es
+ *    una app VISUAL.
+ *
+ * Un Oraculos claro no seria la misma app peor iluminada: seria otra app. Si
+ * alguien lo reabre "porque Vigia lo tiene", la respuesta esta en estos dos
+ * puntos.
  */
 
 export const colores = {

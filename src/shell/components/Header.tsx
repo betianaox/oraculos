@@ -6,10 +6,18 @@ import { ContadorGemas } from './ContadorGemas';
 import { colores, espaciado } from '../theme/tokens';
 import { fuente } from '../theme/fuentes';
 
-type AccionHeader = 'config' | 'cerrar';
+type AccionHeader = 'ayuda' | 'cerrar';
 
 interface Props {
-  /** Que muestra el boton de la derecha: engranaje (inicio) o X (oraculo). */
+  /**
+   * Que muestra el boton de la derecha: el signo de pregunta (inicio) o la X
+   * (adentro de un oraculo).
+   *
+   * Era un engranaje que abria Ajustes, donde solo se elegia el idioma. El
+   * engranaje promete configuracion y la app casi no tiene: lo que la gente
+   * busca ahi arriba cuando no entiende algo es ayuda, no opciones. Ahora es un
+   * `?` y detras vive todo junto (ver `screens/Ayuda.tsx`).
+   */
   accion: AccionHeader;
   onAccion: () => void;
   /** Titulo centrado opcional (se muestra en Cinzel). */
@@ -45,7 +53,7 @@ function armarPaths(W: number, borde: number, fondo: number) {
 
 /**
  * Header comun a toda la app: gemas a la izquierda, accion a la derecha
- * (engranaje en inicio, X en un oraculo) y el titulo centrado en la plataforma.
+ * (el `?` en inicio, X en un oraculo) y el titulo centrado en la plataforma.
  * Es el footer espejado (plataforma que baja), con la misma chapa metalica
  * semitransparente y borde con glow cian -> celeste -> dorado.
  */
@@ -91,9 +99,13 @@ export function Header({ accion, onAccion, titulo }: Props) {
           hitSlop={10}
           style={({ pressed }) => [estilos.boton, pressed && estilos.botonPresionado]}
           accessibilityRole="button"
-          accessibilityLabel={accion === 'config' ? 'Ajustes' : 'Cerrar'}
+          accessibilityLabel={accion === 'ayuda' ? 'Ayuda' : 'Cerrar'}
         >
-          <Ionicons name={accion === 'config' ? 'settings-outline' : 'close'} size={22} color={colores.texto} />
+          <Ionicons
+            name={accion === 'ayuda' ? 'help-circle-outline' : 'close'}
+            size={accion === 'ayuda' ? 24 : 22}
+            color={colores.texto}
+          />
         </Pressable>
       </View>
 

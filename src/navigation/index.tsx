@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import type { RootStackParamList } from './tipos';
 import { InicioScreen } from '@/screens/Inicio';
-import { AjustesScreen } from '@/screens/Ajustes';
+import { AyudaScreen } from '@/screens/Ayuda';
 import { OraculoScreen } from '@/screens/Oraculo';
 import { TiradaScreen } from '@/flujo/screens/Tirada';
 import { TiradaIchingScreen } from '@/oraculos/iching/screens/TiradaIching';
@@ -28,8 +28,8 @@ export function Navegacion() {
       <Stack.Screen name="ConsejoDelDia" component={ConsejoDelDiaScreen} />
       <Stack.Screen name="Reto" component={RetoScreen} />
       <Stack.Screen
-        name="Ajustes"
-        component={AjustesScreen}
+        name="Ayuda"
+        component={AyudaScreen}
         options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
       />
     </Stack.Navigator>
