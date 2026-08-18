@@ -138,6 +138,34 @@ export function AyudaScreen({ navigation }: Props) {
           ))}
         </View>
 
+        {/**
+         * ── Las gemas ────────────────────────────────────────────────────────
+         *
+         * BLOQUE PROPIO Y NO UN SEXTO ITEM DE LA LISTA DE ARRIBA. Esa lista se
+         * titula "en cada uno puedes", y las gemas no son algo que se haga
+         * adentro de un oraculo: son la economia de la app entera, la misma para
+         * los seis. Meterlas ahi obligaria a cambiar el titulo por uno mas vago.
+         *
+         * Y es lo unico de la app que la persona necesita que le expliquen. Todo
+         * lo demas se descubre tocando; el contador del header, en cambio, baja
+         * solo y sin decir por que ni cuando vuelve a subir — que es exactamente
+         * el momento en que alguien piensa que la app se rompio, o que hay que
+         * pagar.
+         */}
+        <Text style={[estilos.rotulo, estilos.rotuloSuelto]}>{t('ayuda.gemasTitulo')}</Text>
+        <View style={[estilos.grupo, estilos.aviso, estilos.gemas]}>
+          <Ionicons
+            name="diamond-outline"
+            size={20}
+            color={colores.gema}
+            style={[estilos.icono, estilos.iconoGema]}
+          />
+          <View style={estilos.filaTexto}>
+            <Text style={estilos.filaTitulo}>{t('ayuda.gemas')}</Text>
+            <Text style={estilos.filaSub}>{t('ayuda.gemasVideo')}</Text>
+          </View>
+        </View>
+
         {/* ── La advertencia ──────────────────────────────────────────────── */}
         {/**
          * NO ES LETRA CHICA Y NO VA AL FINAL.
@@ -372,6 +400,16 @@ const estilos = StyleSheet.create({
   aviso: {
     padding: espaciado.lg,
   },
+  /**
+   * El diamante al costado. La fila se alinea arriba —`flex-start`— porque el
+   * texto tiene dos parrafos y centrarlo dejaria el icono flotando en el medio;
+   * el `marginTop` de abajo es lo que lo baja hasta el renglon del titulo.
+   */
+  gemas: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: espaciado.md,
+  },
   avisoTexto: {
     color: colores.texto,
     fontSize: 14.5,
@@ -394,6 +432,18 @@ const estilos = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+  },
+  /**
+   * Baja el diamante. Sin esto quedaba pegado al tope de la caja de texto, que
+   * arranca bastante mas arriba que las letras — incluye el espacio de los
+   * acentos y las colas— y el ojo alinea con el trazo, no con la caja.
+   *
+   * El numero salio de mirarlo, no de una cuenta: la geometria daba 5 y a ojo
+   * seguia alto, porque el titulo ocupa dos renglones y el icono tiene que
+   * pesar contra el bloque entero, no contra la primera linea.
+   */
+  iconoGema: {
+    marginTop: 13,
   },
   dev: {
     marginTop: espaciado.md,
