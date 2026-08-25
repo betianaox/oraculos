@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -56,10 +56,16 @@ export default function App() {
   const hidratado = useApp((s) => s.hidratado);
   const listo = fuentesListas && hidratado;
 
-  useEffect(() => {
-    if (listo) SplashScreen.hideAsync().catch(() => {});
-  }, [listo]);
-
+  // ─────────────────────────────────────────────────────────────────────────
+  // EL SPLASH SE SACA EN onLayout, Y EN NINGUN OTRO LADO
+  // ─────────────────────────────────────────────────────────────────────────
+  // Habia tambien un useEffect que lo sacaba, y ese sobraba de la peor manera:
+  // un efecto corre cuando React termino de aplicar los cambios, que es ANTES
+  // de que Android haya pintado el primer cuadro. Sacando el splash ahi queda
+  // un instante sin splash y sin app todavia dibujada — el destello.
+  //
+  // onLayout avisa cuando la vista raiz ya esta medida y ubicada, o sea cuando
+  // hay algo real abajo. Es el unico momento en que sacarlo no deja hueco.
   const onLayout = useCallback(() => {
     if (listo) SplashScreen.hideAsync().catch(() => {});
   }, [listo]);
