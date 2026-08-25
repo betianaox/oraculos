@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { Image, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useT } from '@/i18n';
@@ -92,6 +93,10 @@ export function Bienvenida({
               style={({ pressed }) => [estilos.boton, estilos.principal, pressed && estilos.presionado]}
               accessibilityRole="button"
             >
+              {/* EL MISMO ICONO QUE EL BOTON DEL HEADER. El saludo dice donde esta la
+                  ayuda; mostrando el icono se la presenta en vez de contarla, y despues
+                  se reconoce arriba a la derecha sin tener que buscarla. */}
+              <Ionicons name="help-circle-outline" size={23} color={colores.fondo} />
               <Text style={estilos.principalTexto}>{t('bienvenida.ayuda')}</Text>
             </Pressable>
           </View>
@@ -169,6 +174,8 @@ const estilos = StyleSheet.create({
   },
   boton: {
     flex: 1,
+    flexDirection: 'row',
+    gap: espaciado.xs,
     height: 48,
     alignItems: 'center',
     justifyContent: 'center',

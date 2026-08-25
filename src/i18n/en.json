@@ -44,7 +44,9 @@
     "escuchar": "Listen",
     "detener": "Stop",
     "tirada": "Spread",
-    "lectura": "Reading"
+    "lectura": "Reading",
+    "compartir": "Share",
+    "tarjetaInvitacion": "Get the app on Google Play for the full reading"
   },
   "aprender": {
     "seccionCartas": "Cards",

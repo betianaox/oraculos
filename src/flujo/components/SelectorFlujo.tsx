@@ -74,7 +74,9 @@ function Segmento({
       ]}
     >
       <MaterialCommunityIcons name={icono} size={20} color={color} />
-      <Text style={[estilos.segTexto, { color }]}>{label}</Text>
+      <Text style={[estilos.segTexto, { color }]} numberOfLines={1}>
+        {label}
+      </Text>
     </Pressable>
   );
 }
@@ -83,7 +85,12 @@ const estilos = StyleSheet.create({
   pill: {
     flexDirection: 'row',
     alignItems: 'stretch',
-    height: 54,
+    height: 46,
+    // Con la letra grande del sistema las etiquetas crecen y empujarian los
+    // botones fuera de la pantalla. Encogiendose, se recorta el texto (feo pero
+    // legible) en vez de perderse un boton (que no se puede tocar).
+    flexShrink: 1,
+    minWidth: 0,
     borderRadius: radios.pill,
     borderWidth: 1.5,
     borderColor: 'rgba(175,210,255,0.6)',
@@ -97,8 +104,10 @@ const estilos = StyleSheet.create({
   seg: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: espaciado.sm,
-    paddingHorizontal: espaciado.lg,
+    gap: espaciado.xs,
+    paddingHorizontal: espaciado.md,
+    flexShrink: 1,
+    minWidth: 0,
   },
   segActivo: {
     backgroundColor: 'rgba(175,210,255,0.22)',

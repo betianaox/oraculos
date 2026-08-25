@@ -16,6 +16,8 @@ import { SelectorFlujo } from '@/flujo/components/SelectorFlujo';
 import { CartaAmpliable } from '@/flujo/components/CartaAmpliable';
 import type { Pieza } from '@/flujo/pieza';
 import { RUTAS_LECTURA } from '@/flujo/voz';
+import { guardarCaida } from '@/flujo/caida';
+import { useCompartirLectura } from '@/flujo/components/useCompartirLectura';
 import { tirarHexagrama, type CaraMoneda } from '../tirada';
 import type { Linea } from '../content/types';
 import { lecturaIching } from '../lectura';
@@ -126,6 +128,18 @@ export function TiradaIchingScreen({ navigation, route }: Props) {
     };
   }, [tirada, salto]);
 
+  // Se comparte el hexagrama y no las monedas: las monedas son el CAMINO y el
+  // hexagrama es el resultado, que es lo que se quiere mostrar. Es ademas el
+  // mismo dibujo que se ve al agrandar y en la wiki.
+  useEffect(() => {
+    guardarCaida(oraculoId, pregunta, ({ ancho, alto }) => {
+      const lado = Math.floor(Math.min(ancho, alto));
+      return <CartaHexagrama lineas={tirada.lineas} width={lado} height={lado} />;
+    });
+  }, [oraculoId, pregunta, tirada.lineas]);
+
+  const compartir = useCompartirLectura({ oraculo, pregunta, parrafos, disabled: !listo });
+
   const numPrim = numeroDeLineas(tirada.lineas);
   const hexPrim = HEXAGRAMAS_ES[numPrim];
   const monedaW = Math.min(88, Math.round(width * 0.22));
@@ -223,7 +237,10 @@ export function TiradaIchingScreen({ navigation, route }: Props) {
           lecturaDisabled={!listo}
         />
         <BotonVoz texto={textoVoz} rutas={RUTAS_LECTURA} disabled={!listo} />
+        {compartir.boton}
       </View>
+
+      {compartir.tarjeta}
     </View>
   );
 }
@@ -324,6 +341,6 @@ const estilos = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 18,
+    gap: 12,
   },
 });

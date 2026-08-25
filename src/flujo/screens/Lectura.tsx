@@ -10,6 +10,8 @@ import { colores, espaciado, radios } from '@/shell/theme/tokens';
 import { hexAlfa } from '@/shell/color';
 import { fuente } from '@/shell/theme/fuentes';
 import { BotonVoz } from '../components/BotonVoz';
+import { useCompartirLectura } from '../components/useCompartirLectura';
+import { caidaActual } from '../caida';
 import { SelectorFlujo } from '../components/SelectorFlujo';
 import { RUTAS_LECTURA } from '../voz';
 import { usePedirReview } from '@/shell/usePedirReview';
@@ -29,6 +31,12 @@ export function LecturaScreen({ navigation, route }: Props) {
   const acento = oraculo?.acento ?? colores.cromo;
   const nombre = oraculo ? t(oraculo.nombreKey) : oraculoId;
   const pedirReview = usePedirReview();
+
+  // Sin caida no hay nada que mostrar en la tarjeta mas que texto, y una foto
+  // de texto no la comparte nadie. Pasa si Android mato la app en segundo plano
+  // y restauro esta pantalla: ver `caida.ts`.
+  const sePuedeCompartir = caidaActual(oraculoId, pregunta) !== null;
+  const compartir = useCompartirLectura({ oraculo, pregunta, parrafos });
 
   return (
     <View style={estilos.contenedor}>
@@ -82,8 +90,11 @@ export function LecturaScreen({ navigation, route }: Props) {
             onLectura={() => {}}
           />
           <BotonVoz texto={parrafos.join('\n\n')} rutas={RUTAS_LECTURA} />
+          {sePuedeCompartir && compartir.boton}
         </View>
       </View>
+
+      {sePuedeCompartir && compartir.tarjeta}
     </View>
   );
 }
@@ -139,6 +150,6 @@ const estilos = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 18,
+    gap: 12,
   },
 });

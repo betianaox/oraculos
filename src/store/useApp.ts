@@ -192,12 +192,33 @@ export const useApp = create<EstadoApp>()(
         ultimoPedidoReview: s.ultimoPedidoReview,
         saludoVisto: s.saludoVisto,
       }),
-      onRehydrateStorage: () => (state) => {
-        // Al terminar de leer del disco: marca hidratado y rellena gemas del dia.
-        if (state) {
-          state.hidratado = true;
-          state.chequearDia();
-        }
+      onRehydrateStorage: () => (state, error) => {
+        // Al terminar de leer del disco: rellena las gemas del dia.
+        if (state) state.chequearDia();
+
+        // ─────────────────────────────────────────────────────────────────
+        // `setState` Y NO `state.hidratado = true`
+        // ─────────────────────────────────────────────────────────────────
+        // El `state` que llega aca ES el objeto de estado, asi que mutarlo
+        // "funciona" en el sentido de que el valor queda cambiado. Pero NO
+        // AVISA A NADIE: quien lo este mirando con un selector no se entera y
+        // no se vuelve a dibujar. Persist ya hizo su `set` (con la bandera
+        // todavia en false) antes de llamar a esto.
+        //
+        // Andaba de casualidad. El `chequearDia()` de arriba hace su propio
+        // `set` cuando cambia el dia, y ese aviso arrastraba la mutacion; pero
+        // si el dia es el mismo, `chequearDia` no toca nada y no avisa nadie.
+        // O sea: fallaba en la SEGUNDA apertura del dia y andaba en la primera,
+        // que es la peor forma de fallar que hay.
+        //
+        // Y desde que App.tsx espera esta bandera para dibujar, ese caso ya no
+        // seria un detalle: seria la app en el splash para siempre.
+        //
+        // Se levanta igual si la lectura fallo (ahi no llega `state`): se
+        // arranca con los valores por defecto, que es lo mismo que le pasa a
+        // quien abre la app por primera vez. Quedarse trabado es peor.
+        void error;
+        useApp.setState({ hidratado: true });
       },
     }
   )

@@ -14,6 +14,7 @@ import * as SystemUI from 'expo-system-ui';
 import { Navegacion } from '@/navigation';
 import type { RootStackParamList } from '@/navigation/tipos';
 import { useVoz } from '@/flujo/voz';
+import { useApp } from '@/store/useApp';
 import { mapaFuentes } from '@/shell/theme/fuentes';
 import { colores } from '@/shell/theme/tokens';
 
@@ -45,17 +46,27 @@ export default function App() {
   // useFonts({}) resuelve enseguida y la app corre con la fuente del sistema.
   const [fuentesListas] = useFonts(mapaFuentes);
 
+  // NO ALCANZA CON LAS FUENTES. El idioma arranca en el del dispositivo y recien
+  // al leer el disco aparece el que la persona eligio (ver useApp). Si se dibuja
+  // antes, quien tiene el telefono en espanol pero eligio ingles ve un parpadeo:
+  // la app aparece en espanol y se da vuelta sola un instante despues.
+  //
+  // Esperando las dos cosas, el splash tapa ese momento y la primera pantalla
+  // que se ve ya esta en el idioma correcto.
+  const hidratado = useApp((s) => s.hidratado);
+  const listo = fuentesListas && hidratado;
+
   useEffect(() => {
-    if (fuentesListas) SplashScreen.hideAsync().catch(() => {});
-  }, [fuentesListas]);
+    if (listo) SplashScreen.hideAsync().catch(() => {});
+  }, [listo]);
 
   const onLayout = useCallback(() => {
-    if (fuentesListas) SplashScreen.hideAsync().catch(() => {});
-  }, [fuentesListas]);
+    if (listo) SplashScreen.hideAsync().catch(() => {});
+  }, [listo]);
 
   const navRef = useNavigationContainerRef<RootStackParamList>();
 
-  if (!fuentesListas) return null;
+  if (!listo) return null;
 
   return (
     <SafeAreaProvider>

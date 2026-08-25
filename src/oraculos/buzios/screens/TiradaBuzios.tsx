@@ -22,77 +22,29 @@ import { hexAlfa } from '@/shell/color';
 import { BotonVoz } from '@/flujo/components/BotonVoz';
 import { SelectorFlujo } from '@/flujo/components/SelectorFlujo';
 import { RUTAS_LECTURA } from '@/flujo/voz';
+import { guardarCaida } from '@/flujo/caida';
+import { useCompartirLectura } from '@/flujo/components/useCompartirLectura';
 import { tirarBuzios } from '../tirada';
+import {
+  BASE_BUZIOS,
+  CANT,
+  TableroBuzios,
+  caraCauri,
+  medidasBuzios,
+  repartirPosiciones,
+  ubicarCauri,
+} from '../tablero';
 import { lecturaBuzios } from '../lectura';
 import { paqueteBuzios } from '../content/paquete';
 
-const BASE = require('../../../../assets/oraculos/buzios/caracoles/base.webp');
-const ABIERTO = require('../../../../assets/oraculos/buzios/caracoles/abierto.webp');
-const CERRADO = require('../../../../assets/oraculos/buzios/caracoles/cerrado.webp');
-
 const COSTO = 1;
-const CANT = 16; // dieciseis cauries
-const RATIO_CAURI = 444 / 317; // alto/ancho del arte del cauri
 const STAGGER_MS = 55; // desfase entre una caida y la siguiente
 const CAIDA_MS = 430; // duracion de la caida de cada cauri
 const PAUSA_MS = 1900; // pausa entre la primera y la segunda tirada
 
-const RADIO_FRAC = 0.4; // radio del circulo util dentro de la base (fraccion de S)
-const CAURI_W_FRAC = 0.11; // ancho del cauri (fraccion de S)
-const COLL_FRAC = 0.55; // radio de colision del cauri (fraccion de su ancho)
-const MAX_OVERLAP = 0.08; // superposicion maxima tolerada entre cauries (8%)
-
 type Props = NativeStackScreenProps<RootStackParamList, 'TiradaBuzios'>;
 
-type Pos = { x: number; y: number; rot: number; esc: number };
 type Fase = 'una' | 'entreacto' | 'dos' | 'listo';
-
-/**
- * Reparte los 16 cauries dentro del circulo evitando que se pisen (trabaja en
- * unidades normalizadas, el radio del circulo = 1). Devuelve solo posiciones y
- * rotacion; la cara (abierto/cerrado) la define la tirada.
- */
-function repartirPosiciones(): Pos[] {
-  const rNorm = (COLL_FRAC * CAURI_W_FRAC) / RADIO_FRAC;
-  const usable = 1 - rNorm;
-  const minDist = 2 * rNorm * (1 - MAX_OVERLAP);
-  const puestos: Pos[] = [];
-
-  for (let i = 0; i < CANT; i++) {
-    let elegido: { x: number; y: number } | null = null;
-    let mejorDist = -1;
-
-    for (let intento = 0; intento < 50; intento++) {
-      const r = usable * Math.sqrt(Math.random());
-      const a = Math.random() * Math.PI * 2;
-      const px = Math.cos(a) * r;
-      const py = Math.sin(a) * r;
-
-      let cercano = Infinity;
-      for (const q of puestos) {
-        const d = Math.hypot(px - q.x, py - q.y);
-        if (d < cercano) cercano = d;
-      }
-      if (cercano >= minDist) {
-        elegido = { x: px, y: py };
-        break;
-      }
-      if (cercano > mejorDist) {
-        mejorDist = cercano;
-        elegido = { x: px, y: py };
-      }
-    }
-
-    puestos.push({
-      x: elegido!.x,
-      y: elegido!.y,
-      rot: Math.floor(Math.random() * 360),
-      // Escala minima al azar (±8%) para que no se vean todos identicos.
-      esc: 0.92 + Math.random() * 0.16,
-    });
-  }
-  return puestos;
-}
 
 export function TiradaBuziosScreen({ navigation, route }: Props) {
   const { oraculoId, pregunta, tema, analisis } = route.params;
@@ -129,6 +81,16 @@ export function TiradaBuziosScreen({ navigation, route }: Props) {
     registrarPregunta();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // La caida que se comparte es la SEGUNDA, que es la que queda a la vista: la
+  // primera ya fue reemplazada en pantalla cuando se puede compartir.
+  useEffect(() => {
+    guardarCaida(oraculoId, pregunta, ({ ancho, alto }) => (
+      <TableroBuzios S={Math.floor(Math.min(ancho, alto))} pos={pos2} caras={caida.caras2} />
+    ));
+  }, [oraculoId, pregunta, pos2, caida.caras2]);
+
+  const compartir = useCompartirLectura({ oraculo, pregunta, parrafos, disabled: !listo });
 
   // Arranca la doble caida recien cuando ya se midio el area.
   useEffect(() => {
@@ -172,9 +134,7 @@ export function TiradaBuziosScreen({ navigation, route }: Props) {
     };
   }, [S, anims]);
 
-  const radioColoca = S * RADIO_FRAC;
-  const cauriW = Math.max(16, Math.round(S * CAURI_W_FRAC));
-  const cauriH = cauriW * RATIO_CAURI;
+  const { cauriW, cauriH } = medidasBuzios(S);
 
   const pos = mostrando === 1 ? pos1 : pos2;
   const caras = mostrando === 1 ? caida.caras1 : caida.caras2;
@@ -215,21 +175,16 @@ export function TiradaBuziosScreen({ navigation, route }: Props) {
       <View style={estilos.cuerpo} onLayout={onArea}>
         {S > 0 && (
           <View style={{ width: S, height: S }}>
-            <Image source={BASE} style={{ width: S, height: S }} resizeMode="contain" />
+            <Image source={BASE_BUZIOS} style={{ width: S, height: S }} resizeMode="contain" />
             {pos.map((p, i) => {
-              const w = cauriW * p.esc;
-              const h = cauriH * p.esc;
               return (
                 <Animated.Image
                   key={`${mostrando}-${i}`}
-                  source={caras[i] ? ABIERTO : CERRADO}
+                  source={caraCauri(caras[i])}
                   resizeMode="contain"
                   style={{
                     position: 'absolute',
-                    left: S / 2 + p.x * radioColoca - w / 2,
-                    top: S / 2 + p.y * radioColoca - h / 2,
-                    width: w,
-                    height: h,
+                    ...ubicarCauri(p, S),
                     opacity: anims[i].interpolate({ inputRange: [0, 0.3, 1], outputRange: [0, 1, 1] }),
                     transform: [
                       { translateY: anims[i].interpolate({ inputRange: [0, 1], outputRange: [-S * 0.45, 0] }) },
@@ -253,7 +208,10 @@ export function TiradaBuziosScreen({ navigation, route }: Props) {
           lecturaDisabled={!listo}
         />
         <BotonVoz texto={parrafos.join('\n\n')} rutas={RUTAS_LECTURA} disabled={!listo} />
+        {compartir.boton}
       </View>
+
+      {compartir.tarjeta}
     </View>
   );
 }
@@ -279,6 +237,6 @@ const estilos = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 18,
+    gap: 12,
   },
 });
