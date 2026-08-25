@@ -9,14 +9,29 @@
 // ATTENZIONE: i frammenti sono frasi brevi di forma variabile. Questi modelli
 // usano i due punti o la virgola per accoglierle tutte senza rompersi.
 
-/** Chiude il primo paragrafo: la situazione, con le prime due rune. */
-export const situacion: string[] = [
-  'Sotto si muove qualcosa: {frag1}. E accanto a questo, {frag2}.',
-  'Ciò che circonda la questione: {frag1}. A sostenere tutto, {frag2}.',
-  'Per prima cosa affiora questo: {frag1}. E dietro, {frag2}.',
-  'Ci sono due cose in gioco: {frag1}, e anche {frag2}.',
-  'Quello che si vede subito: {frag1}. Quello che pulsa sotto: {frag2}.',
-];
+/**
+ * Chiude il primo paragrafo: la situazione, con le prime due rune.
+ *
+ * `una` serve quando una delle due rune non ha nulla di NUOVO da aggiungere
+ * (il suo pool è già stato usato). Prima in quel caso il testo si ripeteva —
+ * da lì le frasi duplicate segnalate dai tester; ora si dice una volta sola.
+ */
+export const situacion = {
+  dos: [
+    'Sotto si muove qualcosa: {frag1}. E accanto a questo, {frag2}.',
+    'Ciò che circonda la questione: {frag1}. A sostenere tutto, {frag2}.',
+    'Per prima cosa affiora questo: {frag1}. E dietro, {frag2}.',
+    'Ci sono due cose in gioco: {frag1}, e anche {frag2}.',
+    'Quello che si vede subito: {frag1}. Quello che pulsa sotto: {frag2}.',
+    'Da un lato appare {frag1}, e proprio al centro, {frag2}.',
+  ],
+  una: [
+    'Al centro di tutto c\'è qualcosa di chiaro: {frag}.',
+    'Ciò che regge la scena è {frag}.',
+    'Proprio al centro pulsa questo: {frag}.',
+    'Se c\'è una cosa sola da tenere, è questa: {frag}.',
+  ],
+};
 
 /**
  * Secondo paragrafo: la terza runa, l'unica che guarda avanti. Con una sfumatura

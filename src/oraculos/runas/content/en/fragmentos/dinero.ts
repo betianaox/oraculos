@@ -8,7 +8,7 @@ export const dinero: FragmentosDeTema = {
     normal: [
       'the prosperity that comes when money is managed with care',
       'an inflow of money worth putting to good use',
-      'resources that yield more when arranged calmly',
+      'what you have, which goes twice as far once you sort it out calmly',
     ],
     invertida: [
       'the fear that it will not be enough, whether or not it truly is',
@@ -20,7 +20,7 @@ export const dinero: FragmentosDeTema = {
     normal: [
       'the strength to make a financial decision you had been putting off',
       'the push to commit to a carefully considered investment',
-      'the energy to finally sort out your finances',
+      'the energy to finally sort out the accounts',
     ],
     invertida: [
       'the wear of forcing a purchase that, deep down, does not convince you',
@@ -68,7 +68,7 @@ export const dinero: FragmentosDeTema = {
     normal: [
       'a creative idea to generate some extra income',
       'a different way to solve a money problem',
-      'the inspiration to reorganize your finances another way',
+      'the idea of handling the money another way',
     ],
     invertida: [
       'the lack of will to get down to sorting out the money matter',
@@ -217,7 +217,7 @@ export const dinero: FragmentosDeTema = {
     invertida: [
       'the fear of starting a new financial plan',
       'a financial start put off out of insecurity',
-      'the wish to sort out your finances without daring to yet',
+      'the wish to sort out the accounts without daring to yet',
     ],
   },
   ehwaz: {
@@ -264,7 +264,7 @@ export const dinero: FragmentosDeTema = {
     ],
     invertida: [
       'the impatience of wanting financial results ahead of time',
-      'the urge to speed up an income that still needs its process',
+      'the urge to rush money coming in that is not there yet',
       'the anxiety of not knowing how to wait for the right moment to invest',
     ],
   },

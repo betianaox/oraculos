@@ -2,6 +2,7 @@ import { obtenerContenido } from './content';
 import type { IdiomaConcreto } from './content/paquete';
 import type { Modo, Posicion, RunaId, Tema, Tono } from './content/types';
 import type { AnalisisPregunta } from '@/pregunta/tipos';
+import { sinEcos, tomarNuevo } from '@/flujo/sinRepetir';
 
 export interface RunaTirada {
   id: RunaId;
@@ -71,11 +72,15 @@ export function armarLectura(
   const aperturasDisponibles = porTono(poolAperturas, tono);
   const consejosDisponibles = porTono(poolConsejos, tono);
 
-  // Una variante por runa: cada una aporta a un solo lugar de la lectura, así
-  // que ya no hace falta elegir dos textos distintos para la misma runa.
-  const frags = runas.map((runa) =>
-    elegirAlAzar(fragmentosDelTema[runa.id][runa.posicion]),
-  ) as [string, string, string];
+  // Una variante por runa. Va por `tomarNuevo` —el mismo criterio que usa el
+  // motor de la cruz— porque dos runas distintas pueden caer en el mismo texto,
+  // y una oración repetida dentro de una lectura fue justo lo que reportaron
+  // los testers. `null` = esa runa no tiene nada nuevo que decir; entonces se
+  // acorta la frase en vez de repetirla.
+  const usados = new Set<string>();
+  const [f1, f2, f3] = runas.map((runa) =>
+    tomarNuevo(() => elegirAlAzar(fragmentosDelTema[runa.id][runa.posicion]), usados),
+  ) as [string | null, string | null, string | null];
 
   // P1: la apertura conecta con la pregunta y las dos primeras runas plantan
   // la situación. Sin nombrarlas.
@@ -89,24 +94,34 @@ export function armarLectura(
   const apertura = elegirAlAzar(
     porIntencion && porIntencion.length > 0 ? porIntencion : aperturasDisponibles,
   );
-  const situacion = elegirAlAzar(contenido.situacion)
-    .replace('{frag1}', frags[0])
-    .replace('{frag2}', frags[1]);
+  // Con las dos runas se planta la escena entera; con una sola, se dice esa.
+  let situacion = '';
+  if (f1 && f2) {
+    situacion = elegirAlAzar(contenido.situacion.dos)
+      .replace('{frag1}', f1)
+      .replace('{frag2}', f2);
+  } else if (f1 || f2) {
+    situacion = elegirAlAzar(contenido.situacion.una).replace('{frag}', (f1 ?? f2) as string);
+  }
   const parrafoIndividual = [apertura, situacion].filter((p) => p.length > 0).join(' ');
 
   // P2: el eco personal, la tercera runa mirando hacia adelante y el consejo.
   const eco = elegirEco(analisis, contenido.ecoTercero, contenido.ecoTiempo);
-  const cierre = elegirAlAzar(contenido.cierre).replace('{frag3}', frags[2]);
+  const cierre = f3 ? elegirAlAzar(contenido.cierre).replace('{frag3}', f3) : '';
   const consejo = elegirAlAzar(consejosDisponibles);
   const parrafoIntegrador = [eco, cierre, consejo]
     .filter((parte) => parte.length > 0)
     .join(' ');
 
+  // Red de seguridad: si dos bancos distintos —una apertura y un consejo, por
+  // ejemplo— terminaran diciendo lo mismo, la segunda vez se cae.
+  const [p1 = '', p2 = ''] = sinEcos([parrafoIndividual, parrafoIntegrador]);
+
   return {
     tema,
     modo,
     runas,
-    parrafoIndividual,
-    parrafoIntegrador,
+    parrafoIndividual: p1,
+    parrafoIntegrador: p2,
   };
 }

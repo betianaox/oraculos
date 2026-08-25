@@ -5,13 +5,13 @@ import type { FragmentosDeTema } from '../../types';
 export const trabajo: FragmentosDeTema = {
   fehu: {
     normal: [
-      'os recursos bem administrados como base de um bom resultado',
+      'o que você já tem, bem cuidado, como base de todo o resto',
       'uma oportunidade concreta que convém aproveitar agora',
       'o esforço que começa a se traduzir em algo tangível',
     ],
     invertida: [
       'o medo de não ter o suficiente para sustentar o que já foi conquistado',
-      'recursos mal distribuídos que geram tensão na equipe',
+      'uma divisão injusta que deixa a equipe tensa',
       'a insegurança de não saber se o esforço será reconhecido',
     ],
   },
@@ -113,7 +113,7 @@ export const trabajo: FragmentosDeTema = {
   },
   naudiz: {
     normal: [
-      'a perseverança diante de recursos ou tempo limitados',
+      'seguir firme mesmo faltando tempo e mãos',
       'o esforço sustentado num projeto que ainda não dá frutos',
       'a paciência necessária enquanto se consegue o que falta',
     ],
@@ -161,13 +161,13 @@ export const trabajo: FragmentosDeTema = {
   },
   perthu: {
     normal: [
-      'a confiança num processo seletivo ou resultado que não depende de você',
+      'confiar numa resposta que não depende de você',
       'a abertura para uma oportunidade inesperada',
       'o desconhecido de uma mudança de rumo profissional',
     ],
     invertida: [
       'a necessidade de controlar um resultado que não depende só de você',
-      'a ansiedade de não saber como um processo de trabalho vai terminar',
+      'a ansiedade de não saber como isso do trabalho vai terminar',
       'a dificuldade de esperar uma resposta sem se desesperar',
     ],
   },
@@ -258,12 +258,12 @@ export const trabajo: FragmentosDeTema = {
   ingwaz: {
     normal: [
       'um projeto que está se gestando e ainda precisa do seu tempo',
-      'um potencial profissional que convém deixar amadurecer antes de mostrar',
+      'algo seu que promete e ainda convém não mostrar',
       'uma ideia já plantada que vai dar frutos',
     ],
     invertida: [
       'a impaciência de querer resultados antes de o projeto estar pronto',
-      'a vontade de acelerar um processo seletivo que pede seu tempo',
+      'a vontade de apressar uma resposta que pede seu tempo',
       'a ansiedade de não saber esperar o momento certo para agir',
     ],
   },

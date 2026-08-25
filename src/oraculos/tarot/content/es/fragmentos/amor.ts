@@ -54,7 +54,7 @@ export const FRAGMENTOS_AMOR_ES: FragmentosDeTema = {
   },
   'mayor-04': {
     normal: [
-      'un vínculo estable, con estructura y compromiso',
+      'un vínculo firme, de los que se sostienen con el tiempo',
       'alguien firme y protector en el amor',
       'poner reglas claras que dan seguridad',
     ],

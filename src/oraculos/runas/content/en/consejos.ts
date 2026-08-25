@@ -9,12 +9,12 @@ export const consejos: Partial<Record<Tema, Record<Modo, Record<Tono, string[]>>
     abierta: {
       neutro: [
         'The advice is simple: pay attention to what you already know but have not dared to say.',
-        'Letting go helps more than trying to manage everything: let this find its own pace.',
+        'Letting go helps more than trying to hold it all: let this find its own pace.',
         'The balance between giving and receiving matters, whether or not there is a relationship yet.',
         'Before acting, take a moment to listen to what you truly feel.',
       ],
       preocupacion: [
-        'You do not have to solve it all today, it is enough not to lose yourself in the process.',
+        'You do not have to solve it all today, it is enough not to lose yourself along the way.',
         'Treat this with the same patience you would give someone you care about.',
         'Ease up on yourself: feeling doubt is not doing something wrong.',
       ],
@@ -47,7 +47,7 @@ export const consejos: Partial<Record<Tema, Record<Modo, Record<Tono, string[]>>
     abierta: {
       neutro: [
         'The advice is simple: pay attention to what you already know but have not taken on.',
-        'Letting go helps more than trying to manage everything: let the process keep its pace.',
+        'Letting go helps more than trying to hold it all: let this keep its pace.',
         'The balance between effort and rest matters, even if pressure says otherwise.',
         'Before acting, take a moment to think about what you truly need from work.',
       ],
@@ -85,7 +85,7 @@ export const consejos: Partial<Record<Tema, Record<Modo, Record<Tono, string[]>>
     abierta: {
       neutro: [
         'The advice is simple: pay attention to what you already know but have not resolved.',
-        'Letting go helps more than trying to manage everything: let the plan keep its pace.',
+        'Letting go helps more than trying to hold it all: let the plan keep its pace.',
         'The balance between saving and enjoying matters, even if worry says otherwise.',
         'Before acting, take a moment to think about what you truly need to resolve.',
       ],
@@ -104,7 +104,7 @@ export const consejos: Partial<Record<Tema, Record<Modo, Record<Tono, string[]>>
       neutro: [
         'It is worth taking a concrete step instead of turning it over in your head.',
         'Talk about the money matter that keeps getting postponed — it will not sort itself out.',
-        'Choose carefully where to place your resources now.',
+        'Choose carefully where to put the money now.',
         'Showing your real situation, without so much filter, may be exactly what is needed now.',
       ],
       preocupacion: [
@@ -123,7 +123,7 @@ export const consejos: Partial<Record<Tema, Record<Modo, Record<Tono, string[]>>
     abierta: {
       neutro: [
         'The advice is simple: pay attention to what you already know but have not taken on.',
-        'Letting go helps more than trying to manage everything: let this find its own pace.',
+        'Letting go helps more than trying to hold it all: let this find its own pace.',
         'Balance matters more than pressure, even when it is hard to remember.',
         'Before acting, take a moment to listen to what you truly need.',
       ],
@@ -134,7 +134,7 @@ export const consejos: Partial<Record<Tema, Record<Modo, Record<Tono, string[]>>
       ],
       impulso: [
         'Make room for that momentum, but rest it on a first concrete step.',
-        'Eagerness is a good sign, hold on to it without rushing the process.',
+        'Eagerness is a good sign, hold on to it without rushing what is still ripening.',
         'Use the energy to start with something small and real.',
       ],
     },

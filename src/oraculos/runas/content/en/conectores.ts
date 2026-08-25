@@ -9,14 +9,29 @@
 // NOTE: fragments are short clauses of varying shape. These templates lean on
 // colons and commas so any of them fits without breaking the sentence.
 
-/** Closes the first paragraph: the situation, from the first two runes. */
-export const situacion: string[] = [
-  'Something is moving underneath: {frag1}. And alongside it, {frag2}.',
-  'What surrounds the matter: {frag1}. Holding it up, {frag2}.',
-  'This shows up first: {frag1}. And behind it, {frag2}.',
-  'Two things are at play: {frag1}, and also {frag2}.',
-  'What shows on the surface: {frag1}. What beats underneath: {frag2}.',
-];
+/**
+ * Closes the first paragraph: the situation, from the first two runes.
+ *
+ * `una` covers the case where one of the two runes has nothing NEW to add (its
+ * pool is already spent). That case used to repeat the same text — the source
+ * of the duplicated sentences testers reported — and now says it just once.
+ */
+export const situacion = {
+  dos: [
+    'Something is moving underneath: {frag1}. And alongside it, {frag2}.',
+    'What surrounds the matter: {frag1}. Holding it up, {frag2}.',
+    'This shows up first: {frag1}. And behind it, {frag2}.',
+    'Two things are at play: {frag1}, and also {frag2}.',
+    'What shows on the surface: {frag1}. What beats underneath: {frag2}.',
+    'Off to one side there is {frag1}, and right in the middle, {frag2}.',
+  ],
+  una: [
+    'At the centre of it all there is something clear: {frag}.',
+    'What holds the whole scene up is {frag}.',
+    'Right in the middle, this is what beats: {frag}.',
+    'If there is one thing to take from this, it is {frag}.',
+  ],
+};
 
 /**
  * Second paragraph: the third rune, the only one that looks ahead. A hint of

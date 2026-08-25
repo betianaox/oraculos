@@ -1,6 +1,6 @@
 {
   "app": {
-    "nombre": "Oraculos"
+    "nombre": "Oráculos"
   },
   "home": {
     "gemas": "Gemas"
@@ -44,7 +44,9 @@
     "escuchar": "Ouvir",
     "detener": "Parar",
     "tirada": "Tiragem",
-    "lectura": "Leitura"
+    "lectura": "Leitura",
+    "compartir": "Compartilhar",
+    "tarjetaInvitacion": "Baixe o app no Google Play para a leitura completa"
   },
   "aprender": {
     "seccionCartas": "Cartas",
@@ -60,7 +62,7 @@
   },
   "consejo": {
     "titulo": "Conselho do dia",
-    "elegir": "Escolha uma carta para o conselho de hoje",
+    "elegir": "Escolha {pieza} para o conselho de hoje",
     "vuelveManana": "Volte amanhã para o próximo conselho"
   },
   "ajustes": {
@@ -70,27 +72,33 @@
   "oraculos": {
     "tarot": {
       "nombre": "Tarô",
-      "subtitulo": "O espelho dos arcanos"
+      "subtitulo": "O espelho dos arcanos",
+      "pieza": "uma carta"
     },
     "runas": {
       "nombre": "Runas",
-      "subtitulo": "A voz do antigo norte"
+      "subtitulo": "A voz do antigo norte",
+      "pieza": "uma runa"
     },
     "angeles": {
       "nombre": "Anjos",
-      "subtitulo": "Mensagens do alto"
+      "subtitulo": "Mensagens do alto",
+      "pieza": "uma carta"
     },
     "egipcio": {
       "nombre": "Egípcio",
-      "subtitulo": "O oráculo do Nilo"
+      "subtitulo": "O oráculo do Nilo",
+      "pieza": "uma carta"
     },
     "buzios": {
       "nombre": "Buzios",
-      "subtitulo": "O oráculo dos cauries"
+      "subtitulo": "O oráculo dos cauries",
+      "pieza": "um buzio"
     },
     "iching": {
       "nombre": "I Ching",
-      "subtitulo": "O livro das mutações"
+      "subtitulo": "O livro das mutações",
+      "pieza": "um hexagrama"
     }
   },
   "quiz": {
@@ -117,5 +125,37 @@
   "buzios": {
     "aFavor": "a favor",
     "desafio": "desafio"
+  },
+  "ayuda": {
+    "titulo": "Ajuda",
+    "oraculos": "Os oráculos",
+    "enCadaUno": "Em cada um você pode:",
+    "preguntar": "Perguntar",
+    "preguntarDetalle": "Escreva o que está te rondando e escolha o tema. A tiragem responde a isso.",
+    "consejo": "Ver o conselho do dia",
+    "consejoDetalle": "Um conselho por dia, sem gastar gemas.",
+    "aprender": "Aprender sobre o oráculo",
+    "aprenderDetalle": "O que cada peça significa, de onde vem e como interpretá-la.",
+    "reto": "Medir seu progresso",
+    "retoDetalle": "Um jogo curto para ver o quanto você avançou.",
+    "disclaimerTitulo": "Sobre",
+    "disclaimer": "Oráculos é um app de entretenimento e aprendizado: serve para conhecer os símbolos e seus significados. Não adivinha o futuro, não é magia e não responde sobre saúde. Nada do que você ler aqui substitui a consulta a um profissional.",
+    "ajustes": "Ajustes",
+    "valorar": "Avaliar o app",
+    "privacidad": "Política de privacidade",
+    "contacto": "Fale com a gente",
+    "version": "Oráculos {v}",
+    "verSaludo": "Ver a saudação de novo",
+    "escuchar": "Ler e ouvir",
+    "escucharDetalle": "A interpretação fica na tela e também pode ser ouvida em voz alta.",
+    "gemasTitulo": "As gemas",
+    "gemas": "Você tem 3 gemas por dia e cada consulta usa uma",
+    "gemasVideo": "Se acabarem, dá para ganhar mais uma assistindo a um vídeo curto."
+  },
+  "bienvenida": {
+    "titulo": "Bem-vindo ao Oráculos",
+    "texto": "Consulte, veja o conselho do dia e aprenda. Para saber como usar o app, abra a Ajuda.",
+    "ayuda": "Ajuda",
+    "cerrar": "Fechar"
   }
 }

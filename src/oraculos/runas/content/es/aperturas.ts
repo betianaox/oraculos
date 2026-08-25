@@ -1,17 +1,33 @@
 import type { Tema, Tono } from '../types';
 
-// Frase de apertura, antes de la oración combinada de las 3 runas.
-// A propósito neutra, sin metáforas ni contrastes: tiene que funcionar
-// como puente hacia la interpretación, no como un texto memorable — el
-// objetivo es que a la segunda o tercera consulta no se note el molde.
+// Frase de apertura, antes de la oración combinada de las 3 runas. Es el puente
+// entre la pregunta y la interpretación.
 //
 // Español neutro, sin voseo (igual que el resto del contenido de la app).
 //
-// "Abierta" sí nombra el plano (afectivo/laboral/económico) porque la
-// pregunta fue reflexiva y conviene situar el contexto. "Cerrada" no
-// necesita nombrar el tema — la pregunta ya fue concreta ("¿me conviene…?",
-// "¿va a…?") así que alcanza con referirse a "tu consulta", y por eso ese
-// pool es tema-agnóstico.
+// ── CÓMO SE ESCRIBE ACÁ ──────────────────────────────────────────────────
+// Se probó la app con gente y volvieron dos quejas: frases que se repetían y
+// lenguaje que no se entendía. Estas aperturas eran parte del segundo problema,
+// por un motivo concreto: hablaban DEL ORÁCULO y no de la persona. "Esta
+// combinación aporta una mirada sobre el plano profesional" es una ficha
+// técnica; quien pregunta si le renuevan el contrato no se reconoce ahí.
+//
+// Reglas, entonces:
+//
+// 1. HABLARLE A LA PERSONA, no describir la tirada. El sujeto de la frase es
+//    ella y su asunto, no "esta lectura" ni "estas runas". Palabras de la vida
+//    diaria. Prohibidas las de informe: plano (como en "el plano afectivo"),
+//    aspecto, tendencia, interpretación, situación económica, proceso.
+// 2. MÍSTICO SOBRIO. Una imagen por frase como mucho —piedra, fuego, camino,
+//    hilo— y nunca dos seguidas. Sin arcaísmos ni solemnidad.
+//
+// Las mismas reglas están en los bancos de Tarot, Ángeles y Egipcio, y en el
+// prompt del servidor (imagostack/lib/oraculo/prompt.ts), para que la lectura
+// de la IA y esta hablen igual.
+//
+// "Abierta" sí nombra el terreno (amor/trabajo/dinero) porque la pregunta fue
+// reflexiva y conviene situarla. "Cerrada" no lo necesita —la pregunta ya fue
+// concreta ("¿me conviene…?", "¿va a…?")— y por eso ese pool es tema-agnóstico.
 //
 // Cada pool está dividido por TONO (preocupacion/impulso/neutro). 'neutro'
 // es el fallback: si un tono quedara vacío, armarLectura cae a 'neutro'.
@@ -19,125 +35,125 @@ import type { Tema, Tono } from '../types';
 export const aperturasAbiertas: Partial<Record<Tema, Record<Tono, string[]>>> = {
   amor: {
     neutro: [
-      'Esta tirada muestra un aspecto del momento que está atravesando tu vida afectiva.',
-      'Las runas señalan una tendencia relacionada con el amor en este momento.',
-      'Esta combinación aporta una mirada sobre el plano sentimental.',
-      'La tirada refleja aspectos que pueden estar influyendo en tu vida amorosa.',
-      'Estas tres runas describen la energía que rodea al amor en este momento.',
-      'Esta lectura se enfoca en el estado actual de tu vida sentimental.',
-      'Las runas ofrecen una interpretación sobre el momento emocional que estás viviendo.',
-      'La lectura pone el foco en aquello que hoy tiene más peso en el amor.',
+      'Esto es lo que hay para mostrarte sobre el amor.',
+      'Vamos a mirar con calma cómo está eso que sientes.',
+      'Las piedras se detienen en lo que hoy pesa en el amor.',
+      'Miremos qué está pasando de verdad con ese vínculo.',
+      'Sobre lo que preguntas del corazón, esto es lo que se ve.',
+      'Hay algo del amor que hoy se deja ver mejor que otros días.',
+      'Esto es lo que aparece cuando preguntas por ese vínculo.',
+      'Lo que sientes también tiene su forma, y hoy se ve así.',
     ],
     preocupacion: [
-      'Esta tirada mira con calma eso que hoy te inquieta en el amor.',
-      'Las runas responden con serenidad a lo que vienes cargando en lo afectivo.',
-      'Esta lectura se detiene en lo que hoy te preocupa del plano sentimental.',
-      'Estas runas toman con cuidado lo que te tiene en duda en el amor.',
+      'Miremos con calma eso que hoy te inquieta en el amor.',
+      'Sé que lo del corazón te viene pesando. Vamos despacio.',
+      'Lo que te preocupa de ese vínculo se mira mejor sin apuro.',
+      'Estas piedras toman con cuidado la duda que traes en el amor.',
     ],
     impulso: [
-      'Esta tirada acompaña las ganas con las que estás mirando el amor.',
-      'Las runas leen el impulso que traes en lo afectivo.',
-      'Esta lectura toma el entusiasmo que hoy tienes en lo sentimental.',
-      'Estas runas recogen la energía con la que llegas al plano afectivo.',
+      'Traes ganas, y en el amor eso también se lee.',
+      'Vamos con ese impulso que traes en lo del corazón.',
+      'Con todo ese entusiasmo, hay algo que conviene mirar antes.',
+      'Esa energía con la que llegas al amor también dice lo suyo.',
     ],
   },
   trabajo: {
     neutro: [
-      'Esta tirada muestra un aspecto del momento que está atravesando tu vida laboral.',
-      'Las runas señalan una tendencia relacionada con el trabajo en este momento.',
-      'Esta combinación aporta una mirada sobre el plano profesional.',
-      'La tirada refleja aspectos que pueden estar influyendo en tu situación laboral.',
-      'Estas tres runas describen la energía que rodea tu trabajo en este momento.',
-      'Esta lectura se enfoca en el estado actual de tu vida profesional.',
-      'Las runas ofrecen una interpretación sobre el momento laboral que estás viviendo.',
-      'La lectura pone el foco en aquello que hoy tiene más peso en el trabajo.',
+      'Esto es lo que hay para mostrarte sobre el trabajo.',
+      'Vamos a mirar con calma cómo viene lo laboral.',
+      'Las piedras se detienen en lo que hoy pesa en tu trabajo.',
+      'Miremos qué está pasando de verdad con eso del trabajo.',
+      'Sobre lo que preguntas de tu camino laboral, esto es lo que se ve.',
+      'Hay algo del trabajo que hoy se deja ver mejor que otros días.',
+      'Esto es lo que aparece cuando preguntas por lo laboral.',
+      'Lo que traes del trabajo también tiene su forma, y hoy se ve así.',
     ],
     preocupacion: [
-      'Esta tirada mira con calma eso que hoy te inquieta en lo laboral.',
-      'Las runas responden con serenidad a lo que vienes cargando con el trabajo.',
-      'Esta lectura se detiene en lo que hoy te preocupa de tu situación laboral.',
-      'Estas runas toman con cuidado la tensión que traes del trabajo.',
+      'Miremos con calma eso que hoy te inquieta del trabajo.',
+      'Sé que lo laboral te viene pesando. Vamos despacio.',
+      'Lo que te preocupa del trabajo se mira mejor sin apuro.',
+      'Estas piedras toman con cuidado la tensión que traes del trabajo.',
     ],
     impulso: [
-      'Esta tirada acompaña las ganas con las que estás encarando el trabajo.',
-      'Las runas leen el impulso que traes en lo profesional.',
-      'Esta lectura toma el entusiasmo con el que miras tu presente laboral.',
-      'Estas runas recogen la energía con la que llegas a lo profesional.',
+      'Traes ganas, y en el trabajo eso también se lee.',
+      'Vamos con ese impulso que traes en lo laboral.',
+      'Con todo ese entusiasmo por lo que viene, hay algo que mirar antes.',
+      'Esa energía con la que encaras el trabajo también dice lo suyo.',
     ],
   },
   dinero: {
     neutro: [
-      'Esta tirada muestra un aspecto del momento que está atravesando tu situación económica.',
-      'Las runas señalan una tendencia relacionada con el dinero en este momento.',
-      'Esta combinación aporta una mirada sobre el plano financiero.',
-      'La tirada refleja aspectos que pueden estar influyendo en tu economía.',
-      'Estas tres runas describen la energía que rodea al dinero en este momento.',
-      'Esta lectura se enfoca en el estado actual de tus finanzas.',
-      'Las runas ofrecen una interpretación sobre el momento económico que estás viviendo.',
-      'La lectura pone el foco en aquello que hoy tiene más peso en lo económico.',
+      'Esto es lo que hay para mostrarte sobre el dinero.',
+      'Vamos a mirar con calma cómo vienen las cuentas.',
+      'Las piedras se detienen en lo que hoy pesa con la plata.',
+      'Miremos qué está pasando de verdad con eso del dinero.',
+      'Sobre lo que preguntas de lo material, esto es lo que se ve.',
+      'Hay algo del dinero que hoy se deja ver mejor que otros días.',
+      'Esto es lo que aparece cuando preguntas por lo económico.',
+      'Lo que traes de las cuentas también tiene su forma, y hoy se ve así.',
     ],
     preocupacion: [
-      'Esta tirada mira con calma eso que hoy te inquieta con el dinero.',
-      'Las runas responden con serenidad a lo que vienes cargando en lo económico.',
-      'Esta lectura se detiene en lo que hoy te preocupa de tu economía.',
-      'Estas runas toman con cuidado la tensión que traes por el dinero.',
+      'Miremos con calma eso que hoy te inquieta con el dinero.',
+      'Sé que las cuentas te vienen pesando. Vamos despacio.',
+      'Lo que te preocupa de la plata se mira mejor sin apuro.',
+      'Estas piedras toman con cuidado la tensión que traes por el dinero.',
     ],
     impulso: [
-      'Esta tirada acompaña las ganas con las que estás mirando lo económico.',
-      'Las runas leen el impulso que traes con tus proyectos de dinero.',
-      'Esta lectura toma el entusiasmo con el que encaras tus planes económicos.',
-      'Estas runas recogen la energía con la que llegas a lo financiero.',
+      'Traes ganas, y con el dinero eso también se lee.',
+      'Vamos con ese impulso que traes en lo económico.',
+      'Con todo ese entusiasmo por lo que planeas, hay algo que mirar antes.',
+      'Esa energía con la que encaras las cuentas también dice lo suyo.',
     ],
   },
   general: {
     neutro: [
-      'Esta tirada muestra un aspecto del momento que estás atravesando.',
-      'Las runas señalan una tendencia relacionada con esto que estás viviendo.',
-      'Esta combinación aporta una mirada sobre la situación actual.',
-      'La tirada refleja aspectos que pueden estar influyendo en este momento.',
-      'Estas tres runas describen la energía que rodea este momento.',
-      'Esta lectura se enfoca en el estado actual de la situación.',
-      'Las runas ofrecen una interpretación sobre lo que estás viviendo.',
-      'La lectura pone el foco en aquello que hoy tiene más peso.',
+      'Esto es lo que hay para mostrarte sobre este momento.',
+      'Vamos a mirar con calma lo que estás viviendo.',
+      'Las piedras se detienen en lo que hoy pesa más.',
+      'Miremos qué está pasando de verdad con esto que traes.',
+      'Sobre lo que preguntas, esto es lo que se ve.',
+      'Hay algo de tu momento que hoy se deja ver mejor que otros días.',
+      'Esto es lo que aparece cuando preguntas por tu presente.',
+      'Lo que estás atravesando también tiene su forma, y hoy se ve así.',
     ],
     preocupacion: [
-      'Esta tirada mira con calma eso que hoy te inquieta.',
-      'Las runas responden con serenidad a lo que vienes cargando.',
-      'Esta lectura se detiene en lo que hoy te preocupa.',
-      'Estas runas toman con cuidado lo que te tiene en duda.',
+      'Miremos con calma eso que hoy te inquieta.',
+      'Sé que esto te viene pesando. Vamos despacio.',
+      'Lo que te preocupa se mira mejor sin apuro.',
+      'Estas piedras toman con cuidado la duda que traes.',
     ],
     impulso: [
-      'Esta tirada acompaña las ganas con las que estás mirando este momento.',
-      'Las runas leen el impulso que traes.',
-      'Esta lectura toma el entusiasmo con el que llegas a esta etapa.',
-      'Estas runas recogen la energía con la que encaras lo que viene.',
+      'Traes ganas, y eso también se lee.',
+      'Vamos con ese impulso que traes.',
+      'Con todo ese entusiasmo, hay algo que conviene mirar antes.',
+      'Esa energía con la que encaras lo que viene también dice lo suyo.',
     ],
   },
 };
 
 export const aperturasCerradas: Record<Tono, string[]> = {
   neutro: [
-    'Esta fue la respuesta de las runas a tu consulta.',
-    'La tirada refleja el mensaje asociado a tu pregunta.',
-    'Estas runas muestran la interpretación correspondiente a tu consulta.',
-    'La combinación obtenida responde al tema que planteaste.',
-    'Esto es lo que indican las runas para la pregunta realizada.',
-    'La lectura se construye a partir de esta combinación de runas.',
-    'Esta tirada resume el mensaje relacionado con tu consulta.',
-    'Las runas respondieron de la siguiente manera.',
-    'El resultado de la consulta quedó representado en esta combinación.',
-    'Esta es la interpretación que surge de la tirada realizada.',
+    'Esto es lo que responden las runas a lo que preguntaste.',
+    'Vamos con tu pregunta. Esto es lo que se ve.',
+    'Para lo que preguntas, esto es lo que hay.',
+    'Las piedras contestan, y contestan así.',
+    'Esto es lo que aparece para tu pregunta.',
+    'Miremos tu pregunta con lo que salió.',
+    'Lo que preguntaste tiene esta respuesta.',
+    'Acá está lo que las runas traen para eso que quieres saber.',
+    'Esto es lo que se ordena alrededor de tu pregunta.',
+    'Para lo que quieres saber, esto es lo que se enciende.',
   ],
   preocupacion: [
     'Esto es lo que responden las runas, y lo dicen sin dramatismo.',
-    'Las runas contestan a tu consulta con calma.',
-    'La tirada responde a lo que preguntaste sin cargar las tintas.',
-    'Esto es lo que muestran las runas, leído con serenidad.',
+    'Las piedras contestan a tu pregunta con calma.',
+    'Responden a lo que preguntaste sin cargar las tintas.',
+    'Esto es lo que aparece, leído con serenidad.',
   ],
   impulso: [
-    'Las runas respondieron a tu consulta, y hay con qué entusiasmarse.',
-    'Esto es lo que traen las runas para lo que preguntaste.',
-    'La tirada responde a tu consulta con buena energía.',
-    'Esto es lo que las runas devuelven a tu pregunta.',
+    'Las runas contestaron, y hay con qué entusiasmarse.',
+    'Esto es lo que traen para lo que preguntaste.',
+    'Responden a tu pregunta con buena energía.',
+    'Esto es lo que las piedras devuelven a lo que quieres saber.',
   ],
 };

@@ -43,9 +43,12 @@ export function crearContenidoRunas(idioma: CodigoIdioma): ContenidoOraculo {
     };
   };
 
-  const consejo = (p: Pieza, posicion: Posicion) => {
+  // Ocho redacciones por runa y posición. La elección sale del sorteo del día
+  // (`variante`) y no de un azar nuevo en cada render: antes el texto cambiaba
+  // cada vez que se volvía a abrir la pantalla, debajo de un "vuelve mañana".
+  const consejo = (p: Pieza, posicion: Posicion, variante: number) => {
     const variantes = consejos[p.id as RunaId]?.[posicion] ?? [];
-    return variantes.length > 0 ? variantes[Math.floor(Math.random() * variantes.length)] : '';
+    return variantes.length > 0 ? variantes[variante % variantes.length] : '';
   };
 
   return {

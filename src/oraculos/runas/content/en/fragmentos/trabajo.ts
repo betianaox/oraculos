@@ -6,13 +6,13 @@ import type { FragmentosDeTema } from '../../types';
 export const trabajo: FragmentosDeTema = {
   fehu: {
     normal: [
-      'well-managed resources as the basis of a good outcome',
+      'what you already have, well looked after, as the basis for the rest',
       'a concrete opportunity worth taking now',
       'the effort that is starting to turn into something tangible',
     ],
     invertida: [
       'the fear of not having enough to sustain what has already been achieved',
-      'poorly shared resources that create tension in the team',
+      'an unfair split that puts the team on edge',
       'the uncertainty of not knowing whether the effort will be recognized',
     ],
   },
@@ -114,7 +114,7 @@ export const trabajo: FragmentosDeTema = {
   },
   naudiz: {
     normal: [
-      'perseverance in the face of limited resources or time',
+      'keeping at it even when time and hands are short',
       'the sustained effort on a project that is not yet bearing fruit',
       'the patience needed while what is missing is secured',
     ],
@@ -162,13 +162,13 @@ export const trabajo: FragmentosDeTema = {
   },
   perthu: {
     normal: [
-      'trust in a selection process or outcome that is out of your hands',
+      'trusting an answer that is out of your hands',
       'openness to an unexpected opportunity',
       'the unknown of a change in professional direction',
     ],
     invertida: [
       'the need to control an outcome that does not rest on you alone',
-      'the anxiety of not knowing how a work process will end',
+      'the anxiety of not knowing how this work matter will end',
       'the difficulty of waiting for an answer without despairing',
     ],
   },
@@ -259,12 +259,12 @@ export const trabajo: FragmentosDeTema = {
   ingwaz: {
     normal: [
       'a project taking shape that still needs its time',
-      'a professional potential worth letting ripen before showing it',
+      'something of yours that promises, and is better kept quiet a while longer',
       'an idea already in place that will bear its fruit',
     ],
     invertida: [
       'the impatience of wanting results before the project is ready',
-      'the urge to speed up a hiring process that takes its time',
+      'the urge to rush an answer that takes its own time',
       'the anxiety of not knowing how to wait for the right moment to act',
     ],
   },

@@ -9,6 +9,7 @@ import { Header } from '@/shell/components/Header';
 import { Footer, type SeccionFooter } from '@/shell/components/Footer';
 import { CarruselDomos } from '@/shell/components/CarruselDomos';
 import { Fondo } from '@/shell/components/Fondo';
+import { Bienvenida } from '@/shell/components/Bienvenida';
 import { calcularLayout } from '@/shell/layout';
 import { colores } from '@/shell/theme/tokens';
 
@@ -27,6 +28,25 @@ export function InicioScreen({ navigation }: Props) {
   const t = useT();
   const idioma = useApp((s) => s.idioma);
   const { listaLoop } = useCarrusel();
+
+  /**
+   * EL SALUDO DE LA PRIMERA VEZ vive aca y no en App.tsx: necesita `navigation`
+   * para llevar a la Ayuda, y el inicio es la primera pantalla que se ve igual.
+   *
+   * `hidratado` es la condicion y no un default: mientras el store todavia no
+   * leyo el disco, `saludoVisto` es false para todo el mundo, y sin esperar el
+   * saludo aparecería un instante en cada arranque a quien ya lo cerro hace
+   * meses.
+   */
+  const hidratado = useApp((s) => s.hidratado);
+  const saludoVisto = useApp((s) => s.saludoVisto);
+  const marcarSaludoVisto = useApp((s) => s.marcarSaludoVisto);
+
+  /** Las dos salidas lo dan por visto: la que entra a la Ayuda y la que se va. */
+  const cerrarSaludo = (irAAyuda: boolean) => {
+    marcarSaludoVisto();
+    if (irAAyuda) navigation.navigate('Ayuda');
+  };
 
   // Al cambiar el idioma cambia la lista de oraculos (el I Ching solo esta en
   // espanol). El carrusel vuelve solo al primero; aca se acompaña ese reinicio
@@ -59,7 +79,7 @@ export function InicioScreen({ navigation }: Props) {
     <View style={estilos.contenedor}>
       <Fondo scrollX={scrollX} stride={stride} />
 
-      <Header accion="config" onAccion={() => navigation.navigate('Ajustes')} titulo={t('app.nombre')} />
+      <Header accion="ayuda" onAccion={() => navigation.navigate('Ayuda')} titulo={t('app.nombre')} />
 
       <View style={estilos.centro}>
         <CarruselDomos
@@ -72,6 +92,13 @@ export function InicioScreen({ navigation }: Props) {
       </View>
 
       <Footer onSelect={abrirSeccion} scrollX={scrollX} stride={stride} />
+
+      {/* Ultimo del arbol, para que quede por encima del carrusel y del footer. */}
+      <Bienvenida
+        visible={hidratado && !saludoVisto}
+        onAyuda={() => cerrarSaludo(true)}
+        onCerrar={() => cerrarSaludo(false)}
+      />
     </View>
   );
 }

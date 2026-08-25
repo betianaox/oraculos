@@ -4,11 +4,11 @@ import type { AnalisisPregunta, Tema } from '@/pregunta/tipos';
 import type { PiezaMaterial } from '@/ia/tipos';
 import { armarCruz, type FuentesCruz } from '@/flujo/motorCruz';
 import { materialCruz } from '@/flujo/materialCruz';
-import { CARTAS_ES } from './content/es/cartas';
-import { BANCOS_EGIPCIO_ES } from './content/es/bancos';
+import { paqueteLecturaEgipcio } from './content/idiomaLectura';
+import type { BaseCartas } from './content/types';
 
-function cartaDeId(id: string) {
-  return CARTAS_ES[Number(id.replace('carta', ''))];
+function cartaDeId(cartas: BaseCartas, id: string) {
+  return cartas[Number(id.replace('carta', ''))];
 }
 
 function mezclar<T>(lista: readonly T[]): T[] {
@@ -36,11 +36,17 @@ function recorte(texto: string): string {
   return trozo.charAt(0).toLowerCase() + trozo.slice(1);
 }
 
-// Cláusula corta para la carta en su posición:
-//   - derecha:   dos claves unidas ("intuición y atracción").
-//   - invertida: el significado invertido recortado (no hay claves propias).
-function fragmentoEgipcio(p: PiezaTirada): string {
-  const carta = cartaDeId(p.pieza.id);
+/**
+ * Último recurso, cuando una carta no tiene fragmento escrito para ningún tema:
+ *   - derecha:   dos claves de la ficha unidas ("intuición y atracción").
+ *   - invertida: el significado invertido recortado.
+ *
+ * Con el banco completo (78 cartas × 4 temas) esto ya no debería dispararse
+ * nunca. Se deja igual para que agregar una carta nueva no rompa la lectura, y
+ * porque es la única red si algún día el banco queda a medias en otro idioma.
+ */
+function desdeLaFicha(p: PiezaTirada, cartas: BaseCartas): string {
+  const carta = cartaDeId(cartas, p.pieza.id);
   if (!carta) return '';
 
   if (p.posicion === 'invertida') return recorte(carta.invertido);
@@ -52,11 +58,51 @@ function fragmentoEgipcio(p: PiezaTirada): string {
   return `${a} y ${b}`;
 }
 
-function fuentesEgipcio(): FuentesCruz {
+/**
+ * La cláusula para una carta en su posición. Escalera de fallback, la misma que
+ * usa Tarot:
+ *   1. Fragmento del tema consultado (lo mejor: la carta hablando de amor,
+ *      trabajo o dinero según lo que se preguntó).
+ *   2. Fragmento del tema 'general' (misma carta, encuadre neutro).
+ *   3. Las claves de la ficha de la Wiki (último recurso, ver arriba).
+ *
+ * Cuando cae al escalón 3 —que ya no debería pasar— se le suma un encuadre que
+ * al menos ate esas palabras sueltas al asunto por el que se preguntó: "sabiduría
+ * y previsión" a secas no le dice nada a quien pregunta si le renuevan el
+ * contrato.
+ */
+function fragmentoEgipcio(p: PiezaTirada, tema: Tema, idioma: CodigoIdioma): string {
+  const { fragmentos, cartas, encuadres } = paqueteLecturaEgipcio(idioma);
+  const numero = Number(p.pieza.id.replace('carta', ''));
+
+  const delTema = fragmentos[tema]?.[numero]?.[p.posicion];
+  if (delTema && delTema.length > 0) {
+    return delTema[Math.floor(Math.random() * delTema.length)];
+  }
+
+  const general = fragmentos.general?.[numero]?.[p.posicion];
+  if (general && general.length > 0) {
+    return general[Math.floor(Math.random() * general.length)];
+  }
+
+  const ficha = desdeLaFicha(p, cartas);
+  if (!ficha) return '';
+  const pool = encuadres[tema];
+  const encuadre = pool[Math.floor(Math.random() * pool.length)];
+  return encuadre ? `${ficha} ${encuadre}` : ficha;
+}
+
+/**
+ * El `idioma` decide de qué paquete sale todo (ver content/idiomaLectura.ts).
+ * Antes estaba cableado a español y la lectura salía en español aunque la app
+ * estuviera en inglés.
+ */
+function fuentesEgipcio(tema: Tema, idioma: CodigoIdioma): FuentesCruz {
+  const { bancos, cartas } = paqueteLecturaEgipcio(idioma);
   return {
-    nombre: (p) => cartaDeId(p.pieza.id)?.nombre ?? '',
-    fragmento: fragmentoEgipcio,
-    bancos: BANCOS_EGIPCIO_ES,
+    nombre: (p) => cartaDeId(cartas, p.pieza.id)?.nombre ?? '',
+    fragmento: (p) => fragmentoEgipcio(p, tema, idioma),
+    bancos,
   };
 }
 
@@ -65,23 +111,25 @@ function fuentesEgipcio(): FuentesCruz {
  * de la pregunta a los tres párrafos, con el armador compartido
  * (flujo/motorCruz) y registro propio. Antes tenía un motor aparte que
  * enumeraba "posición — nombre — significado" y abría siempre con la misma
- * frase; ahora comparte forma y variación con Tarot y Ángeles.
+ * frase; ahora comparte forma y variación con Tarot y Ángeles, y también su
+ * banco de fragmentos por tema (content/es/index.ts), que es lo que hace que la
+ * misma carta diga una cosa en una pregunta de amor y otra en una de trabajo.
  */
 export function lecturaEgipcio(
   tirada: PiezaTirada[],
   tema: Tema,
   analisis: AnalisisPregunta,
-  _idioma: CodigoIdioma,
+  idioma: CodigoIdioma,
 ): string[] {
-  return armarCruz(tirada, tema, analisis, fuentesEgipcio());
+  return armarCruz(tirada, tema, analisis, fuentesEgipcio(tema, idioma));
 }
 
 /** Las mismas 5 cartas, sin redactar, para que la IA escriba la lectura. */
 export function materialEgipcio(
   tirada: PiezaTirada[],
-  _tema: Tema,
+  tema: Tema,
   _analisis: AnalisisPregunta,
-  _idioma: CodigoIdioma,
+  idioma: CodigoIdioma,
 ): PiezaMaterial[] {
-  return materialCruz(tirada, fuentesEgipcio());
+  return materialCruz(tirada, fuentesEgipcio(tema, idioma));
 }

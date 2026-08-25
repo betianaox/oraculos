@@ -9,7 +9,7 @@ export const FRAGMENTOS_DINERO_MENORES_ES: FragmentosDeTema = {
     normal: [
       'la chispa de un emprendimiento',
       'el impulso de un negocio nuevo',
-      'una idea con potencial de ganancia',
+      'una idea que puede dar plata',
     ],
     invertida: [
       'un negocio que no arranca',
@@ -103,7 +103,7 @@ export const FRAGMENTOS_DINERO_MENORES_ES: FragmentosDeTema = {
   },
   'bastos-nueve': {
     normal: [
-      'sostener las finanzas tras varias trabas',
+      'sostener las cuentas después de varios golpes',
       'la última reserva económica',
       'perseverar cerca de la meta material',
     ],
@@ -164,7 +164,7 @@ export const FRAGMENTOS_DINERO_MENORES_ES: FragmentosDeTema = {
   'bastos-rey': {
     normal: [
       'visión para los negocios',
-      'conducir las finanzas con convicción',
+      'manejar la plata con convicción',
       'emprender en grande',
     ],
     invertida: [
@@ -229,7 +229,7 @@ export const FRAGMENTOS_DINERO_MENORES_ES: FragmentosDeTema = {
       'tristeza por un mal negocio',
     ],
     invertida: [
-      'ver los recursos que aún quedan',
+      'ver con qué se cuenta todavía',
       'aceptar la pérdida y seguir',
       'rescatar lo que no se perdió',
     ],
@@ -243,7 +243,7 @@ export const FRAGMENTOS_DINERO_MENORES_ES: FragmentosDeTema = {
     invertida: [
       'aferrarse a cómo se ganaba antes',
       'idealizar una época próspera',
-      'no adaptar las finanzas a lo nuevo',
+      'no acomodar el gasto a lo que cambió',
     ],
   },
   'copas-siete': {
@@ -326,7 +326,7 @@ export const FRAGMENTOS_DINERO_MENORES_ES: FragmentosDeTema = {
     ],
     invertida: [
       'gastar de más por los otros',
-      'descuidar las propias finanzas',
+      'ocuparse de todos menos de lo propio',
       'inseguridad detrás del dar',
     ],
   },
@@ -362,7 +362,7 @@ export const FRAGMENTOS_DINERO_MENORES_ES: FragmentosDeTema = {
       'no querer mirar las cuentas',
     ],
     invertida: [
-      'por fin enfrentar las finanzas',
+      'por fin sentarse a mirar los números',
       'tomar la decisión postergada',
       'abrir los ojos al balance',
     ],
@@ -436,7 +436,7 @@ export const FRAGMENTOS_DINERO_MENORES_ES: FragmentosDeTema = {
     invertida: [
       'ver la salida económica que había',
       'liberarse de una creencia sobre el dinero',
-      'recuperar el control de las finanzas',
+      'volver a tener las cuentas en la mano',
     ],
   },
   'espadas-nueve': {
@@ -494,7 +494,7 @@ export const FRAGMENTOS_DINERO_MENORES_ES: FragmentosDeTema = {
       'no dejarse engañar en un trato',
     ],
     invertida: [
-      'una frialdad calculadora',
+      'sacar la calculadora y no mirar a nadie',
       'recortar sin miramientos',
       'dureza con lo material',
     ],
@@ -622,14 +622,14 @@ export const FRAGMENTOS_DINERO_MENORES_ES: FragmentosDeTema = {
   },
   'oros-diez': {
     normal: [
-      'riqueza estable y patrimonio',
+      'una holgura que ya tiene raíz',
       'prosperidad que se hereda',
       'seguridad material construida con años',
     ],
     invertida: [
       'conflictos por herencias o dinero',
       'inestabilidad económica',
-      'apego al patrimonio que enreda',
+      'apego a lo acumulado que enreda',
     ],
   },
   'oros-sota': {
@@ -647,11 +647,11 @@ export const FRAGMENTOS_DINERO_MENORES_ES: FragmentosDeTema = {
   'oros-caballo': {
     normal: [
       'constancia que asegura los ingresos',
-      'avanzar con las finanzas paso a paso',
+      'avanzar con las cuentas paso a paso',
       'un manejo confiable del dinero',
     ],
     invertida: [
-      'finanzas estancadas',
+      'todo igual mes tras mes, sin que suba nada',
       'una monotonía que no crece',
       'terquedad con un método que no rinde',
     ],
@@ -664,15 +664,15 @@ export const FRAGMENTOS_DINERO_MENORES_ES: FragmentosDeTema = {
     ],
     invertida: [
       'agobio por las cuentas',
-      'descuidarse por lo económico',
-      'inseguridad detrás del gasto',
+      'descuidarse por estar pendiente de la plata',
+      'un miedo viejo escondido detrás del gasto',
     ],
   },
   'oros-rey': {
     normal: [
       'éxito material y maestría con el dinero',
       'una riqueza consolidada y segura',
-      'manejar los recursos con mano experta',
+      'manejar la plata con mano firme',
     ],
     invertida: [
       'codicia o apego al estatus',

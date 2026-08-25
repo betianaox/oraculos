@@ -44,7 +44,9 @@
     "escuchar": "Listen",
     "detener": "Stop",
     "tirada": "Spread",
-    "lectura": "Reading"
+    "lectura": "Reading",
+    "compartir": "Share",
+    "tarjetaInvitacion": "Get the app on Google Play for the full reading"
   },
   "aprender": {
     "seccionCartas": "Cards",
@@ -60,7 +62,7 @@
   },
   "consejo": {
     "titulo": "Advice of the day",
-    "elegir": "Choose a card for today's advice",
+    "elegir": "Choose {pieza} for today's advice",
     "vuelveManana": "Come back tomorrow for the next advice"
   },
   "ajustes": {
@@ -70,27 +72,33 @@
   "oraculos": {
     "tarot": {
       "nombre": "Tarot",
-      "subtitulo": "The mirror of the arcana"
+      "subtitulo": "The mirror of the arcana",
+      "pieza": "a card"
     },
     "runas": {
       "nombre": "Runes",
-      "subtitulo": "The voice of the old north"
+      "subtitulo": "The voice of the old north",
+      "pieza": "a rune"
     },
     "angeles": {
       "nombre": "Angels",
-      "subtitulo": "Messages from above"
+      "subtitulo": "Messages from above",
+      "pieza": "a card"
     },
     "egipcio": {
       "nombre": "Egyptian",
-      "subtitulo": "The oracle of the Nile"
+      "subtitulo": "The oracle of the Nile",
+      "pieza": "a card"
     },
     "buzios": {
       "nombre": "Buzios",
-      "subtitulo": "The oracle of the cauries"
+      "subtitulo": "The oracle of the cauries",
+      "pieza": "a cowrie"
     },
     "iching": {
       "nombre": "I Ching",
-      "subtitulo": "The book of changes"
+      "subtitulo": "The book of changes",
+      "pieza": "a hexagram"
     }
   },
   "quiz": {
@@ -117,5 +125,37 @@
   "buzios": {
     "aFavor": "in favour",
     "desafio": "challenge"
+  },
+  "ayuda": {
+    "titulo": "Help",
+    "oraculos": "The oracles",
+    "enCadaUno": "In each one you can:",
+    "preguntar": "Ask",
+    "preguntarDetalle": "Write what is on your mind and pick the topic. The reading answers that.",
+    "consejo": "See the advice of the day",
+    "consejoDetalle": "One piece of advice a day, no gems spent.",
+    "aprender": "Learn about the oracle",
+    "aprenderDetalle": "What each piece means, where it comes from and how to read it.",
+    "reto": "Measure your progress",
+    "retoDetalle": "A short game to see how far you have come.",
+    "disclaimerTitulo": "About",
+    "disclaimer": "Oracles is an entertainment and learning app: it is for getting to know the symbols and their meanings. It does not predict the future, it is not magic and it does not answer questions about health. Nothing you read here replaces consulting a professional.",
+    "ajustes": "Settings",
+    "valorar": "Rate the app",
+    "privacidad": "Privacy policy",
+    "contacto": "Write to us",
+    "version": "Oracles {v}",
+    "verSaludo": "Show the welcome again",
+    "escuchar": "Read and listen",
+    "escucharDetalle": "The reading is there on screen, and can also be listened to out loud.",
+    "gemasTitulo": "Gems",
+    "gemas": "You get 3 gems a day, and each reading uses one",
+    "gemasVideo": "If you run out, you can earn one more by watching a short video."
+  },
+  "bienvenida": {
+    "titulo": "Welcome to Oracles",
+    "texto": "Consult, check the advice of the day and learn. To find out how to use the app, open Help.",
+    "ayuda": "Help",
+    "cerrar": "Close"
   }
 }

@@ -11,7 +11,7 @@ import { DORSO_EGIPCIO } from './imagenes';
  * activo. Lo que no este traducido cae a español (ver content/paquete.ts).
  */
 export function crearContenidoEgipcio(idioma: CodigoIdioma): ContenidoOraculo {
-  const { cartas, numerologia, textos } = paqueteEgipcio(idioma);
+  const { cartas, numerologia, textos, consejos } = paqueteEgipcio(idioma);
 
   const cartaDeId = (id: string): Carta | undefined => cartas[Number(id.replace('carta', ''))];
 
@@ -45,8 +45,14 @@ export function crearContenidoEgipcio(idioma: CodigoIdioma): ContenidoOraculo {
     };
   };
 
-  // El consejo del dia nunca sale invertido (regla global), asi que siempre el derecho.
-  const consejo = (p: Pieza) => cartaDeId(p.id)?.derecho ?? '';
+  // Un consejo escrito por carta. Antes esto devolvía `carta.derecho`, o sea la
+  // ficha de la Wiki: un párrafo que describe la carta y no le dice nada a quien
+  // la sacó. El consejo del día nunca sale invertido (regla global), así que
+  // basta con una redacción por carta.
+  const consejo = (p: Pieza) => {
+    const c = cartaDeId(p.id);
+    return c ? consejos[c.numero] ?? '' : '';
+  };
 
   const mayores = MAZO_EGIPCIO.filter((p) => cartaDeId(p.id)?.arcano === 'mayor');
   const menores = MAZO_EGIPCIO.filter((p) => cartaDeId(p.id)?.arcano === 'menor');

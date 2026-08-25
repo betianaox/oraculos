@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -14,6 +14,7 @@ import * as SystemUI from 'expo-system-ui';
 import { Navegacion } from '@/navigation';
 import type { RootStackParamList } from '@/navigation/tipos';
 import { useVoz } from '@/flujo/voz';
+import { useApp } from '@/store/useApp';
 import { mapaFuentes } from '@/shell/theme/fuentes';
 import { colores } from '@/shell/theme/tokens';
 
@@ -45,17 +46,33 @@ export default function App() {
   // useFonts({}) resuelve enseguida y la app corre con la fuente del sistema.
   const [fuentesListas] = useFonts(mapaFuentes);
 
-  useEffect(() => {
-    if (fuentesListas) SplashScreen.hideAsync().catch(() => {});
-  }, [fuentesListas]);
+  // NO ALCANZA CON LAS FUENTES. El idioma arranca en el del dispositivo y recien
+  // al leer el disco aparece el que la persona eligio (ver useApp). Si se dibuja
+  // antes, quien tiene el telefono en espanol pero eligio ingles ve un parpadeo:
+  // la app aparece en espanol y se da vuelta sola un instante despues.
+  //
+  // Esperando las dos cosas, el splash tapa ese momento y la primera pantalla
+  // que se ve ya esta en el idioma correcto.
+  const hidratado = useApp((s) => s.hidratado);
+  const listo = fuentesListas && hidratado;
 
+  // ─────────────────────────────────────────────────────────────────────────
+  // EL SPLASH SE SACA EN onLayout, Y EN NINGUN OTRO LADO
+  // ─────────────────────────────────────────────────────────────────────────
+  // Habia tambien un useEffect que lo sacaba, y ese sobraba de la peor manera:
+  // un efecto corre cuando React termino de aplicar los cambios, que es ANTES
+  // de que Android haya pintado el primer cuadro. Sacando el splash ahi queda
+  // un instante sin splash y sin app todavia dibujada — el destello.
+  //
+  // onLayout avisa cuando la vista raiz ya esta medida y ubicada, o sea cuando
+  // hay algo real abajo. Es el unico momento en que sacarlo no deja hueco.
   const onLayout = useCallback(() => {
-    if (fuentesListas) SplashScreen.hideAsync().catch(() => {});
-  }, [fuentesListas]);
+    if (listo) SplashScreen.hideAsync().catch(() => {});
+  }, [listo]);
 
   const navRef = useNavigationContainerRef<RootStackParamList>();
 
-  if (!fuentesListas) return null;
+  if (!listo) return null;
 
   return (
     <SafeAreaProvider>

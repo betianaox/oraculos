@@ -39,8 +39,11 @@ export interface PaqueteContenido {
    * Acá NO se nombran las runas. Antes la lectura decía "Fehu trae X, Uruz
    * suma Y": la persona ya ve las runas en pantalla, y lo que espera leer es
    * qué dicen sobre lo que preguntó, no una definición de cada una.
+   *
+   * `una` (con {frag}) es el caso degradado: cuando una de las dos runas no
+   * tiene ningún texto NUEVO que aportar, se dice una sola en vez de repetir.
    */
-  situacion: string[];
+  situacion: { dos: string[]; una: string[] };
   /**
    * Segundo párrafo: la runa 3 con {frag3}. Es la única que se lee mirando
    * hacia adelante, en clave de tendencia ("se perfila", "todo apunta a"),

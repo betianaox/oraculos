@@ -8,9 +8,11 @@
  * Cuando se traduzcan, se agregan aca y vuelven a aparecer.
  */
 export const IDIOMAS = [
-  { codigo: 'es', etiqueta: 'Espanol' },
+  // Cada idioma se nombra en si mismo y bien escrito, acentos incluidos: quien
+  // busca su idioma en esta lista lo reconoce por como se ve.
+  { codigo: 'es', etiqueta: 'Español' },
   { codigo: 'en', etiqueta: 'English' },
-  { codigo: 'pt', etiqueta: 'Portugues' },
+  { codigo: 'pt', etiqueta: 'Português' },
 ] as const;
 
 export type CodigoIdioma = (typeof IDIOMAS)[number]['codigo'];

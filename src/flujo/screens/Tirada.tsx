@@ -20,6 +20,10 @@ import { hexAlfa } from '@/shell/color';
 import { tirarCruz, type EspecieTirada, type Pieza, type PiezaTirada } from '../pieza';
 import { useLectura } from '../useLectura';
 import { RATIO_PIEZA, CartaImagen } from '../components/CartaImagen';
+import { TableroTirada } from '../components/TableroTirada';
+import { medirTablero } from '../tablero';
+import { guardarCaida } from '../caida';
+import { useCompartirLectura } from '../components/useCompartirLectura';
 import { CartaAmpliable } from '../components/CartaAmpliable';
 import { BotonVoz } from '../components/BotonVoz';
 import { SelectorFlujo } from '../components/SelectorFlujo';
@@ -59,6 +63,7 @@ export function TiradaScreen({ navigation, route }: Props) {
   const [tirada] = useState<PiezaTirada[]>(() => spec.tirar(mazo));
   const [area, setArea] = useState<{ w: number; h: number } | null>(null);
   const gastarGemas = useApp((s) => s.gastarGemas);
+  const registrarPregunta = useApp((s) => s.registrarPregunta);
   const idioma = useApp((s) => s.idioma);
 
   const ratio = tirada[0]?.pieza.ratio ?? RATIO_PIEZA;
@@ -91,14 +96,28 @@ export function TiradaScreen({ navigation, route }: Props) {
   const [animacionLista, setAnimacionLista] = useState(false);
   const listo = animacionLista && !pendiente;
 
+  const compartir = useCompartirLectura({ oraculo, pregunta, parrafos, disabled: !listo });
+
   // Estado del sorteo (titileo + revelado uno por uno).
   const [revelado, setRevelado] = useState<boolean[]>(() => tirada.map(() => !conSorteo));
   const [vista, setVista] = useState<Pieza[]>(() => tirada.map((p) => p.pieza));
 
   useEffect(() => {
     gastarGemas(COSTO);
+    // Una tirada ES una pregunta. Este contador solo sube y no lo mira nadie
+    // mas que la valoracion (ver `shell/review.ts`).
+    registrarPregunta();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // La caida queda registrada para poder compartirla, desde aca y desde la
+  // lectura (ver `flujo/caida.ts`). `tirada` sale de un useState inicializado
+  // una sola vez, asi que esto corre una vez y no cambia.
+  useEffect(() => {
+    guardarCaida(oraculoId, pregunta, ({ ancho, alto }) => (
+      <TableroTirada tirada={tirada} disposicion={spec.disposicion} ancho={ancho} alto={alto} />
+    ));
+  }, [oraculoId, pregunta, tirada, spec.disposicion]);
 
   // Habilita los botones cuando la entrada (sorteo o escalonado) termino.
   useEffect(() => {
@@ -142,26 +161,23 @@ export function TiradaScreen({ navigation, route }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Tamano de pieza segun disposicion y area medida.
-  let cartaW = 0;
-  let gap = 0;
-  if (area) {
-    const anchoDisp = area.w - AIRE * 2;
-    const altoDisp = area.h - RESPIRO * 2;
-    if (enFila) {
-      const n = tirada.length;
-      gap = Math.round(width * 0.03);
-      const porAncho = (anchoDisp - gap * (n - 1)) / n;
-      const porAlto = altoDisp / ratio;
-      cartaW = Math.floor(Math.min(porAncho, porAlto));
-    } else {
-      gap = Math.round(area.w * 0.022);
-      const porAncho = (anchoDisp - gap * 2) / 3;
-      const porAlto = (altoDisp - gap * 2) / (3 * ratio);
-      cartaW = Math.floor(Math.min(porAncho, porAlto));
-    }
-  }
-  const cartaH = cartaW * ratio;
+  // Tamano de pieza segun disposicion y area medida (la misma cuenta que usa
+  // la tarjeta que se comparte: ver `flujo/tablero.ts`).
+  const { cartaW, cartaH, gap } = area
+    ? medirTablero({
+        disposicion: spec.disposicion,
+        n: tirada.length,
+        ratio,
+        ancho: area.w,
+        alto: area.h,
+        aire: AIRE,
+        respiro: RESPIRO,
+        // El gap de la fila sale del ancho de la VENTANA y no del area: asi las
+        // runas se ven igual de separadas sin importar cuanto alto le quede
+        // libre a la tirada.
+        gapFila: Math.round(width * 0.03),
+      })
+    : { cartaW: 0, cartaH: 0, gap: 0 };
 
   const onArea = (e: LayoutChangeEvent) => {
     const { width: w, height: h } = e.nativeEvent.layout;
@@ -245,7 +261,10 @@ export function TiradaScreen({ navigation, route }: Props) {
           interpretando={animacionLista && pendiente}
         />
         <BotonVoz texto={textoVoz} rutas={RUTAS_LECTURA} disabled={!listo} />
+        {compartir.boton}
       </View>
+
+      {compartir.tarjeta}
     </View>
   );
 }
@@ -277,7 +296,7 @@ const estilos = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 18,
+    gap: 12,
   },
   // Absoluto a proposito: el sello de desarrollo no debe correr ni un pixel
   // los botones reales, para que lo que se ve en dev sea lo que se ve en prod.

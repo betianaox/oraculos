@@ -1,0 +1,96 @@
+// Daily advice for the Egyptian Tarot, in English: one per card.
+//
+// WHY THIS EXISTS: until now this oracle returned `carta.derecho`, the
+// encyclopedia entry from the Wiki. "The ability to direct one's own power
+// toward what is needed and achieve results. Skill, cunning and firm will…"
+// describes the card; it says nothing to the person who drew it. Those were
+// paragraphs of up to 186 characters where a single line belonged.
+//
+// ── HOW AN ADVICE LINE IS WRITTEN ────────────────────────────────────────
+// The usual two rules (see en/bancos.ts) — plain before elevated, quiet
+// mysticism — plus the one specific to this file:
+//
+//   ADVICE TELLS THE PERSON WHAT TO DO TODAY. Not what the card means. If the
+//   line reads fine with nobody on the other side, it is badly written.
+//
+// Second person, they open by talking about today, and they fit in two lines.
+export const CONSEJOS_EGIPCIO_EN: Record<number, string> = {
+  1: 'Use what you know how to do today instead of just having it. Start with the smallest piece.',
+  2: 'Listen before answering today. What you need to know has already been said quietly.',
+  3: 'Water something today that you planted a while ago and stopped looking at.',
+  4: 'Set one clear rule today where there is disorder. Even just one.',
+  5: 'Do it the usual way today. This is not the day to improvise.',
+  6: 'Choose with your heart today, but choose. Staying in the middle is not neutral.',
+  7: 'Push today on the thing you have been pushing. It is about to give.',
+  8: 'Claim what is yours today, or give back what is not. One of the two.',
+  9: 'Step away from the noise for a while today. The answer turns up in the quiet.',
+  10: 'Take what turns up today without over-analysing it. The run does not wait.',
+  11: 'Hold your position today without raising your voice. Calm convinces more.',
+  12: 'Let something go today to gain clarity. Choose what, before life chooses for you.',
+  13: 'Give something an ending today. Naming it is enough.',
+  14: 'Go slowly today. What gets rushed now has to be redone later.',
+  15: 'Look head on today at what has you hooked. Just looking already loosens it.',
+  16: 'If something falls today, do not rush to prop it up. Check first whether it was worth it.',
+  17: 'Trust a little more than comes naturally today. One day.',
+  18: 'Do not sign or promise anything today that you cannot revisit tomorrow.',
+  19: 'Enjoy today what is going well, out loud and without guilt.',
+  20: 'Reckon with what you have lived today and forgive yourself one thing. The heaviest one.',
+  21: 'Call something finished today. It already is, even if you never celebrated it.',
+  22: 'Take the first step today without having it all worked out. The road shows itself as you walk.',
+  23: 'Do one small thing properly today, with nobody watching. That is enough.',
+  24: 'Leave your place in order today before you go. Tomorrow you will be grateful.',
+  25: 'Change something in your route today, even the way home.',
+  26: 'Take whatever good turns up today without asking where it came from.',
+  27: 'Something today will not be what it looks like. Look twice before believing it.',
+  28: 'Keep searching today even without seeing the way out. It is not time to give up yet.',
+  29: 'Do nothing today that is not necessary. Resting also solves things.',
+  30: 'Negotiate today instead of taking the first offer. Asking costs nothing.',
+  31: 'Wait patiently today for what was promised. Pushing only delays it.',
+  32: 'Give something today without keeping count. It comes back another way.',
+  33: 'Agree with someone today on something small. The big thing comes later.',
+  34: 'Say yes to the new thing today, even if it frightens you a little.',
+  35: 'Stay standing today even with your spirits low. That is enough.',
+  36: 'Fight today for something worth it. And only for that.',
+  37: 'Show today what you know how to do. Keeping it hidden does not improve it.',
+  38: 'Play straight today, even if you could win another way.',
+  39: 'Say a truth today that you have been dodging. Carefully, but say it.',
+  40: 'Listen to that hunch today. It has been flagging itself for days.',
+  41: 'Talk to your family today about the thing you all avoid. Start with the easiest one.',
+  42: 'Insist one more time today. It is likely the one that gives.',
+  43: 'Let yourself get your hopes up today, even if it does not come off later.',
+  44: 'Write down today the plan in your head. On paper it takes up less room.',
+  45: 'Start again today with something you had written off.',
+  46: 'Look after today what you built. It does not have to grow every day.',
+  47: 'Hope for the best today but prepare for the other. Both at once.',
+  48: 'Go for that goal today with a cool head. You are closer than you think.',
+  49: 'You have two roads today. Choose the one you can hold up, not the one that shines.',
+  50: 'Tell someone today that you understood them. It shows little and is worth a lot.',
+  51: 'Ask for advice today from someone with nothing to gain from your decision.',
+  52: 'Put something aside today just in case: time, money, energy.',
+  53: 'Hold on today without hitting back. The answer can wait.',
+  54: 'Dig into something today until you really understand it.',
+  55: 'Stay quiet for a while today. Not everything asks for an answer.',
+  56: 'Go out today and get the thing you want. Nobody is going to bring it.',
+  57: 'Someone is playing their own game today. Do not take it personally.',
+  58: 'Be clear today about why you do what you do. If no reason turns up, look again.',
+  59: 'Share a piece of news today that someone is waiting for.',
+  60: 'Move one step forward today, even a small one. It counts the same.',
+  61: 'Spend a while today with yourself, no screen and no noise.',
+  62: 'Cool things down today where there is a fight. Even if it is not your fight.',
+  63: 'Get genuinely close to someone today, not out of obligation.',
+  64: 'Understand someone today even if you disagree. You do not have to give in.',
+  65: 'Let someone who knows more help you today. It is not a debt.',
+  66: 'It is fine to doubt today. Do not decide yet.',
+  67: 'Look for a friend today. No reason and no plan.',
+  68: 'Put something today where it pays off later: time, attention or money.',
+  69: 'Go out today and take whatever turns up. Luck does not knock twice.',
+  70: 'Hold out a hand today. Someone needs it more than they say.',
+  71: 'Loosen your grip a little today on what you are holding. It is not going anywhere.',
+  72: 'Get one thing out of your life today that is spare. Something concrete.',
+  73: 'Listen to your body today before your head.',
+  74: 'Give today without expecting it back. It comes back another way.',
+  75: 'Share out what there is today without being tight. There is enough.',
+  76: 'Say thank you out loud today for something. Then get on with the day.',
+  77: 'There will be a mess today. Something good is going to come out of it anyway.',
+  78: 'Start again today with what you learned. The scars are an advantage too.',
+};

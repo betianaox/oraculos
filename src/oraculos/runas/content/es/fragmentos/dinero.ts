@@ -8,7 +8,7 @@ export const dinero: FragmentosDeTema = {
     normal: [
       'la prosperidad que llega cuando el dinero se administra con cuidado',
       'una entrada de dinero que conviene aprovechar bien',
-      'los recursos que rinden más cuando se ordenan con calma',
+      'lo que tienes, que rinde el doble cuando lo ordenas con calma',
     ],
     invertida: [
       'el miedo a que no alcance, más allá de si realmente falta',
@@ -20,7 +20,7 @@ export const dinero: FragmentosDeTema = {
     normal: [
       'la fuerza para tomar una decisión financiera que venías postergando',
       'el impulso para animarte a una inversión pensada con cuidado',
-      'la energía para ordenar de una vez las finanzas',
+      'la energía para ordenar de una vez las cuentas',
     ],
     invertida: [
       'el desgaste de forzar un gasto que en el fondo no convence',
@@ -68,7 +68,7 @@ export const dinero: FragmentosDeTema = {
     normal: [
       'una idea creativa para generar un ingreso extra',
       'una forma distinta de resolver un problema económico',
-      'la inspiración para reorganizar las finanzas de otra manera',
+      'la idea de manejar la plata de otra manera',
     ],
     invertida: [
       'la falta de ganas de ponerse a ordenar el tema plata',
@@ -85,7 +85,7 @@ export const dinero: FragmentosDeTema = {
     invertida: [
       'un préstamo que se dio sin condiciones claras',
       'el desgaste de prestar dinero que no vuelve',
-      'una dinámica económica donde siempre pone el mismo lado',
+      'un arreglo donde la plata siempre la pone el mismo',
     ],
   },
   wunju: {
@@ -217,7 +217,7 @@ export const dinero: FragmentosDeTema = {
     invertida: [
       'el miedo a empezar un plan financiero nuevo',
       'un comienzo económico que se posterga por inseguridad',
-      'las ganas de ordenar las finanzas sin animarse todavía',
+      'las ganas de ordenar las cuentas sin animarse todavía',
     ],
   },
   ehwaz: {
@@ -264,7 +264,7 @@ export const dinero: FragmentosDeTema = {
     ],
     invertida: [
       'la impaciencia de querer resultados financieros antes de tiempo',
-      'las ganas de acelerar un ingreso que todavía necesita su proceso',
+      'las ganas de apurar una entrada de plata que todavía no está',
       'la ansiedad de no saber esperar el momento justo para invertir',
     ],
   },

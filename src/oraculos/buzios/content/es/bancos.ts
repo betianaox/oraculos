@@ -5,7 +5,7 @@ import type { Orientacion } from '../types';
 // Tejido de la consulta de odus (español NEUTRO).
 //
 // PRUDENCIA, que acá importa más que en ningún otro oráculo: esto es una
-// consulta SIMBÓLICA de los significados de los odus, no el jogo de búzios,
+// consulta SIMBÓLICA de los significados de los odus, no el jogo de buzios,
 // que es un ritual sagrado que realizan personas iniciadas. Este banco NO
 // interpreta, no invoca, no pide y no habla en nombre de nadie: solo presenta
 // lo que ya está escrito y lo conecta con la pregunta.

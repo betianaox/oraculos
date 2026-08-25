@@ -61,12 +61,12 @@ export const FRAGMENTOS_GENERAL_ES: FragmentosDeTema = {
     normal: [
       'el orden que sostiene y la mano firme al mando',
       'bases firmes sobre las que construir',
-      'la estructura que protege lo que se creó',
+      'las paredes que protegen lo que ya construiste',
     ],
     invertida: [
       'un control que ahoga y una rigidez sin matices',
       'terquedad que no admite otra mirada',
-      'la falta de estructura, todo suelto y sin rumbo',
+      'todo suelto y sin rumbo, sin nada que lo sostenga',
     ],
   },
   'mayor-05': {
@@ -185,8 +185,8 @@ export const FRAGMENTOS_GENERAL_ES: FragmentosDeTema = {
     ],
     invertida: [
       'la medida perdida, un exceso en algún lado',
-      'la impaciencia que arruina el proceso',
-      'partes que no logran integrarse',
+      'la impaciencia que arruina lo que venía bien',
+      'partes tuyas que no terminan de llevarse bien',
     ],
   },
   'mayor-15': {
@@ -205,7 +205,7 @@ export const FRAGMENTOS_GENERAL_ES: FragmentosDeTema = {
     normal: [
       'el derrumbe súbito de lo que estaba mal construido',
       'una verdad que estalla y libera',
-      'estructuras falsas que caen para dejar suelo firme',
+      'lo que se sostenía con alfileres cae y deja suelo firme',
     ],
     invertida: [
       'una crisis que se ve venir y se evita',
@@ -270,7 +270,7 @@ export const FRAGMENTOS_GENERAL_ES: FragmentosDeTema = {
     invertida: [
       'un cierre cercano pero todavía incompleto',
       'una meta a la que le falta un último paso',
-      'algo que no terminas de integrar',
+      'algo que todavía no terminas de digerir',
     ],
   },
 };

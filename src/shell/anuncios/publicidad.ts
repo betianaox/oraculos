@@ -22,17 +22,37 @@ export const ads = modulo;
 export const adsDisponible = modulo !== null;
 
 /**
- * Unidad de anuncio recompensado.
+ * ─────────────────────────────────────────────────────────────────────────
+ * UNIDAD DE ANUNCIO RECOMPENSADO
+ * ─────────────────────────────────────────────────────────────────────────
+ * La real sale de `EXPO_PUBLIC_AD_REWARDED`, y se usa SOLO en builds de
+ * produccion. En desarrollo va siempre la de test de Google, pase lo que pase.
  *
- * Igual que en Runas y Tarot: usamos SIEMPRE el ID de test de Google, tambien
- * en builds de release, para poder probar en dispositivos reales sin arriesgar
- * la cuenta de AdMob por trafico invalido (tocar nuestros propios anuncios).
+ * ESO ULTIMO NO ES UNA PREFERENCIA. Tocar los propios anuncios reales es
+ * trafico invalido para Google, y el castigo no es que no se cobre ese clic: es
+ * que suspenden la cuenta de AdMob entera. Por eso `__DEV__` manda por encima
+ * de la variable — aunque este configurada, en desarrollo no se usa.
  *
- * TODO (antes de publicar en Play): crear la unidad real de Oraculos y usarla
- * en produccion (condicionando por una variable de build), y darle a la app su
- * propio androidAppId de AdMob en app.json (hoy reusa el de Runas/Tarot).
+ * Y SI FALTA LA VARIABLE, CAE A LA DE TEST en vez de romper. Es la decision
+ * menos mala de las dos: sin unidad no hay anuncio, y sin anuncio la app queda
+ * trabada sin forma de sumar gemas. Pero ojo, porque esta caida NO SE VE — el
+ * video aparece, la gema se suma y todo parece andar, solo que no genera un
+ * peso. Por eso el valor vive en `eas.json`, dentro del perfil de produccion:
+ * ahi no se puede olvidar, porque va con el perfil.
+ *
+ * Como conseguir la unidad real: AdMob → Apps → Oraculos → Bloques de anuncios
+ * → Crear → Bonificado. Devuelve un id con la forma
+ * `ca-app-pub-XXXXXXXXXXXXXXXX/YYYYYYYYYY` — con barra, que es lo que lo
+ * distingue del App ID, que lleva tilde de virgulilla.
  */
-export const AD_UNIT_ID_RECOMPENSADO = modulo?.TestIds.REWARDED ?? '';
+const UNIDAD_REAL = process.env.EXPO_PUBLIC_AD_REWARDED;
+
+/** `true` cuando se estan sirviendo anuncios de prueba (o sea, sin ingresos). */
+export const anunciosDePrueba = __DEV__ || !UNIDAD_REAL;
+
+export const AD_UNIT_ID_RECOMPENSADO = anunciosDePrueba
+  ? (modulo?.TestIds.REWARDED ?? '')
+  : UNIDAD_REAL;
 
 // El SDK se inicializa una sola vez por sesion, la primera vez que alguien
 // pide un anuncio.

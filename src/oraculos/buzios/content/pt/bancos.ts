@@ -6,7 +6,7 @@ import type { Orientacion } from '../types';
 // Tejido de la consulta de odus (español NEUTRO).
 //
 // PRUDENCIA, que acá importa más que en ningún otro oráculo: esto es una
-// consulta SIMBÓLICA de los significados de los odus, no el jogo de búzios,
+// consulta SIMBÓLICA de los significados de los odus, no el jogo de buzios,
 // que es un ritual sagrado que realizan personas iniciadas. Este banco NO
 // interpreta, no invoca, no pide y no habla en nombre de nadie: solo presenta
 // lo que ya está escrito y lo conecta con la pregunta.
@@ -41,31 +41,31 @@ export const BANCO_BUZIOS_PT: BancoBuzios = {
   aperturas: {
     cerrada: {
       neutro: [
-        'Para o que você pergunta {tema}, com {num} búzios abertos fala {odu}.',
+        'Para o que você pergunta {tema}, com {num} buzios abertos fala {odu}.',
         'Diante da sua consulta {tema}, os {num} abertos trazem {odu}.',
         'O que responde {tema} chega pelas mãos de {odu} ({num} abertos).',
       ],
       preocupacion: [
-        'Entendo a sua inquietação {tema}. Com {num} búzios abertos fala {odu}, e convém ler com calma.',
+        'Entendo a sua inquietação {tema}. Com {num} buzios abertos fala {odu}, e convém ler com calma.',
         'Para isso que te preocupa {tema}, os {num} abertos trazem {odu}.',
       ],
       impulso: [
         'Com essa vontade de avançar {tema}, os {num} abertos propõem uma pausa em {odu}.',
-        'Antes de dar o passo {tema}, com {num} búzios abertos fala {odu}.',
+        'Antes de dar o passo {tema}, com {num} buzios abertos fala {odu}.',
       ],
     },
     abierta: {
       neutro: [
-        'Para o que você quer compreender {tema}, com {num} búzios abertos fala {odu}.',
+        'Para o que você quer compreender {tema}, com {num} buzios abertos fala {odu}.',
         'O que se abre diante da sua consulta {tema} chega com {odu} ({num} abertos).',
       ],
       preocupacion: [
         'Sem pressa: para isso que te pesa {tema}, os {num} abertos trazem {odu}.',
-        'Respire. Com {num} búzios abertos, fala {odu}.',
+        'Respire. Com {num} buzios abertos, fala {odu}.',
       ],
       impulso: [
         'Detenha por um instante o impulso: os {num} abertos trazem {odu}.',
-        'Tanta energia merece uma pausa. Com {num} búzios abertos, fala {odu}.',
+        'Tanta energia merece uma pausa. Com {num} buzios abertos, fala {odu}.',
       ],
     },
   },
@@ -74,7 +74,7 @@ export const BANCO_BUZIOS_PT: BancoBuzios = {
   // consulta simbólica, no una adivinación: nada acá promete un desenlace.
   aperturasIntencion: {
     retorno: [
-      'Você pergunta se volta. Os búzios não decidem retornos; com {num} abertos, fala {odu}, mostrando o que ficou aberto.',
+      'Você pergunta se volta. Os buzios não decidem retornos; com {num} abertos, fala {odu}, mostrando o que ficou aberto.',
       'Quer saber se a pessoa vai voltar. Com {num} abertos, responde {odu}: veja o que sustenta a distância hoje.',
     ],
     sentimiento: [
@@ -94,7 +94,7 @@ export const BANCO_BUZIOS_PT: BancoBuzios = {
       'Você quer saber se vai dar certo. Com {num} abertos, responde {odu}.',
     ],
     espera: [
-      'Você pergunta quando. Os búzios não marcam datas; com {num} abertos, {odu} mostra o que falta para amadurecer.',
+      'Você pergunta quando. Os buzios não marcam datas; com {num} abertos, {odu} mostra o que falta para amadurecer.',
       'Você quer saber quanto falta. Com {num} abertos, {odu} fala sobre o que está sendo gestado.',
     ],
   },

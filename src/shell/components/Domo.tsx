@@ -222,7 +222,9 @@ const estilos = StyleSheet.create({
     borderWidth: 1.5,
   },
   subtitulo: {
-    marginTop: espaciado.lg,
+    /* Pegado al domo, no a media distancia: el subtitulo es del domo que tiene
+       arriba, no un texto suelto entre dos cosas. */
+    marginTop: espaciado.xs,
     color: 'rgba(240,242,248,0.9)',
     fontSize: 18,
     textAlign: 'center',

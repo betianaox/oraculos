@@ -6,13 +6,13 @@ import type { FragmentosDeTema } from '../../types';
 export const trabajo: FragmentosDeTema = {
   fehu: {
     normal: [
-      'los recursos bien administrados como base de un buen resultado',
+      'lo que ya tienes, bien administrado, como base de todo lo demás',
       'una oportunidad concreta que conviene aprovechar ahora',
       'el esfuerzo que empieza a traducirse en algo tangible',
     ],
     invertida: [
       'el miedo a no tener suficiente para sostener lo que ya se logró',
-      'recursos mal repartidos que generan tensión en el equipo',
+      'un reparto injusto que tensa al equipo',
       'la inseguridad de no saber si el esfuerzo va a ser reconocido',
     ],
   },
@@ -103,7 +103,7 @@ export const trabajo: FragmentosDeTema = {
   hagalaz: {
     normal: [
       'un cambio brusco en el equipo o el proyecto que abre algo nuevo',
-      'una reestructuración que, aunque incómoda, ordena lo que hacía falta',
+      'un cambio incómodo que igual ordena lo que hacía falta',
       'el quiebre necesario para dejar un puesto que ya no rendía',
     ],
     invertida: [
@@ -114,7 +114,7 @@ export const trabajo: FragmentosDeTema = {
   },
   naudiz: {
     normal: [
-      'la perseverancia frente a recursos o tiempo limitado',
+      'seguir dándole aunque falten tiempo y manos',
       'el esfuerzo sostenido en un proyecto que todavía no da frutos',
       'la paciencia necesaria mientras se consigue lo que falta',
     ],
@@ -162,13 +162,13 @@ export const trabajo: FragmentosDeTema = {
   },
   perthu: {
     normal: [
-      'la confianza en un proceso de selección o resultado que no depende de ti',
+      'confiar en una respuesta que no depende de ti',
       'la apertura a una oportunidad inesperada',
       'lo desconocido de un cambio de rumbo profesional',
     ],
     invertida: [
       'la necesidad de controlar un resultado que no depende solo de ti',
-      'la ansiedad de no saber cómo va a terminar un proceso laboral',
+      'la ansiedad de no saber cómo va a terminar esto del trabajo',
       'la dificultad de esperar una respuesta sin desesperarse',
     ],
   },
@@ -259,12 +259,12 @@ export const trabajo: FragmentosDeTema = {
   ingwaz: {
     normal: [
       'un proyecto que se está gestando y todavía necesita su tiempo',
-      'un potencial profesional que conviene dejar madurar antes de mostrarlo',
+      'algo tuyo que promete y todavía conviene no mostrar',
       'una idea que ya está puesta y va a dar sus frutos',
     ],
     invertida: [
       'la impaciencia de querer resultados antes de que el proyecto esté listo',
-      'las ganas de acelerar un proceso de selección que pide su tiempo',
+      'las ganas de apurar una respuesta que pide su tiempo',
       'la ansiedad de no saber esperar el momento indicado para actuar',
     ],
   },

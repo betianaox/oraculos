@@ -15,7 +15,7 @@ export const amor: FragmentosDeTema = {
   fehu: {
     normal: [
       'generosity as a foundation for this to grow',
-      'emotional resources that yield more when shared',
+      'the good you have to give, which grows when it is shared',
       'the abundance that comes when affection is set in motion',
     ],
     invertida: [
@@ -123,7 +123,7 @@ export const amor: FragmentosDeTema = {
   naudiz: {
     normal: [
       'the patience to sustain this through a lean moment',
-      'the effort you keep putting in even when resources are short',
+      'the effort you keep putting in even when you get little back',
       'perseverance in the face of a concrete obstacle',
     ],
     invertida: [
@@ -267,12 +267,12 @@ export const amor: FragmentosDeTema = {
   ingwaz: {
     normal: [
       'something taking shape that still needs its time',
-      'a potential worth letting ripen before acting',
+      'something promising that still needs time to ripen',
       'a seed already planted that will bear its fruit',
     ],
     invertida: [
       'the impatience of forcing something that is not ready',
-      'the urge to speed up a process that asks for calm',
+      'the urge to rush something that asks for calm',
       'the anxiety of not knowing how to wait for the right moment',
     ],
   },

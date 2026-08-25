@@ -8,7 +8,7 @@ export const amor: FragmentosDeTema = {
   fehu: {
     normal: [
       'a generosidade como alicerce para que isto cresça',
-      'recursos afetivos que rendem mais quando são compartilhados',
+      'o de bom que você tem para dar, que cresce quando é compartilhado',
       'a prosperidade que chega quando o carinho se põe em movimento',
     ],
     invertida: [
@@ -116,7 +116,7 @@ export const amor: FragmentosDeTema = {
   naudiz: {
     normal: [
       'a paciência para sustentar isto num momento de carência',
-      'o esforço que se mantém mesmo faltando recursos',
+      'o esforço que se mantém mesmo tendo pouco',
       'a perseverança diante de um obstáculo concreto',
     ],
     invertida: [
@@ -260,12 +260,12 @@ export const amor: FragmentosDeTema = {
   ingwaz: {
     normal: [
       'algo que está se gestando e ainda precisa do seu tempo',
-      'um potencial que convém deixar amadurecer antes de agir',
+      'algo que promete e ainda pede tempo para amadurecer',
       'uma semente já plantada que vai dar frutos',
     ],
     invertida: [
       'a impaciência de querer forçar algo que não está pronto',
-      'a vontade de acelerar um processo que pede calma',
+      'a vontade de apressar algo que pede calma',
       'a ansiedade de não saber esperar o momento certo',
     ],
   },

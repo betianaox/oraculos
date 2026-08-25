@@ -2,17 +2,18 @@
   "expo": {
     "name": "Oraculos",
     "slug": "oraculos",
-    "owner": "betianare",
-    "version": "1.0.0",
+    "owner": "imagostack",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
+    "backgroundColor": "#0E0F14",
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "predictiveBackGestureEnabled": false,
-      "package": "com.oraculos.app",
+      "package": "com.imagostack.oraculos",
       "adaptiveIcon": {
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
@@ -47,8 +48,17 @@
         {
           "androidAppId": "ca-app-pub-5829308591228932~5466272602"
         }
-      ]
+      ],
+      "expo-sharing"
     ],
-    "extra": {}
+    "extra": {
+      "expo-navigation-bar": {
+        "enforceContrast": false,
+        "style": "light"
+      },
+      "eas": {
+        "projectId": "f88c2cfe-d469-49a7-a78e-b2eef5e7f0ac"
+      }
+    }
   }
 }

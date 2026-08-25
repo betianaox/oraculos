@@ -45,9 +45,12 @@ export function BotonIcono({
 
 const estilos = StyleSheet.create({
   boton: {
-    width: 54,
-    height: 54,
-    borderRadius: 27,
+    // 46 y no 54: en el pie hay tres cosas (el switch, la voz y compartir) y
+    // con 54 no entraban en un telefono de 360. Con el hitSlop de 8 el area
+    // que se toca sigue siendo de 62, asi que no se perdio nada real.
+    width: 46,
+    height: 46,
+    borderRadius: 23,
     borderWidth: 1.5,
     borderColor: 'rgba(175,210,255,0.65)',
     alignItems: 'center',

@@ -6,7 +6,8 @@ export type SeccionOraculo = 'pregunta' | SeccionFooter;
 
 export type RootStackParamList = {
   Inicio: undefined;
-  Ajustes: undefined;
+  /** Ayuda y ajustes, juntos: ver `screens/Ayuda.tsx`. */
+  Ayuda: undefined;
   Oraculo: { oraculoId: string; seccion: SeccionOraculo };
   // Flujo de lectura COMPARTIDO: cualquier oraculo con `mazo` lo usa.
   Tirada: { oraculoId: string; pregunta: string; tema: Tema; analisis: AnalisisPregunta };

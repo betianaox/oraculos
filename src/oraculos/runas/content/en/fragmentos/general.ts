@@ -6,7 +6,7 @@ import type { FragmentosDeTema } from '../../types';
 export const general: FragmentosDeTema = {
   fehu: {
     normal: [
-      'the resources you already have and may not be fully valuing',
+      'what you already have and may not be valuing enough',
       'a solid base built by tending to what already works',
       'the prosperity that comes when what is already underway is put in order',
     ],
@@ -115,7 +115,7 @@ export const general: FragmentosDeTema = {
   naudiz: {
     normal: [
       'the patience needed in a lean moment',
-      'the effort held up even when resources are short',
+      'the effort held up even when there is little to work with',
       'perseverance in the face of a concrete obstacle',
     ],
     invertida: [
@@ -145,7 +145,7 @@ export const general: FragmentosDeTema = {
     invertida: [
       'the impatience of wanting results ahead of time',
       'the frustration of not yet seeing what was sown',
-      'a process cut short before it bears fruit',
+      'something cut short just before it bore fruit',
     ],
   },
   eihwaz: {
@@ -259,12 +259,12 @@ export const general: FragmentosDeTema = {
   ingwaz: {
     normal: [
       'something taking shape that still needs its time',
-      'a potential worth letting ripen before acting',
+      'something promising that still needs time to ripen',
       'a seed already planted that will bear its fruit',
     ],
     invertida: [
       'the impatience of forcing something that is not ready',
-      'the urge to speed up a process that asks for calm',
+      'the urge to rush something that asks for calm',
       'the anxiety of not knowing how to wait for the right moment',
     ],
   },
