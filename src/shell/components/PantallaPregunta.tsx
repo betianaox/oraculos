@@ -322,7 +322,16 @@ function AvisoModal({
                   pressed && { opacity: 0.7 },
                 ]}
               >
-                <Text style={estilos.cardBotonTexto} numberOfLines={1} adjustsFontSizeToFit>
+                {/* DOS RENGLONES, Y NUNCA ACHICAR LA LETRA. Antes esto tenia
+                    `adjustsFontSizeToFit`, que cuando la etiqueta no entra en un
+                    renglon le baja el cuerpo. Como los dos botones miden lo
+                    mismo pero las etiquetas no, en portugues quedaba
+                    "Escrever mais" grande al lado de "Consultar mesmo assim"
+                    chiquito: dos botones que parecen de distinta jerarquia
+                    cuando son pares. Dejandolo partir en dos renglones, la
+                    letra es siempre la misma y lo que cambia es el alto, que
+                    ademas es el mismo para los dos porque la fila los estira. */}
+                <Text style={estilos.cardBotonTexto} numberOfLines={2}>
                   {a.label}
                 </Text>
               </Pressable>
@@ -468,6 +477,7 @@ const estilos = StyleSheet.create({
   cardBoton: {
     flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
     paddingVertical: espaciado.md,
     paddingHorizontal: espaciado.md,
     borderRadius: radios.md,
@@ -478,6 +488,9 @@ const estilos = StyleSheet.create({
   cardBotonTexto: {
     color: colores.texto,
     fontSize: 14,
+    // Centrado: si la etiqueta se parte en dos renglones, el segundo tiene que
+    // quedar centrado abajo del primero y no pegado a la izquierda.
+    textAlign: 'center',
     fontFamily: fuente('uiMedium'),
   },
 });

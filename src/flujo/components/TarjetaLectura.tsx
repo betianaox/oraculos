@@ -5,6 +5,7 @@ import type { OraculoModulo } from '@/oraculos/tipos';
 import { colores } from '@/shell/theme/tokens';
 import { hexAlfa } from '@/shell/color';
 import { fuente } from '@/shell/theme/fuentes';
+import type { CodigoIdioma } from '@/i18n/idiomas';
 import { caidaActual } from '../caida';
 
 /**
@@ -66,7 +67,7 @@ const ALTO_LECTURA = 18 * 3 + HOLGURA; // tres renglones de 18
 // por eso tampoco se usa el triangulito suelto. Solo se escala, respetando su
 // proporcion (839x258).
 const BADGE_ANCHO = 120;
-const BADGE_ALTO = Math.round(BADGE_ANCHO * (258 / 839));
+const BADGE_ALTO = Math.round(BADGE_ANCHO * (142 / 478));
 
 // HAY UNA SOLA LINEA, Y VA ARRIBA. Cerraba la caida con otra abajo, y sobraba:
 // la de arriba separa la firma de la tirada, que son dos cosas distintas, pero
@@ -80,8 +81,8 @@ const BADGE_ALTO = Math.round(BADGE_ANCHO * (258 / 839));
 const AIRE_FIRMA = 8; // firma -> linea
 const AIRE_LINEA = 14; // linea -> caida
 const AIRE_PREGUNTA = 30; // caida -> pregunta
-const AIRE_LECTURA = 20; // pregunta -> lectura
-const AIRE_CTA = 16; // lectura -> badge
+const AIRE_LECTURA = 14; // pregunta -> lectura
+const AIRE_CTA = 22; // lectura -> badge
 
 /**
  * Lo que le queda a la caída.
@@ -114,11 +115,19 @@ const ANCHO_CAIDA = ANCHO_TARJETA - PADDING * 2;
 // le devuelven al renglon el alto que corresponde.
 const DOMO = require('../../../assets/android-icon-foreground.png');
 
-// OJO: POR AHORA SOLO ESTA EL DE INGLES. Google publica un archivo por idioma en
-// play.google.com/intl/es-419/badges/ y hay que bajar el es-419 y el pt-BR; un
-// badge en ingles abajo de una tarjeta en castellano se lee como armada con lo
-// que habia. Cuando esten, esto elige por idioma en vez de ser uno solo.
-const BADGE = require('../../../assets/googleplay/en-US.png');
+// UN ARCHIVO POR IDIOMA, Y SON LOS DE GOOGLE, SIN TOCAR. Las reglas de marca
+// piden usar su artwork tal cual: no se recolorea, no se recorta —por eso
+// tampoco se usa el triangulito suelto— y no se rehace con el texto traducido
+// aunque quede identico. Los nombres son los que traen al descargarlos, a
+// proposito: renombrarlos invita a que alguien crea que son nuestros.
+//
+// Los tres miden 478x142, asi que la proporcion no cambia con el idioma y el
+// badge ocupa siempre el mismo lugar en la tarjeta.
+const BADGES: Record<CodigoIdioma, number> = {
+  es: require('../../../assets/googleplay/GetItOnGooglePlay_Badge_Web_color_Spanish-LATAM.png'),
+  en: require('../../../assets/googleplay/GetItOnGooglePlay_Badge_Web_color_English.png'),
+  pt: require('../../../assets/googleplay/GetItOnGooglePlay_Badge_Web_color_Portuguese-Brazil.png'),
+};
 const CAJA_DOMO = 46;
 const DOMO_VISIBLE = 26;
 const RECORTE_DOMO = (CAJA_DOMO - DOMO_VISIBLE) / 2;
@@ -131,10 +140,12 @@ interface Props {
   parrafos: string[];
   /** Nombre de la app, ya traducido: la firma de arriba a la izquierda. */
   marca: string;
+  /** Idioma activo: decide en que idioma va el badge de Google Play. */
+  idioma: CodigoIdioma;
 }
 
 export const TarjetaLectura = forwardRef<View, Props>(function TarjetaLectura(
-  { oraculo, nombre, pregunta, parrafos, marca },
+  { oraculo, nombre, pregunta, parrafos, marca, idioma },
   ref
 ) {
   const acento = oraculo?.acento ?? colores.cromo;
@@ -174,7 +185,7 @@ export const TarjetaLectura = forwardRef<View, Props>(function TarjetaLectura(
         {parrafos.join(' ')}
       </Text>
 
-      <Image source={BADGE} style={estilos.badge} resizeMode="contain" />
+      <Image source={BADGES[idioma]} style={estilos.badge} resizeMode="contain" />
     </View>
   );
 });

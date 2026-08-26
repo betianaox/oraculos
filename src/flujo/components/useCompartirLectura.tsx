@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useT } from '@/i18n';
+import { useApp } from '@/store/useApp';
 import type { OraculoModulo } from '@/oraculos/tipos';
 import { BotonCompartir } from './BotonCompartir';
 import { TarjetaLectura } from './TarjetaLectura';
@@ -32,6 +33,7 @@ export function useCompartirLectura({
   disabled?: boolean;
 }) {
   const t = useT();
+  const idioma = useApp((s) => s.idioma);
   const ref = useRef<View>(null);
 
   return {
@@ -55,6 +57,7 @@ export function useCompartirLectura({
           pregunta={pregunta}
           parrafos={parrafos}
           marca={t('app.nombre')}
+          idioma={idioma}
         />
       </View>
     ),
