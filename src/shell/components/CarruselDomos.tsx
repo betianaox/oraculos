@@ -12,6 +12,11 @@ import { calcularLayout } from '../layout';
 import { useCarrusel } from '../carrusel';
 import { Domo } from './Domo';
 
+// Cuanto se espera, despues de soltar, antes de dar por sentado que no va a
+// haber momentum. Tiene que alcanzar para que Android alcance a dispararlo si
+// lo va a disparar, y ser corto como para que no se note.
+const ESPERA_MS = 160;
+
 interface Props {
   scrollX: Animated.Value;
   /** Toque en el domo centrado -> ir a la pregunta de ese oraculo. */
@@ -27,6 +32,9 @@ export function CarruselDomos({ scrollX, onSelect, onIndexChange }: Props) {
   const { listaLoop, inicio, aLogico, recentrar } = useCarrusel();
   // Indice (en la lista repetida) del domo centrado: solo ese anima particulas.
   const [centrado, setCentrado] = useState(inicio);
+  // Donde esta parado el carrusel, en JS: lo mantiene al dia el listener
+  // de onScroll, mas abajo.
+  const posicion = useRef(inicio * stride);
 
   // ─────────────────────────────────────────────────────────────────────────
   // EL DOMO DE ADELANTE CHIQUITO
@@ -56,39 +64,98 @@ export function CarruselDomos({ scrollX, onSelect, onIndexChange }: Props) {
   // desincronizarlo.
   useEffect(() => {
     lista.current?.scrollToOffset({ offset: inicio * stride, animated: false });
+    posicion.current = inicio * stride;
     setCentrado(inicio);
   }, [stride, inicio]);
 
+  // Donde esta parado el carrusel, en JS. El scroll lo maneja el driver nativo,
+  // asi que JS no se entera de la posicion salvo que se la pida: el `listener`
+  // de Animated.event corre ademas del driver y solo guarda el numero. No hace
+  // nada mas —ni un setState— para no meter trabajo de JS en cada cuadro.
   const onScroll = useRef(
-    Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], { useNativeDriver: true })
+    Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
+      useNativeDriver: true,
+      listener: (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+        posicion.current = e.nativeEvent.contentOffset.x;
+      },
+    })
   ).current;
 
-  /** Donde quedo parado el carrusel: fija el centrado y recentra el loop. */
-  const asentar = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const raw = Math.round(e.nativeEvent.contentOffset.x / stride);
+  /**
+   * Donde quedo parado el carrusel: fija el centrado y recentra el loop.
+   *
+   * `alinear` es para el caso raro en que se suelta y no hay animacion de snap
+   * que lo termine de acomodar: ahi hay que empujarlo al domo mas cercano, o
+   * queda a mitad de camino entre dos. Cuando lo llama el momentum ya viene
+   * asentado y no hace falta.
+   */
+  // Si el dedo ya esta apoyado de nuevo, el salto se saltea. Mover la lista
+  // por codigo mientras alguien la esta tocando es pelearle al gesto, y gana
+  // cualquiera de los dos: queda a mitad de camino. No pasa nada por no
+  // recentrar esta vez —para eso esta el colchon de dos copias— y en la proxima
+  // asentada se vuelve a evaluar.
+  const tocando = useRef(false);
+  const onDragBegin = () => {
+    tocando.current = true;
+  };
+
+  const asentar = (x: number, alinear: boolean) => {
+    const raw = Math.round(x / stride);
     onIndexChange(aLogico(raw));
 
-    // Si quedo en una copia de los extremos, salta a la del medio (invisible).
-    const destino = recentrar(raw);
+    const destino = tocando.current ? raw : recentrar(raw);
     if (destino !== raw) {
+      // Quedo en una copia de los extremos: salta a la del medio. Es el mismo
+      // oraculo en la misma posicion, asi que el salto no se ve.
       lista.current?.scrollToOffset({ offset: destino * stride, animated: false });
+    } else if (alinear && Math.abs(x - destino * stride) > 1) {
+      lista.current?.scrollToOffset({ offset: destino * stride, animated: true });
     }
     setCentrado(destino);
   };
 
   // ─────────────────────────────────────────────────────────────────────────
-  // EL DOMO CENTRADO SIN PARTICULAS
+  // POR QUE NO SE ASIENTA APENAS SE LEVANTA EL DEDO
   // ─────────────────────────────────────────────────────────────────────────
-  // `centrado` decide que domo anima, y salia solo de onMomentumScrollEnd. Pero
-  // si se arrastra despacio y se suelta sin impulso, Android no tiene momentum
-  // que terminar y ESE EVENTO NO SE DISPARA NUNCA: el domo queda centrado y
-  // apagado, y el footer sigue nombrando al anterior.
+  // Habia un onScrollEndDrag que, si la velocidad era casi cero, asentaba ahi
+  // mismo. Rompia el carrusel, y de una forma que solo se ve en el borde del
+  // loop: al soltar, el snap todavia esta en curso, asi que la posicion que se
+  // lee NO es donde va a quedar. Se redondeaba al domo equivocado y, peor, el
+  // salto del loop (que es un scrollToOffset) le cortaba el snap por la mitad;
+  // el nativo terminaba el movimiento desde una posicion que ya no era la que
+  // el creia y volvia a caer en el mismo domo.
   //
-  // El final del arrastre trae la velocidad. Si es practicamente cero, ese
-  // arrastre no va a tener momentum y hay que dar por asentado ahi mismo; si
-  // trae impulso, se deja que siga y asienta el momentum como siempre.
-  const onDragEnd = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    if (Math.abs(e.nativeEvent.velocity?.x ?? 0) < 0.1) asentar(e);
+  // Ahora el final del arrastre no asienta: DEJA UN AVISO por si nadie mas lo
+  // hace. Si arranca el momentum, ese aviso se cancela y asienta el momentum
+  // como siempre. Si no arranca ninguno —que era el caso original, arrastrar
+  // despacio y soltar sin impulso, donde Android no dispara nunca el evento de
+  // fin de momentum— salta el aviso y asienta el, ya con todo quieto.
+  //
+  // La diferencia de fondo con lo anterior: aca nunca se toca la lista mientras
+  // se esta moviendo.
+  const aviso = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cancelarAviso = () => {
+    if (aviso.current) clearTimeout(aviso.current);
+    aviso.current = null;
+  };
+  useEffect(() => cancelarAviso, []);
+
+  const onDragEnd = () => {
+    tocando.current = false;
+    cancelarAviso();
+    aviso.current = setTimeout(() => {
+      aviso.current = null;
+      asentar(posicion.current, true);
+    }, ESPERA_MS);
+  };
+
+  const onMomentumBegin = () => {
+    cancelarAviso();
+  };
+
+  const onMomentumEnd = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    cancelarAviso();
+    asentar(e.nativeEvent.contentOffset.x, false);
   };
 
   // El View contenedor se ajusta al alto de los domos (si se devuelve la lista
@@ -107,7 +174,9 @@ export function CarruselDomos({ scrollX, onSelect, onIndexChange }: Props) {
         contentContainerStyle={{ paddingHorizontal: side - spacing / 2 }}
         scrollEventThrottle={16}
         onScroll={onScroll}
-        onMomentumScrollEnd={asentar}
+        onScrollBeginDrag={onDragBegin}
+        onMomentumScrollBegin={onMomentumBegin}
+        onMomentumScrollEnd={onMomentumEnd}
         onScrollEndDrag={onDragEnd}
         renderItem={({ item, index }) => (
           <Domo
