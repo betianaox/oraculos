@@ -48,10 +48,13 @@ export function useCompartirLectura({
         <TarjetaLectura
           ref={ref}
           oraculo={oraculo}
+          // El nombre se resuelve aca y no lo pasa quien llama: las cuatro
+          // pantallas ya lo tenian calculado igual, y era la clase de dato que
+          // se olvida de pasar en la quinta.
+          nombre={oraculo ? t(oraculo.nombreKey) : ''}
           pregunta={pregunta}
           parrafos={parrafos}
           marca={t('app.nombre')}
-          invitacion={t('flujo.tarjetaInvitacion')}
         />
       </View>
     ),

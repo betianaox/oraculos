@@ -11,8 +11,13 @@ import { caidaActual } from '../caida';
  * ───────────────────────────────────────────────────────────────────────────
  * LA TARJETA QUE SE COMPARTE
  * ───────────────────────────────────────────────────────────────────────────
- * Una foto de la consulta: la pregunta, la caída, el arranque de la lectura y
- * abajo la invitación a bajar la app.
+ * De arriba abajo: la firma, una línea, la caída, otra línea, la pregunta, el
+ * arranque de la lectura cortado, y la invitación.
+ *
+ * LAS DOS LINEAS SON LO QUE LA ORDENA. Encierran la caída, que es lo que se
+ * quiere mostrar, y separan lo de arriba (de quién es esto) de lo de abajo (qué
+ * dice). Sin ellas las partes flotaban juntas y no se veía dónde terminaba una
+ * y empezaba la otra.
  *
  * MIDE SIEMPRE LO MISMO, en puntos, y no se adapta a la pantalla. Es lo
  * contrario de lo que hace el resto de la app, y es a propósito: esto no lo va
@@ -24,7 +29,7 @@ import { caidaActual } from '../caida';
  *
  * ES 9:16 Y NO CUADRADA. Vertical alta es la forma de las historias, que es
  * donde una imagen así se manda, y de paso le deja a la caída casi el doble de
- * alto: las cartas se ven grandes, que es lo que se está compartiendo.
+ * alto: las piezas se ven grandes, que es lo que se está compartiendo.
  *
  * EL TEXTO VA RECORTADO A PROPOSITO, Y SE NOTA. Tres renglones y puntos
  * suspensivos, con la invitación abajo. Una lectura entera no entra en una
@@ -42,63 +47,94 @@ export const ALTO_TARJETA = 640;
 // renglones empujaba al resto y el bloque de lectura terminaba cortado a la
 // mitad de un renglón: no truncado con puntos suspensivos —que es lo que se
 // quiere— sino tajeado por la mitad de las letras.
-// ── Y ojo con el alto de los bloques de texto ──────────────────────────────
-// Android le suma a cada Text un relleno propio arriba y abajo (el famoso
-// includeFontPadding), asi que un Text de tres renglones NO mide tres veces el
-// lineHeight: mide un poco mas. Fijandole el alto exacto, el ultimo renglon
-// queda cortado por la mitad de las letras.
 //
-// Se apaga ese relleno (abajo, en cada estilo) y ademas se dejan 2 puntos de
-// juego, porque el alto real depende de la fuente y de la escala de letra del
-// sistema. Los 2 puntos salen de la caida, que es la unica que se estira.
+// Android le suma a cada Text un relleno propio arriba y abajo (el famoso
+// includeFontPadding), así que un Text de tres renglones NO mide tres veces el
+// lineHeight: mide un poco más. Se apaga ese relleno (abajo, en cada estilo) y
+// además se dejan 2 puntos de juego, porque el alto real depende de la fuente.
 const PADDING = 18;
 const HOLGURA = 2;
-const ALTO_PREGUNTA = 26 * 3 + HOLGURA; // tres renglones de 26
+
+const ALTO_FIRMA = 28;
+const ALTO_PREGUNTA = 24 * 3 + HOLGURA; // tres renglones de 24
 const ALTO_LECTURA = 18 * 3 + HOLGURA; // tres renglones de 18
-const ALTO_MARCA = 24; // el alto de la moneda, que es lo mas alto de la fila
-const ALTO_CTA = 15 + HOLGURA;
+// El badge de Google Play, en lugar de una frase escrita por nosotros. Viene
+// traducido de fabrica —hay un archivo por idioma— y se reconoce de un vistazo,
+// que es mas de lo que consigue cualquier frase a este tamano.
+//
+// NO SE RECOLOREA NI SE RECORTA: las reglas de marca de Google lo prohiben, y
+// por eso tampoco se usa el triangulito suelto. Solo se escala, respetando su
+// proporcion (839x258).
+const BADGE_ANCHO = 120;
+const BADGE_ALTO = Math.round(BADGE_ANCHO * (258 / 839));
 
-// Aire entre bloques. El pie va apretado contra si mismo y separado de la
-// caida: se lee como una sola firma abajo y no como cuatro cosas sueltas.
-const AIRE_PREGUNTA = 14;
-const AIRE_PIE = 16;
-const AIRE_SEPARADOR = 12;
-const AIRE_LECTURA = 16;
-const AIRE_CTA = 6;
+// HAY UNA SOLA LINEA, Y VA ARRIBA. Cerraba la caida con otra abajo, y sobraba:
+// la de arriba separa la firma de la tirada, que son dos cosas distintas, pero
+// entre la tirada y la pregunta no hace falta un trazo para entender que una
+// termino y empieza la otra — lo dice el cambio de dibujo a texto. Sacandola,
+// ademas, ese espacio se puede usar para separarlas de verdad.
+//
+// Y la tirada va APRETADA CONTRA SU LINEA, con el aire repartido abajo, donde
+// hay tres textos seguidos y el espacio entre ellos es lo unico que los
+// distingue.
+const AIRE_FIRMA = 8; // firma -> linea
+const AIRE_LINEA = 14; // linea -> caida
+const AIRE_PREGUNTA = 30; // caida -> pregunta
+const AIRE_LECTURA = 20; // pregunta -> lectura
+const AIRE_CTA = 16; // lectura -> badge
 
-/** Lo que le queda a la caída: unos 378 puntos, casi el doble que antes. */
+/**
+ * Lo que le queda a la caída.
+ *
+ * Se calcula con la pregunta de TRES renglones, que es el peor caso, aunque la
+ * pregunta no tenga alto fijo. Así la caída se dibuja del mismo tamaño en todas
+ * las tarjetas en vez de agrandarse cuando la pregunta es corta; el sobrante
+ * queda como aire alrededor de la tirada, que es donde no molesta.
+ */
 const ALTO_CAIDA =
   ALTO_TARJETA -
   PADDING * 2 -
-  ALTO_PREGUNTA -
+  ALTO_FIRMA -
+  AIRE_FIRMA -
+  1 - // la unica linea
+  AIRE_LINEA -
   AIRE_PREGUNTA -
-  AIRE_PIE -
-  1 - // el separador
-  AIRE_SEPARADOR -
-  ALTO_LECTURA -
+  ALTO_PREGUNTA -
   AIRE_LECTURA -
-  ALTO_MARCA -
+  ALTO_LECTURA -
   AIRE_CTA -
-  ALTO_CTA;
+  BADGE_ALTO;
 
 const ANCHO_CAIDA = ANCHO_TARJETA - PADDING * 2;
 
+// El icono de la app es el ADAPTATIVO de Android, y ese formato obliga a dejar
+// una zona segura enorme alrededor del dibujo: la bola ocupa poco mas de la
+// mitad del archivo. Puesto en una caja del tamano que se quiere ver, se veria
+// diminuto. Por eso va en una caja mucho mas grande, con margenes negativos que
+// le devuelven al renglon el alto que corresponde.
+const DOMO = require('../../../assets/android-icon-foreground.png');
+
+// OJO: POR AHORA SOLO ESTA EL DE INGLES. Google publica un archivo por idioma en
+// play.google.com/intl/es-419/badges/ y hay que bajar el es-419 y el pt-BR; un
+// badge en ingles abajo de una tarjeta en castellano se lee como armada con lo
+// que habia. Cuando esten, esto elige por idioma en vez de ser uno solo.
+const BADGE = require('../../../assets/googleplay/en-US.png');
+const CAJA_DOMO = 46;
+const DOMO_VISIBLE = 26;
+const RECORTE_DOMO = (CAJA_DOMO - DOMO_VISIBLE) / 2;
+
 interface Props {
   oraculo: OraculoModulo | undefined;
+  /** Nombre del oráculo, ya traducido: va arriba a la derecha, con su moneda. */
+  nombre: string;
   pregunta: string;
   parrafos: string[];
-  /** Nombre de la app, ya traducido: el de la firma y el de la invitación. */
+  /** Nombre de la app, ya traducido: la firma de arriba a la izquierda. */
   marca: string;
-  /**
-   * La invitación de abajo, ya traducida. NO NOMBRA A LA APP: el nombre está
-   * justo arriba, en la firma, y repetirlo dos renglones seguidos se lee como
-   * un error. Dice para qué bajarla y dónde, que es lo que falta.
-   */
-  invitacion: string;
 }
 
 export const TarjetaLectura = forwardRef<View, Props>(function TarjetaLectura(
-  { oraculo, pregunta, parrafos, marca, invitacion },
+  { oraculo, nombre, pregunta, parrafos, marca },
   ref
 ) {
   const acento = oraculo?.acento ?? colores.cromo;
@@ -113,32 +149,32 @@ export const TarjetaLectura = forwardRef<View, Props>(function TarjetaLectura(
         end={{ x: 0.5, y: 0.92 }}
       />
 
-      <Text style={estilos.pregunta} numberOfLines={3}>
-        {pregunta}
-      </Text>
-
-      <View style={estilos.caida}>
-        {dibujarCaida?.({ ancho: ANCHO_CAIDA, alto: ALTO_CAIDA })}
-      </View>
-
-      <View style={estilos.pie}>
-        <View style={estilos.separador} />
-
-        <Text style={estilos.lectura} numberOfLines={3} ellipsizeMode="tail">
-          {parrafos.join(' ')}
-        </Text>
-
-        <View style={estilos.marca}>
+      <View style={estilos.firma}>
+        <View style={estilos.firmaLado}>
+          <Image source={DOMO} style={estilos.domo} resizeMode="contain" />
           <Text style={estilos.marcaTexto}>{marca}</Text>
+        </View>
+        <View style={estilos.firmaLado}>
+          <Text style={[estilos.oraculoTexto, { color: acento }]}>{nombre}</Text>
           {oraculo?.icono ? (
             <Image source={oraculo.icono} style={estilos.moneda} resizeMode="contain" />
           ) : null}
         </View>
-
-        <Text style={estilos.cta} numberOfLines={1}>
-          {invitacion}
-        </Text>
       </View>
+
+      <View style={[estilos.linea, { marginTop: AIRE_FIRMA }]} />
+
+      <View style={estilos.caida}>{dibujarCaida?.({ ancho: ANCHO_CAIDA, alto: ALTO_CAIDA })}</View>
+
+      <Text style={estilos.pregunta} numberOfLines={3}>
+        {pregunta}
+      </Text>
+
+      <Text style={estilos.lectura} numberOfLines={3} ellipsizeMode="tail">
+        {parrafos.join(' ')}
+      </Text>
+
+      <Image source={BADGE} style={estilos.badge} resizeMode="contain" />
     </View>
   );
 });
@@ -154,43 +190,78 @@ const estilos = StyleSheet.create({
     backgroundColor: colores.fondo,
     overflow: 'hidden',
   },
-  pregunta: {
-    // SIN ALTO FIJO, a diferencia del resto. Reservarle los tres renglones
-    // siempre dejaba un hueco muerto debajo del titulo cuando la pregunta
-    // ocupaba uno solo, que es el caso normal. Midiendo lo que ocupa, ese aire
-    // se lo queda la caida, que es la unica que se estira.
-    //
-    // El presupuesto de la caida se sigue calculando con los tres renglones
-    // (ver ALTO_CAIDA): es el peor caso, y asi la caida se dibuja del mismo
-    // tamano en todas las tarjetas en vez de agrandarse con las preguntas
-    // cortas. Con una pregunta corta, el sobrante queda como aire repartido
-    // arriba y abajo de la tirada, que es donde no molesta.
-    marginBottom: AIRE_PREGUNTA,
+  firma: {
+    height: ALTO_FIRMA,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  firmaLado: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  // Los margenes negativos le sacan al renglon la zona segura del icono
+  // adaptativo. El de la derecha se pasa a proposito unos puntos mas: el nombre
+  // tiene que quedar tan pegado al domo como la moneda al nombre del oraculo del
+  // otro lado, o la firma se ve desbalanceada.
+  domo: {
+    width: CAJA_DOMO,
+    height: CAJA_DOMO,
+    marginVertical: -RECORTE_DOMO,
+    marginLeft: -RECORTE_DOMO,
+    marginRight: -RECORTE_DOMO - 4,
+  },
+  marcaTexto: {
     color: colores.texto,
-    fontSize: 21,
-    lineHeight: 26,
-    textAlign: 'center',
+    fontSize: 14,
+    letterSpacing: 1.8,
     includeFontPadding: false,
-    fontFamily: fuente('subtituloMedium'),
+    fontFamily: fuente('titulo'),
+  },
+  // Del mismo cuerpo que la marca: son las dos mitades de la misma firma, y con
+  // el nombre chiquito parecia una nota al pie de ORACULOS en vez de su par. Lo
+  // que los distingue es el color, que ya es el del oraculo.
+  oraculoTexto: {
+    fontSize: 14,
+    letterSpacing: 1.2,
+    includeFontPadding: false,
+    fontFamily: fuente('titulo'),
+  },
+  moneda: {
+    width: 24,
+    height: 24,
+  },
+  // De punta a punta del contenido: la tarjeta ya tiene su padding, y la linea
+  // llega hasta donde llega todo lo demas.
+  linea: {
+    height: 1,
+    alignSelf: 'stretch',
+    backgroundColor: hexAlfa(colores.texto, 0.22),
   },
   caida: {
     flex: 1,
+    marginTop: AIRE_LINEA,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  pie: {
-    marginTop: AIRE_PIE,
-    alignItems: 'center',
-  },
-  separador: {
-    width: '38%',
-    height: 1,
-    marginBottom: AIRE_SEPARADOR,
-    backgroundColor: hexAlfa(colores.texto, 0.22),
+  // SANS Y NO LA SERIF. En la app la pregunta va en Cormorant porque esta en
+  // pantalla, grande y con aire alrededor. Aca convive con la lectura y con la
+  // invitacion en un bloque apretado, y la serif a ese tamano se lee peor: se
+  // afina y compite con la caida. La sans, un poco mas grande y con mas peso,
+  // manda sin adornarse.
+  pregunta: {
+    marginTop: AIRE_PREGUNTA,
+    color: colores.texto,
+    fontSize: 18,
+    lineHeight: 24,
+    textAlign: 'center',
+    includeFontPadding: false,
+    fontFamily: fuente('uiMedium'),
   },
   lectura: {
     height: ALTO_LECTURA,
-    marginBottom: AIRE_LECTURA,
+    marginTop: AIRE_LECTURA,
     alignSelf: 'stretch',
     color: hexAlfa(colores.texto, 0.8),
     fontSize: 12.5,
@@ -199,31 +270,10 @@ const estilos = StyleSheet.create({
     includeFontPadding: false,
     fontFamily: fuente('ui'),
   },
-  marca: {
-    height: ALTO_MARCA,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 10,
-  },
-  marcaTexto: {
-    color: colores.texto,
-    fontSize: 13,
-    letterSpacing: 1.8,
-    fontFamily: fuente('titulo'),
-  },
-  moneda: {
-    width: ALTO_MARCA,
-    height: ALTO_MARCA,
-  },
-  cta: {
-    height: ALTO_CTA,
+  badge: {
+    width: BADGE_ANCHO,
+    height: BADGE_ALTO,
     marginTop: AIRE_CTA,
-    color: hexAlfa(colores.texto, 0.55),
-    fontSize: 10.5,
-    lineHeight: 15,
-    textAlign: 'center',
-    includeFontPadding: false,
-    fontFamily: fuente('ui'),
+    alignSelf: 'center',
   },
 });

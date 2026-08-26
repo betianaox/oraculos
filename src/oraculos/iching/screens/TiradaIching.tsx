@@ -30,6 +30,10 @@ const CARA = require('../../../../assets/oraculos/iching/monedas/cara.webp');
 const CRUZ = require('../../../../assets/oraculos/iching/monedas/cruz.webp');
 
 const COSTO = 1;
+// Cuanto puede medir el hexagrama en la tarjeta que se comparte, como maximo.
+// En pantalla las lineas miden 220 como tope (ver anchoLinea), asi que este
+// numero lo deja del mismo porte.
+const LADO_MAXIMO_TARJETA = 220;
 const ORO = '#E7C89A';
 const GROSOR = 12; // alto de cada linea del hexagrama
 const SEP_LINEAS = 14; // separacion entre lineas (aireada, como al agrandar)
@@ -133,7 +137,11 @@ export function TiradaIchingScreen({ navigation, route }: Props) {
   // mismo dibujo que se ve al agrandar y en la wiki.
   useEffect(() => {
     guardarCaida(oraculoId, pregunta, ({ ancho, alto }) => {
-      const lado = Math.floor(Math.min(ancho, alto));
+      // NO SE ESTIRA HASTA LLENAR, aunque haya lugar. Un hexagrama son seis
+      // rayas: agrandado a toda la tarjeta se ve grotesco, no imponente. Este
+      // tope lo deja del tamano que tiene en pantalla, que es como se lo
+      // reconoce.
+      const lado = Math.min(Math.floor(Math.min(ancho, alto)), LADO_MAXIMO_TARJETA);
       return <CartaHexagrama lineas={tirada.lineas} width={lado} height={lado} />;
     });
   }, [oraculoId, pregunta, tirada.lineas]);
