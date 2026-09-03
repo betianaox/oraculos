@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { RewardedAd } from 'react-native-google-mobile-ads';
+import { resolverConsentimiento } from './consentimiento';
 import { AD_UNIT_ID_RECOMPENSADO, ads, adsDisponible, iniciarAds } from './publicidad';
 
 export type EstadoAnuncio = 'cargando' | 'listo' | 'sinAnuncio';
@@ -30,42 +31,76 @@ export function useAnuncioRecompensado() {
   useEffect(() => {
     if (!ads) return;
 
-    let anuncio: RewardedAd;
-    try {
-      iniciarAds();
-      anuncio = ads.RewardedAd.createForAdRequest(AD_UNIT_ID_RECOMPENSADO);
-    } catch (e) {
-      // El SDK esta en el JS pero no en el binario nativo: hay que recompilar.
-      console.warn('[ads] no se pudo crear el anuncio:', e);
-      setEstado('sinAnuncio');
-      return;
-    }
+    // Lo que haya que desenchufar al desmontar. Se va llenando cuando el
+    // anuncio existe, que ahora pasa despues de una espera.
+    let limpiar: (() => void) | null = null;
+    let vivo = true;
 
-    const { AdEventType, RewardedAdEventType } = ads;
-    anuncioRef.current = anuncio;
+    /**
+     * EL CONSENTIMIENTO VA ANTES DEL PRIMER PEDIDO, y por eso esto es asincrono.
+     *
+     * En Europa, pedir un anuncio sin haber preguntado es lo que Google no
+     * permite; fuera de Europa la consulta contesta "no hace falta" enseguida y
+     * no se nota. Es la unica razon por la que este efecto dejo de ser directo.
+     *
+     * Si la consulta falla —sin red, tipicamente— se sigue igual: se pide el
+     * anuncio y el SDK sirve lo que pueda. Trabar la app por no poder preguntar
+     * seria peor que preguntar tarde, sobre todo en una app que funciona sin
+     * conexion.
+     */
+    void (async () => {
+      await resolverConsentimiento();
+      if (!vivo || !ads) return;
 
-    const cancelarCargado = anuncio.addAdEventListener(RewardedAdEventType.LOADED, () => {
-      setEstado('listo');
-    });
-    // Sin red, sin relleno o con la unidad mal configurada: se avisa y se deja
-    // reintentar (no se reintenta solo en bucle, que gasta pedidos al SDK).
-    const cancelarError = anuncio.addAdEventListener(AdEventType.ERROR, (error) => {
-      console.warn('[ads] no se pudo cargar el anuncio:', error);
-      setEstado('sinAnuncio');
-    });
-    // Al cerrarse, se precarga el siguiente para la proxima vez.
-    const cancelarCerrado = anuncio.addAdEventListener(AdEventType.CLOSED, () => {
-      setEstado('cargando');
+      let anuncio: RewardedAd;
+      try {
+        iniciarAds();
+        anuncio = ads.RewardedAd.createForAdRequest(AD_UNIT_ID_RECOMPENSADO);
+      } catch (e) {
+        // El SDK esta en el JS pero no en el binario nativo: hay que recompilar.
+        console.warn('[ads] no se pudo crear el anuncio:', e);
+        setEstado('sinAnuncio');
+        return;
+      }
+
+      const { AdEventType, RewardedAdEventType } = ads;
+      anuncioRef.current = anuncio;
+
+      const cancelarCargado = anuncio.addAdEventListener(RewardedAdEventType.LOADED, () => {
+        setEstado('listo');
+      });
+      // Sin red, sin relleno o con la unidad mal configurada: se avisa y se deja
+      // reintentar (no se reintenta solo en bucle, que gasta pedidos al SDK).
+      const cancelarError = anuncio.addAdEventListener(AdEventType.ERROR, (error) => {
+        console.warn('[ads] no se pudo cargar el anuncio:', error);
+        setEstado('sinAnuncio');
+      });
+      // Al cerrarse, se precarga el siguiente para la proxima vez.
+      const cancelarCerrado = anuncio.addAdEventListener(AdEventType.CLOSED, () => {
+        setEstado('cargando');
+        anuncio.load();
+      });
+
+      limpiar = () => {
+        cancelarCargado();
+        cancelarError();
+        cancelarCerrado();
+        anuncioRef.current = null;
+      };
+
+      // Si el componente se fue mientras se resolvia el consentimiento, se
+      // desarma en el momento en vez de dejar los oyentes colgados.
+      if (!vivo) {
+        limpiar();
+        return;
+      }
+
       anuncio.load();
-    });
-
-    anuncio.load();
+    })();
 
     return () => {
-      cancelarCargado();
-      cancelarError();
-      cancelarCerrado();
-      anuncioRef.current = null;
+      vivo = false;
+      limpiar?.();
     };
   }, []);
 
