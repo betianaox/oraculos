@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useT } from '@/i18n';
 import { colores, espaciado, radios } from '../theme/tokens';
@@ -86,7 +86,13 @@ export function ModalRecompensa({
             onPress={verVideo}
             disabled={!listo}
           >
-            <MaterialCommunityIcons name="play-circle-outline" size={18} color={colores.fondo} />
+            {/* Girando mientras se pide el anuncio: el texto solo no alcanzaba
+                para que se entienda que algo esta pasando. */}
+            {estado === 'cargando' ? (
+              <ActivityIndicator size="small" color={colores.fondo} />
+            ) : (
+              <MaterialCommunityIcons name="play-circle-outline" size={18} color={colores.fondo} />
+            )}
             <Text style={estilos.botonTexto}>
               {estado === 'cargando'
                 ? t('recompensa.preparando')
